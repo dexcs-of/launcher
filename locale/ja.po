@@ -1,0 +1,1104 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-10-02 21:42+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "hello %d"
+msgstr "こんにちは %d"
+
+#: ../makeCfMeshSetting.py:2215 ../makeCfMeshSetting.py:2228
+msgid "FreeCAD library not found. Check the FREECADPATH variable. "
+msgstr ""
+"FreeCADのライブラリが見つかりません。FREECADPATH変数をチェックして下さい。"
+
+#: ../makeCfMeshSetting.py:483 ../makeCfMeshSetting.py:814
+#: ../makeCfMeshSetting.py:484 ../makeCfMeshSetting.py:815
+msgid "cfMesh parameter settings from FreeCAD Model(.fcstd)"
+msgstr "FreeCADモデル(.fcstd)によるcfMeshパラメタ設定"
+
+#: ../makeCfMeshSetting.py:987 ../makeCfMeshSetting.py:988
+msgid "Will you exit?"
+msgstr "終了しますか?"
+
+msgid "Choose a directory:"
+msgstr "ディレクトリを選択:"
+
+#: ../makeCfMeshSetting.py:1353 ../makeCfMeshSetting.py:1354
+msgid "Will you create a setting file for cfMesh?"
+msgstr "cfMesh用の設定ファイルを作成しますか?"
+
+#: ../makeCfMeshSetting.py:1369 ../makeCfMeshSetting.py:1370
+msgid "Will you create a cartesianMesh?"
+msgstr "cfMesh(cartesianMesh)を作成しますか?"
+
+msgid "The fms file for cfMesh has been created."
+msgstr "cfMesh用のfmsファイルを作成しました。"
+
+#: ../makeCfMeshSetting.py:2107 ../makeCfMeshSetting.py:2120
+msgid "The configuration file system/meshDict for cfMesh has been created."
+msgstr "cfMesh用の設定ファイル(system/meshDict)を作成しました。"
+
+msgid "The BoundaryType in the fms file for cfMesh has been modified."
+msgstr "cfMesh用fmsファイルのBoundaryTypeを修正しました。"
+
+msgid "The STL file for cfMesh has been created."
+msgstr "cfMesh用のstlファイルを作成しました。"
+
+msgid "cfMesh settings from FreeCAD Model(.fcstd)"
+msgstr "FreeCADモデル(.fcstd)から得たcfMesh設定値"
+
+#: ../makeCfMeshSetting.py:613 ../makeCfMeshSetting.py:614
+msgid "location of CaseFile"
+msgstr "ケースファイルの在所"
+
+#: ../makeCfMeshSetting.py:640 ../makeCfMeshSetting.py:641
+msgid "primary parameters"
+msgstr "基本パラメタ"
+
+#: ../makeCfMeshSetting.py:742 ../makeCfMeshSetting.py:743
+msgid "individual parameters"
+msgstr "個別パラメタ"
+
+#: ../makeCfMeshSetting.py:767 ../makeCfMeshSetting.py:768
+msgid "action"
+msgstr "アクション"
+
+#: ../makeCfMeshSetting.py:687 ../makeCfMeshSetting.py:688
+msgid "options"
+msgstr "オプション"
+
+#: ../makeCfMeshSetting.py:1119 ../makeCfMeshSetting.py:1120
+msgid " has been found, do you choose it? "
+msgstr " 見つかりましたが、これを選択しますか？"
+
+#: ../makeCfMeshSetting.py:1125 ../makeCfMeshSetting.py:1126
+msgid " is not a meshDict file."
+msgstr " meshDict ファイルではありません。"
+
+#: ../makeCfMeshSetting.py:1115 ../makeCfMeshSetting.py:1116
+msgid "You Canceled."
+msgstr "キャンセルしました。"
+
+#: ../makeCfMeshSetting.py:1401 ../makeCfMeshSetting.py:1402
+msgid "Will you view a Mesh?"
+msgstr "メッシュを表示しますか?"
+
+#: ../makeCfMeshSetting.py:1417 ../makeCfMeshSetting.py:1418
+msgid "Will you edit the meshDict?"
+msgstr "meshDict ファイルを修正しますか?"
+
+msgid "select the JGP project file(,jgp)."
+msgstr "JGPプロジェクトファイル(.jgp)を選択してください"
+
+#: ../runJgp.py:75
+msgid " has been adjusted for the included caseName."
+msgstr ""
+" に記載の設定ファイルのフォルダ名は、当該解析ケースのフォルダ名に適合しまし"
+"た。"
+
+msgid "jgp setting"
+msgstr "jgpファイルの適合"
+
+msgid ""
+"this folder is not a OpenFOAM case! \n"
+" check current directory."
+msgstr ""
+"OpenFOAMのcaseフォルダではありません!\n"
+"  current directoryを確認してください。"
+
+msgid "case file is "
+msgstr "解析ケースファイルは、"
+
+#: ../checkCaseFileName.py:29
+msgid "."
+msgstr " です。"
+
+msgid ""
+"\n"
+"To change the analysis case, press the Case button in the setting macro for "
+"cfMesh and specify the change destination."
+msgstr ""
+"\n"
+"解析ケースファイルを変更するには、cfMesh用設定マクロにてCaseボタンを押して変"
+"更先を指定してください。"
+
+msgid "check analysis case"
+msgstr "解析ケースファイルの確認"
+
+msgid ""
+"cannot recognize solver name.\n"
+"  check current directory."
+msgstr ""
+"ソルバー名を認識できません!\n"
+"  current directoryを確認してください。"
+
+#: ../editSystemFolder.py:62 ../editSystemFolder.py:73
+#: ../editSystemFolder.py:72
+msgid ""
+"there is no system folder.\n"
+"  check current directory."
+msgstr ""
+"systemフォルダがありません!\n"
+"  current directoryを確認してください。"
+
+#: ../editConstantFolder.py:79 ../editConstantFolder.py:90
+#: ../editConstantFolder.py:104 ../editSystemFolder.py:78
+msgid ""
+"there is no constant folder.\n"
+"  check current directory."
+msgstr ""
+"constantフォルダがありません!\n"
+"  current directoryを確認してください。"
+
+msgid ""
+"folder could not be deleted.\n"
+"  continue ?"
+msgstr ""
+"」フォルダが削除できませんでした。\n"
+"　継続しますか？"
+
+#: ../editConstantFolder.py:50 ../editConstantFolder.py:58
+#: ../editConstantFolder.py:66
+msgid "edit properties File."
+msgstr "...Properties File の編集"
+
+msgid ""
+"select edit Properties file.\n"
+"\n"
+"properties file is in constant folder."
+msgstr ""
+"編集する Properties file を選択してください。\n"
+"\n"
+"Properties File は、constant フォルダ内にあります。"
+
+#: ../editSystemFolder.py:33 ../editSystemFolder.py:43
+#: ../editSystemFolder.py:42
+msgid "edit Dict File"
+msgstr "Dict File の編集"
+
+#: ../editSystemFolder.py:35 ../editSystemFolder.py:45
+#: ../editSystemFolder.py:44
+msgid ""
+"select edit Dict file.\n"
+"\n"
+"Dict file is in system folder."
+msgstr ""
+"編集するDict file を選択してください。\n"
+"\n"
+"Dict file は、systemフォルダ内にあります。"
+
+#: ../checkCaseFileName.py:29
+msgid "the case file is "
+msgstr "解析ケースファイルは、"
+
+#: ../checkCaseFileName.py:30
+msgid ""
+"\n"
+"To change the analysis case file, click the Case button in the cfMesh "
+"setting macro and specify the change destination."
+msgstr ""
+"\n"
+"解析ケースファイルを変更するには、cfMesh用設定マクロにてCaseボタンを押して変"
+"更先を指定してください。"
+
+#: ../checkCaseFileName.py:31
+msgid "Confirmation of analysis case file"
+msgstr "解析ケースファイルの確認"
+
+#: ../checkCaseFileName.py:34 ../runCheckMesh.py:47 ../runClearCase.py:235
+#: ../runGridEditor.py:54 ../runJgp.py:90 ../runParalel.py:51
+#: ../runParaview.py:51 ../runPlotWatcher.py:116 ../runSolver.py:71
+#: ../runGridEditor.py:74 ../runParalel.py:68 ../runParaview.py:54
+#: ../runPlotWatcher.py:122 ../runSolver.py:84 ../runClearCase.py:230
+#: ../runGridEditor.py:75 ../runParalel.py:90 ../runParaview.py:55
+#: ../runPlotWatcher.py:178 ../runSolver.py:83 ../runGridEditor.py:87
+#: ../runParalel.py:115 ../runParaview.py:65 ../runParalel.py:123
+msgid ""
+"this folder is not case folder of OpenFOAM.\n"
+"  check current directory."
+msgstr ""
+"OpenFOAMのcaseフォルダではありません!\n"
+"  current directoryを確認してください。"
+
+#: ../editConstantFolder.py:52 ../editConstantFolder.py:60
+#: ../editConstantFolder.py:68
+msgid ""
+"select to edit Properties file.\n"
+"\n"
+"Properties files are in ./constant folder."
+msgstr ""
+"編集する Properties file を選択してください。\n"
+"\n"
+"Properties File は、constant フォルダ内にあります。"
+
+#: ../editConstantFolder.py:75 ../editConstantFolder.py:86
+#: ../editConstantFolder.py:100
+msgid ""
+"there is no polyMesh folder in constant.\n"
+"  check current directory."
+msgstr ""
+"constantフォルダ内にpolyMeshフォルダがありません!\n"
+"  current directoryを確認してください。"
+
+#: ../runCheckMesh.py:26 ../runSolver.py:50 ../runSolver.py:53
+#: ../runSolver.py:55
+msgid ""
+"can't recognize solver name.\n"
+"  check current directory."
+msgstr ""
+"ソルバー名を認識できません!\n"
+"  current directoryを確認してください。"
+
+#: ../runClearCase.py:186 ../runClearCase.py:181
+msgid "'"
+msgstr "「"
+
+#: ../runClearCase.py:186 ../runClearCase.py:181
+msgid "' was not able to delete.  continue ?"
+msgstr ""
+"」フォルダが削除できませんでした。\n"
+"　継続しますか？"
+
+#: ../runJgp.py:32
+msgid "Select a JGP project file"
+msgstr "JGPプロジェクトファイル(,jgp)を選択してください"
+
+#: ../runJgp.py:76
+msgid "Adjust a JGP project file"
+msgstr "jgpファイルの適合"
+
+#: ../runPlotWatcher.py:105 ../runPlotWatcher.py:110 ../runPlotWatcher.py:111
+#: ../runPlotWatcher.py:116 ../runPlotWatcher.py:167 ../runPlotWatcher.py:172
+msgid "error"
+msgstr "エラー"
+
+#: ../runPlotWatcher.py:106 ../runPlotWatcher.py:112 ../runPlotWatcher.py:168
+msgid "does not exist 'controlDict'.\n"
+msgstr "「controlDict」は、存在しません。\n"
+
+#: ../runPlotWatcher.py:107 ../runPlotWatcher.py:113 ../runPlotWatcher.py:169
+msgid "wrong case directory."
+msgstr "case directory が間違っています。"
+
+#: ../runPlotWatcher.py:111 ../runPlotWatcher.py:117 ../runPlotWatcher.py:173
+msgid ""
+"environ file 'bashrcFOAM' does not exist, FOAM terminal could not run.\n"
+msgstr "環境設定file「bashrcFOAM」が存在しない為、FOAM端末が起動できません。\n"
+
+#: ../runPlotWatcher.py:112 ../runPlotWatcher.py:118 ../runPlotWatcher.py:174
+msgid "    check contents of configTreeFoam file."
+msgstr "　　configTreeFoamファイルの内容を確認してください。"
+
+#: ../makeCfMeshSetting.py:208 ../makeCfMeshSetting.py:209
+msgid "FreeCAD library not found. Check the FREECADPATH variable."
+msgstr "FreeCAD ライブラリが見つかりません。FREECADPATH 変数を調べて下さい。"
+
+#: ../makeCfMeshSetting.py:1139 ../makeCfMeshSetting.py:1140
+msgid " has been read."
+msgstr "を読み込みました。"
+
+#: ../makeCfMeshSetting.py:1385 ../makeCfMeshSetting.py:1386
+msgid "Will you check a Mesh?"
+msgstr "メッシュをチェックしますか?"
+
+#: ../pyDexcsSwakSubset.py:19
+msgid ""
+"systemフォルダが見つからないので、\n"
+"OpenFOAMのケースフォルダとして認識できません"
+msgstr ""
+
+#: ../pyDexcsSwakSubset.py:22
+msgid ""
+"constantフォルダが見つからないので、\n"
+"OpenFOAMのケースフォルダとして認識できません"
+msgstr ""
+
+#: ../pyDexcsSwakSubset.py:25
+msgid ""
+"system/controlDict が見つからないので、\n"
+"OpenFOAMのケースフォルダとして認識できません"
+msgstr ""
+
+#: ../checkCaseFileName.py:34
+msgid ""
+"this folder is not case folder of OpenFOAM.\n"
+"   check current directory."
+msgstr ""
+"OpenFOAMのcaseフォルダではありません!\n"
+"  current directoryを確認してください。"
+
+#: ../checkCaseFileName.py:35 ../editConstantFolder.py:76
+#: ../editConstantFolder.py:80 ../editSystemFolder.py:63 ../runCheckMesh.py:27
+#: ../runCheckMesh.py:48 ../runClearCase.py:236 ../runGridEditor.py:55
+#: ../runJgp.py:91 ../runParalel.py:52 ../runParaview.py:52
+#: ../runPlotWatcher.py:117 ../runSolver.py:51 ../runSolver.py:72
+#: ../editConstantFolder.py:87 ../editConstantFolder.py:91
+#: ../editSystemFolder.py:74 ../runGridEditor.py:75 ../runParalel.py:69
+#: ../runParaview.py:55 ../runPlotWatcher.py:123 ../runSolver.py:54
+#: ../runSolver.py:85 ../editSystemFolder.py:73 ../runClearCase.py:231
+#: ../runGridEditor.py:76 ../runParalel.py:91 ../runParaview.py:56
+#: ../runPlotWatcher.py:179 ../runSolver.py:84 ../editConstantFolder.py:101
+#: ../editConstantFolder.py:105 ../editSystemFolder.py:79
+#: ../runGridEditor.py:88 ../runParalel.py:116 ../runParaview.py:66
+#: ../runSolver.py:56 ../runParalel.py:124
+msgid "check OpenFOAM case"
+msgstr "OpenFOAMのケース確認"
+
+#: ../exportStl.py:14
+msgid "save name as stl"
+msgstr "保存するstlファイルの名前"
+
+#: ../exportStl.py:41
+msgid "exportedStlFile"
+msgstr "エクスポートされたStlファイル"
+
+#: ../showSolidInfo.py:16
+msgid "object name "
+msgstr "形状名 "
+
+#: ../showSolidInfo.py:21
+msgid "No. of solid "
+msgstr "構成ソリッド数 "
+
+#: ../showSolidInfo.py:23
+msgid " solid No.    : "
+msgstr "  ソリッド番号 : "
+
+#: ../showSolidInfo.py:24
+msgid " surface area : "
+msgstr "  表面積 : "
+
+#: ../showSolidInfo.py:25
+msgid " volumes      : "
+msgstr "    体積 : "
+
+#: ../showSolidInfo.py:26
+msgid "weight center : \n"
+msgstr "    重心 : \n"
+
+#: ../showSolidInfo.py:27
+msgid "            X : "
+msgstr "       X : "
+
+#: ../showSolidInfo.py:28
+msgid "            Y : "
+msgstr "       Y : "
+
+#: ../showSolidInfo.py:29
+msgid "            Z : "
+msgstr "       Z : "
+
+#: ../runParalel.py:64 ../solverSet.py:57
+msgid ""
+"sorry for TreeFoam Ver.3*, \n"
+"  this module cannnot activate correctly.\n"
+" You need to use this module from TreeFoam main window."
+msgstr ""
+"残念ながら TreeFoam Ver.3*　では, \n"
+"  本モジュールを正しく機能させる事が出来ません。\n"
+" 本モジュールはTreeFoam本体から起動して下さい。"
+
+#: ../runParalel.py:65 ../solverSet.py:58
+msgid "check TreeFoam version"
+msgstr "TreeFoam のヴァージョン確認"
+
+#: ../dexcsPlotTool_ui.py:45
+msgid "Dexcs Plot Tool"
+msgstr "Dexcs プロットツール"
+
+#: ../dexcsPlotTool_ui.py:46
+msgid "Plot"
+msgstr "プロット"
+
+#: ../dexcsPlotTool_ui.py:47
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:68
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:69
+msgid "Edit"
+msgstr "編集"
+
+#: ../dexcsPlotTool_ui.py:48
+msgid "Select .dplt File"
+msgstr ".dplt ファイルを選択"
+
+#: ../dexcsPlotTool_ui.py:49
+msgid "Cancel"
+msgstr "キャンセル"
+
+#: ../dexcsPlotTool_ui.py:50
+msgid "New"
+msgstr "新規"
+
+#: ../runClearCase.py:201
+msgid "initialize of case"
+msgstr "caseの初期化"
+
+#: ../runClearCase.py:202
+msgid "result folders and unneeded files are deleted, case is initialized."
+msgstr "計算結果や不要なファイルを削除して、caseを初期化します。"
+
+#: ../runClearCase.py:226
+msgid "case were initialized."
+msgstr "caseを初期化しました。"
+
+#: ../Table_GUI.py:391 ../Table_GUI.py:392 ../Table_GUI.py:506
+msgid "Existing file"
+msgstr "既存プロットファイル"
+
+#: ../Table_GUI.py:403 ../Table_GUI.py:404 ../Table_GUI.py:518
+msgid "load left-file"
+msgstr "⇒プロット"
+
+#: ../Table_GUI.py:418 ../Table_GUI.py:419 ../Table_GUI.py:433
+msgid "plot"
+msgstr "プロット"
+
+#: ../Table_GUI.py:424 ../Table_GUI.py:425 ../Table_GUI.py:464
+msgid "save dplt"
+msgstr "保存"
+
+#: ../Table_GUI.py:433 ../Table_GUI.py:434 ../Table_GUI.py:473
+msgid "(not yet) load2"
+msgstr "開く"
+
+#: ../Table_GUI.py:439 ../Table_GUI.py:440 ../Table_GUI.py:483
+msgid "reserve"
+msgstr "予備"
+
+#: ../Table_GUI.py:459 ../Table_GUI.py:460 ../Table_GUI.py:448
+msgid "Save FileName"
+msgstr "保存ファイル名"
+
+#: ../Table_GUI.py:474 ../Table_GUI.py:475 ../Table_GUI.py:403
+msgid "Title"
+msgstr "タイトル名"
+
+#: ../Table_GUI.py:489 ../Table_GUI.py:490 ../Table_GUI.py:418
+msgid "Y-Label"
+msgstr "Yラベル名"
+
+#: ../Table_GUI.py:626 ../Table_GUI.py:627 ../Table_GUI.py:649
+msgid "caseDir is :"
+msgstr "ケースファイル :"
+
+#: ../Table_GUI.py:1070 ../Table_GUI.py:1071 ../Table_GUI.py:1118
+msgid "overwrite"
+msgstr "上書き許可"
+
+#: ../Table_GUI.py:1071 ../Table_GUI.py:1072
+msgid "the same file exist. overwrite ? "
+msgstr "既に同名のファイルがありますが上書きしますか？"
+
+#: ../runParalel.py:40
+msgid ""
+"this FreeCAD is AppImage version.\n"
+"  some function of runParallelDialog doesen't work.\n"
+" if you want utilize the function, use normal TreeFoam menu."
+msgstr ""
+"FreeCAD が AppImage版です.\n"
+" 並列処理ダイヤログ中の一部のボタンが機能しません.\n"
+" これを使いたい場合には通常のTreeFoamから並列処理ダイヤログを起動してくださ"
+"い."
+
+#: ../runParalel.py:41 ../runTreefoam.py:50 ../runTreefoam.py:51
+msgid "AppImage Warning"
+msgstr "AppImage版の警告"
+
+#: ../runTreefoam.py:49 ../runTreefoam.py:50
+msgid ""
+"this FreeCAD is AppImage version.\n"
+"  some function of TreeFoam doesen't work.\n"
+" if you want utilize the function, use normal TreeFoam clicked by dock-"
+"launcher button."
+msgstr ""
+"FreeCAD が AppImage版です.\n"
+" TreeFoamの一部のメニューが正しく機能しません..\n"
+" これを使いたい場合には通常のTreeFoamをubuntuドックのランチャーボタンから立ち"
+"上げてください."
+
+#: ../checkCaseFileName.py:30
+msgid ""
+"\n"
+" To change the analysis case file, set the OutputPath property of Analysis "
+"container and then write meshCase on the dexcsTaskPanelCfdMesh,\n"
+" or click the Case button in the cfMesh setting macro and specify the change "
+"destination."
+msgstr ""
+"\n"
+"解析ケースファイルを変更するには，解析コンテナの OutputPath プロパティを変更"
+"してメッシュ作成タスク画面にてケース作成ボタンを押すか\n"
+"または，cfMesh用設定マクロにてCaseボタンを押して変更先を指定してください．"
+
+#: ../Table_GUI.py:1118
+msgid "上書き許可"
+msgstr ""
+
+#: ../Table_GUI.py:1119
+msgid "既に同名のファイルがありますが上書きしますか？"
+msgstr ""
+
+#: ../Table_GUI.py:1119
+msgid "he same file exist. overwrite ?"
+msgstr ""
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:64
+#: ../_dexcsTaskPanelCfdSolverControl.py:66
+#: ../_dexcsTaskPanelCfdSolverControl.py:70
+#: ../_dexcsTaskPanelCfdSolverControl.py:73
+#: ../_dexcsTaskPanelCfdSolverControl.py:69
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:69
+msgid "reconstructPar"
+msgstr "領域再構築"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:64
+#: ../_dexcsTaskPanelCfdSolverControl.py:68
+#: ../_dexcsTaskPanelCfdSolverControl.py:71
+#: ../_dexcsTaskPanelCfdSolverControl.py:67
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:67
+msgid "Write"
+msgstr "実行スクリプト作成"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:65
+#: ../_dexcsTaskPanelCfdSolverControl.py:61
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:61
+msgid "Case"
+msgstr "ケース"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:66
+#: ../_dexcsTaskPanelCfdSolverControl.py:62
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:62
+msgid "Solver"
+msgstr "ソルバー"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:67
+#: ../_dexcsTaskPanelCfdSolverControl.py:63
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:63
+msgid "Results"
+msgstr "計算結果"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:68 ../_dexcsTaskPanelCfdMesh.py:87
+#: ../_dexcsTaskPanelCfdMesh.py:89 ../_dexcsTaskPanelCfdMesh.py:90
+#: ../_dexcsTaskPanelCfdSolverControl.py:64 ../_dexcsTaskPanelCfdMesh.py:85
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:64
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:85
+msgid "Status"
+msgstr "状態"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:69 ../_dexcsTaskPanelCfdMesh.py:60
+#: ../_dexcsTaskPanelCfdMesh.py:72 ../_dexcsTaskPanelCfdSolverControl.py:65
+#: ../_dexcsTaskPanelCfdMesh.py:67
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:65
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:67
+msgid "Stop"
+msgstr "停止"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:70
+#: ../_dexcsTaskPanelCfdSolverControl.py:66
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:66
+msgid "Run"
+msgstr "実行"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:74
+#: ../_dexcsTaskPanelCfdSolverControl.py:70
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:70
+msgid "parallel"
+msgstr "並列計算"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:64
+#: ../_dexcsTaskPanelCfdSolverControl.py:60
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:60
+msgid "Analysis control"
+msgstr "ソルバー実行タスク画面"
+
+#: ../_dexcsTaskPanelCfdMesh.py:57 ../_dexcsTaskPanelCfdMesh.py:69
+#: ../_dexcsTaskPanelCfdMesh.py:64
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:64
+msgid "dexcsCFD Mesh"
+msgstr "メッシュ作成タスク画面"
+
+#: ../_dexcsTaskPanelCfdMesh.py:58 ../_dexcsTaskPanelCfdMesh.py:70
+#: ../_dexcsTaskPanelCfdMesh.py:65
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:65
+msgid "Write mesh case"
+msgstr "ケース作成"
+
+#: ../_dexcsTaskPanelCfdMesh.py:59 ../_dexcsTaskPanelCfdMesh.py:71
+#: ../_dexcsTaskPanelCfdMesh.py:66
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:66
+msgid "Feature Angle(deg)"
+msgstr "特徴角（度）"
+
+#: ../_dexcsTaskPanelCfdMesh.py:61 ../_dexcsTaskPanelCfdMesh.py:73
+#: ../_dexcsTaskPanelCfdMesh.py:68
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:68
+msgid "Scale to Meter:"
+msgstr "スケール（to meter）"
+
+#: ../_dexcsTaskPanelCfdMesh.py:62 ../_dexcsTaskPanelCfdMesh.py:74
+#: ../_dexcsTaskPanelCfdMesh.py:75 ../_dexcsTaskPanelCfdMesh.py:70
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:70
+msgid "Run mesher"
+msgstr "実行"
+
+#: ../_dexcsTaskPanelCfdMesh.py:63 ../_dexcsTaskPanelCfdMesh.py:75
+#: ../_dexcsTaskPanelCfdMesh.py:76 ../_dexcsTaskPanelCfdMesh.py:71
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:71
+msgid "Mesh verification"
+msgstr "メッシュ確認"
+
+#: ../_dexcsTaskPanelCfdMesh.py:64 ../_dexcsTaskPanelCfdMesh.py:76
+#: ../_dexcsTaskPanelCfdMesh.py:78 ../_dexcsTaskPanelCfdMesh.py:79
+#: ../_dexcsTaskPanelCfdMesh.py:74
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:74
+msgid "CheckMesh"
+msgstr "チェックメッシュ"
+
+#: ../_dexcsTaskPanelCfdMesh.py:65 ../_dexcsTaskPanelCfdMesh.py:77
+#: ../_dexcsTaskPanelCfdMesh.py:79 ../_dexcsTaskPanelCfdMesh.py:80
+#: ../_dexcsTaskPanelCfdMesh.py:75
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:75
+msgid "Mesh Parameters"
+msgstr "cfMesh 基本パラメタ"
+
+#: ../_dexcsTaskPanelCfdMesh.py:66 ../_dexcsTaskPanelCfdMesh.py:78
+#: ../_dexcsTaskPanelCfdMesh.py:80 ../_dexcsTaskPanelCfdMesh.py:81
+#: ../_dexcsTaskPanelCfdMesh.py:76
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:76
+msgid "optimiseLayer"
+msgstr "レイヤー最適化"
+
+#: ../_dexcsTaskPanelCfdMesh.py:67 ../_dexcsTaskPanelCfdMesh.py:79
+#: ../_dexcsTaskPanelCfdMesh.py:81 ../_dexcsTaskPanelCfdMesh.py:82
+#: ../_dexcsTaskPanelCfdMesh.py:77
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:77
+msgid "maxNumIterations"
+msgstr "maxNumIterations"
+
+#: ../_dexcsTaskPanelCfdMesh.py:80 ../_dexcsTaskPanelCfdMesh.py:82
+#: ../_dexcsTaskPanelCfdMesh.py:83 ../_dexcsTaskPanelCfdMesh.py:78
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:78
+msgid "maximum allowed thickness:"
+msgstr "maximum allowed thickness:"
+
+#: ../_dexcsTaskPanelCfdMesh.py:81 ../_dexcsTaskPanelCfdMesh.py:83
+#: ../_dexcsTaskPanelCfdMesh.py:84 ../_dexcsTaskPanelCfdMesh.py:79
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:79
+msgid "featureSizeFactor"
+msgstr "featureSizeFactor"
+
+#: ../_dexcsTaskPanelCfdMesh.py:82 ../_dexcsTaskPanelCfdMesh.py:84
+#: ../_dexcsTaskPanelCfdMesh.py:85 ../_dexcsTaskPanelCfdMesh.py:80
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:80
+msgid "reCalculateNormals"
+msgstr "reCalculateNormals"
+
+#: ../_dexcsTaskPanelCfdMesh.py:83 ../_dexcsTaskPanelCfdMesh.py:85
+#: ../_dexcsTaskPanelCfdMesh.py:86 ../_dexcsTaskPanelCfdMesh.py:81
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:81
+msgid "Number of iterations:"
+msgstr "Number of iterations:"
+
+#: ../_dexcsTaskPanelCfdMesh.py:84 ../_dexcsTaskPanelCfdMesh.py:86
+#: ../_dexcsTaskPanelCfdMesh.py:87 ../_dexcsTaskPanelCfdMesh.py:82
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:82
+msgid "keepCellsIntersectingBoundary"
+msgstr "keepCellsIntersectingBoundary"
+
+#: ../_dexcsTaskPanelCfdMesh.py:85 ../_dexcsTaskPanelCfdMesh.py:87
+#: ../_dexcsTaskPanelCfdMesh.py:88 ../_dexcsTaskPanelCfdMesh.py:83
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:83
+msgid "Base element size:"
+msgstr "基本セルサイズ"
+
+#: ../_dexcsTaskPanelCfdMesh.py:86 ../_dexcsTaskPanelCfdMesh.py:88
+#: ../_dexcsTaskPanelCfdMesh.py:89
+msgid "workflowControls"
+msgstr "workflowControls"
+
+#: ../_dexcsTaskPanelCfdMesh.py:76 ../_dexcsTaskPanelCfdMesh.py:77
+msgid "Mesher<"
+msgstr "メッシュ作成"
+
+#: ../_dexcsTaskPanelCfdMesh.py:77 ../_dexcsTaskPanelCfdMesh.py:78
+#: ../_dexcsTaskPanelCfdMesh.py:73
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:73
+msgid "Mesh<"
+msgstr "メッシュケース"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:62
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:58
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:58
+msgid "Mesh refinement"
+msgstr "メッシュ細分化タスク画面"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:63
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:59
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:59
+msgid "Surface"
+msgstr "面"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:64
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:60
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:60
+msgid "Internal Volume"
+msgstr "内部"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:65
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:61
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:61
+msgid "Cartesian Mesh: Type of Refinement"
+msgstr "細分化対象"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:66
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:62
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:62
+msgid "Real cell size:"
+msgstr "実セルサイズ"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:67
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:63
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:63
+msgid "Refinement level:"
+msgstr "細分化レベル"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:68
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:64
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:64
+msgid "Boundary Layers"
+msgstr "境界層レイヤー"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:69
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:65
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:65
+msgid "More Option"
+msgstr "オプション"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:70
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:66
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:66
+msgid "Expansion ratio:"
+msgstr "Expansion ratio"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:71
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:67
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:67
+msgid "max 1st cell height:"
+msgstr "max 1st cell height:"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:72
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:68
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:68
+msgid "allowDiscontinuity"
+msgstr ""
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:73
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:69
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:69
+msgid "number of layers:"
+msgstr "number of layers:"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:74
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:70
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:70
+msgid "Refinement thickness:"
+msgstr "Refinement thickness:"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:75
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:71
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:71
+msgid "keepCellsIntersectingPatches"
+msgstr "keepCellsIntersectingPatches"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:76
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:77
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:72
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:73
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:72
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:73
+msgid "Objects"
+msgstr "対象パーツ"
+
+#: ../dexcsCfdFaceSelectWidget.py:59 ../dexcsCfdFaceSelectWidget.py:55
+#: ../Mod/dexcsCfdOF/dexcsCfdFaceSelectWidget.py:55
+msgid "Select Faces"
+msgstr "面を選択"
+
+#: ../dexcsCfdFaceSelectWidget.py:60 ../dexcsCfdFaceSelectWidget.py:56
+#: ../Mod/dexcsCfdOF/dexcsCfdFaceSelectWidget.py:56
+msgid "Remove"
+msgstr "削除"
+
+#: ../dexcsCfdFaceSelectWidget.py:61 ../dexcsCfdFaceSelectWidget.py:57
+#: ../Mod/dexcsCfdOF/dexcsCfdFaceSelectWidget.py:57
+msgid "Select from list"
+msgstr "リストから選択"
+
+#: ../dexcsCfdFaceSelectWidget.py:62 ../dexcsCfdFaceSelectWidget.py:58
+#: ../Mod/dexcsCfdOF/dexcsCfdFaceSelectWidget.py:58
+msgid "Select All"
+msgstr "全選択"
+
+#: ../dexcsCfdFaceSelectWidget.py:63 ../dexcsCfdFaceSelectWidget.py:59
+#: ../Mod/dexcsCfdOF/dexcsCfdFaceSelectWidget.py:59
+msgid "Select none"
+msgstr "選択しない"
+
+#: ../dexcsCfdFaceSelectWidget.py:64 ../dexcsCfdFaceSelectWidget.py:60
+#: ../Mod/dexcsCfdOF/dexcsCfdFaceSelectWidget.py:60
+msgid "Select Object"
+msgstr "パーツ選択"
+
+#: ../dexcsCfdFaceSelectWidget.py:65 ../dexcsCfdFaceSelectWidget.py:61
+#: ../Mod/dexcsCfdOF/dexcsCfdFaceSelectWidget.py:61
+msgid "Add"
+msgstr "追加"
+
+#: ../dexcsCfdFaceSelectWidget.py:66 ../dexcsCfdFaceSelectWidget.py:62
+#: ../Mod/dexcsCfdOF/dexcsCfdFaceSelectWidget.py:62
+msgid "Done"
+msgstr "完了"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:170
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:170
+msgid "Writing dexcs Allrun ..."
+msgstr "Allrun 作成中 ..."
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:182
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:182
+msgid "Error writing case:"
+msgstr "エラー"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:184
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:184
+msgid "Write case setup file failed"
+msgstr "ケース作成に失敗"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:188
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:188
+msgid "Write dexcs Allrun is completed"
+msgstr "Allrun 作成に成功"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:192
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:192
+msgid "Case check failed"
+msgstr "ケースチェックに失敗"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:195
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:195
+msgid "Checking dependencies..."
+msgstr "依存関係をチェック"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:205 ../_dexcsTaskPanelCfdMesh.py:311
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:205
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:311
+msgid "Please edit the case input files externally at: {}\n"
+msgstr "ファイルマネージャにて以下のケースフォルダーを編集して下さい : {}\n"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:226
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:226
+msgid "Solver started"
+msgstr "ソルバー実行開始"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:228
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:228
+msgid "Error starting solver"
+msgstr "ソルバー実行に失敗"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:232
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:232
+msgid "Solver manually stopped"
+msgstr "ソルバーを手動停止"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:238
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:238
+msgid "Simulation finished successfully"
+msgstr "計算は正常終了"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:240
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:240
+msgid "Simulation exited with error"
+msgstr "計算がエラー終了"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:281
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:281
+msgid "reconstruction started"
+msgstr "領域再構築を開始"
+
+#: ../_dexcsTaskPanelCfdSolverControl.py:283
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:283
+msgid "Error starting reconstruct"
+msgstr "領域再構築に失敗"
+
+#: ../_dexcsTaskPanelCfdMesh.py:72
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:72
+msgid "Mesher"
+msgstr "メッシュ作成"
+
+#: ../_dexcsTaskPanelCfdMesh.py:84
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:84
+msgid "workflowControls(stopAfter):"
+msgstr ""
+
+#: ../_dexcsTaskPanelCfdMesh.py:124
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:124
+msgid "Enter 0 to use default value"
+msgstr "0 はデフォルト値を使用"
+
+#: ../_dexcsTaskPanelCfdMesh.py:323 ../_dexcsTaskPanelCfdMesh.py:423
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:323
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:423
+msgid "Executing: "
+msgstr "計算中: "
+
+#: ../_dexcsTaskPanelCfdMesh.py:332
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:332
+msgid "Mesher started"
+msgstr "メッシュ作成を開始"
+
+#: ../_dexcsTaskPanelCfdMesh.py:334
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:334
+msgid "Error starting meshing process"
+msgstr "メッシュ作成の開始に失敗"
+
+#: ../_dexcsTaskPanelCfdMesh.py:337 ../_dexcsTaskPanelCfdMesh.py:437
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:337
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:437
+msgid "Error "
+msgstr "エラー "
+
+#: ../_dexcsTaskPanelCfdMesh.py:343
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:343
+msgid "Meshing manually stopped"
+msgstr "メッシュ作成を手動停止"
+
+#: ../_dexcsTaskPanelCfdMesh.py:344
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:344
+msgid "Meshing interrupted"
+msgstr "メッシュ作成が中止された"
+
+#: ../_dexcsTaskPanelCfdMesh.py:358
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:358
+msgid "Meshing completed"
+msgstr "メッシュ作成が完了"
+
+#: ../_dexcsTaskPanelCfdMesh.py:371
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:371
+msgid "Meshing exited with error"
+msgstr "メッシュ作成がエラー終了"
+
+#: ../_dexcsTaskPanelCfdMesh.py:393
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:393
+msgid "Reading mesh ..."
+msgstr "メッシュ読み込み中 ..."
+
+#: ../_dexcsTaskPanelCfdMesh.py:395
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:395
+msgid "Triangulated representation of the surface mesh is shown - "
+msgstr "表面メッシュの状態が表示されるので,"
+
+#: ../_dexcsTaskPanelCfdMesh.py:396
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:396
+msgid "Please view in Paraview for accurate display.\n"
+msgstr "Paraviewで詳細に観察してみて下さい.\n"
+
+#: ../_dexcsTaskPanelCfdMesh.py:405
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:405
+msgid "Searching for an internal vector point ..."
+msgstr ""
+
+#: ../_dexcsTaskPanelCfdMesh.py:420
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:420
+msgid "Running {} ..."
+msgstr "実行中 {} ..."
+
+#: ../_dexcsTaskPanelCfdMesh.py:432
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:432
+msgid "checkMesh started"
+msgstr "チェックメッシュを開始"
+
+#: ../_dexcsTaskPanelCfdMesh.py:434
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:434
+msgid "Error starting checkMeshing process"
+msgstr "チェックメッシュの開始に失敗"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:93
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:93
+msgid "Cell size for Reference objects"
+msgstr "対象物体の分割セルサイズ"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:97
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:97
+msgid "Refinement Level for Reference objects"
+msgstr "対象物体の細分化レベル"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:117
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:117
+msgid "Distance the refinement region extends from the reference surface"
+msgstr "対象面から指定細分化領域の距離"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:119
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:119
+msgid ""
+"Number of boundary layers if the reference surface is an external or mesh "
+"patch"
+msgstr "対象面に対するレイヤー数"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:121
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:121
+msgid ""
+"Expansion ratio of boundary layers (limited to be greater than 1.0 and "
+"smaller than 1.2)"
+msgstr "レイヤーの層間の厚み比率（1以上,1.2以下）"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:123
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:123
+msgid "Maximum first cell height (ignored if set to 0.0)"
+msgstr "レイヤー第1層の厚さ（指定なければ0.0）"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:270
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:270
+msgid "Mesh object not found - please re-create."
+msgstr "メッシュ対象がないので作り直して下さい"
+
+#: ../_dexcsTaskPanelCfdMeshRefinement.py:271
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMeshRefinement.py:271
+msgid "Missing mesh object"
+msgstr "メッシュ対象なし"
+
+#: ../dexcsCfdFaceSelectWidget.py:125
+#: ../Mod/dexcsCfdOF/dexcsCfdFaceSelectWidget.py:125
+msgid ""
+"Choose a solid object from the drop down list and select one or more of the "
+"faces associated with the chosen solid."
+msgstr "選択したソリッドに付帯する面を選択"
+
+#: ../dexcsCfdAnalysis.py:89 ../dexcsCfdAnalysis.py:90
+#: ../Mod/dexcsCfdOF/dexcsCfdAnalysis.py:90
+msgid "Creates an analysis container with a CFD solver"
+msgstr "解析コンテナを作成"
+
+#: ../dexcsCfdMesh.py:57 ../Mod/dexcsCfdOF/dexcsCfdMesh.py:57
+msgid "Create a mesh using cfMesh, snappyHexMesh or gmsh"
+msgstr "メッシュ作成コンテナを作成"
+
+#: ../dexcsCfdMeshRefinement.py:66
+#: ../Mod/dexcsCfdOF/dexcsCfdMeshRefinement.py:66
+msgid "Creates a mesh refinement"
+msgstr "メッシュ細分化コンテナを作成"
+
+#: ../dexcsCfdSolverFoam.py:60 ../Mod/dexcsCfdOF/dexcsCfdSolverFoam.py:60
+msgid "Edit properties and run solver"
+msgstr "ソルバーコンテナを起動"
