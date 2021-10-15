@@ -1,0 +1,65 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import FreeCAD
+import Mesh
+import os
+import pyDexcsSwakSubset
+import dexcsCfdTools
+from PySide2 import QtCore
+from PySide import QtGui
+import pythonVerCheck
+
+doc = App.ActiveDocument
+name = os.path.splitext(doc.FileName)[0]
+modelDir = os.path.dirname(doc.FileName)
+
+#モデルファイル置き場がケースファイルの場所（.CaseFileDictで指定）と異なる場合
+caseFileDict = modelDir + "/.CaseFileDict"
+if os.path.isfile(caseFileDict) == True:
+    f = open(caseFileDict)
+    modelDir = f.read()
+    f.close()
+
+workDir=modelDir
+
+configDict = pyDexcsSwakSubset.readConfigDexcs()
+envTreeFoam = configDict["TreeFoam"]
+
+configTreeFoamFile = os.path.expanduser(envTreeFoam) + "/configTreeFoam"
+f = open(configTreeFoamFile)
+x = f.read()
+f.close()
+
+configTreeFoamFileTemp = os.path.expanduser(envTreeFoam) + "/configTreeFoam"
+g = open(configTreeFoamFileTemp,'w')
+y = x.split('\n')
+keyWord = "workDir"
+
+for j in range(len(y)):
+    s = y[j].find(keyWord)
+    if s > -1:
+        g.write("workDir\t"+workDir+"\n") 
+    else :
+        g.write(y[j]+"\n")
+g.close()
+
+env = QtCore.QProcessEnvironment.systemEnvironment()
+
+if env.contains("APPIMAGE"):
+    message = (_("this FreeCAD is AppImage version.\n  some function of TreeFoam doesen't work.\n if you want utilize the function, use normal TreeFoam clicked by dock-launcher button.")) 
+    ans = QtGui.QMessageBox.critical(None, _("AppImage Warning"), message, QtGui.QMessageBox.Yes)
+    dexcsCfdTools.removeAppimageEnvironment(env)
+
+
+trfCmd = "/opt/TreeFoam/treefoam"
+#os.system(trfCmd)
+process = QtCore.QProcess()
+process.setProcessEnvironment(env)
+working_dir = modelDir
+if working_dir:
+    process.setWorkingDirectory(working_dir)
+process.start(trfCmd)
+
+def dummyFunction(): # 何故かこれがないとうまく動かない      
+    pass
