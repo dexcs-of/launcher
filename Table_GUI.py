@@ -53,7 +53,7 @@ import dexcsPlotPost
 fontName = "Monospace"
 
 
-#左列挙欄の各ファイルのマトリックスデータとラベル名を辞書式として管理
+#左列挙欄の各ファイルのマトリックスデータとラベル名を辞書式として
 Use_checkedfile_Matrixes = {}
 Use_checkedfile_rowLabels  = {}
 Use_checkedfile_Matrixes_other = {}
@@ -1787,7 +1787,7 @@ def showGui(learnDir,dpltDir):
     rowLabels.append("blank")
     
     
-    #保存テーブルのロードとして実装したが現状未使用。ただ辞書データロードに際に活用できる
+    #保存テーブルのロードとして実装したが現状未使用。ただ辞書データロードに際に活
     #tbcfgDir = dpltDir[:-5] + ".tbcfg"
     #if os.path.exists(tbcfgDir):
         #logging.debug("dplt cfg exists")   
