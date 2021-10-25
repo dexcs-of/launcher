@@ -73,31 +73,26 @@ if os.path.isdir(systemFolder) and os.path.isdir(constantFolder):
         f=open("./run","w")
         f.write(cont)
         f.close()
-        #実行権付与
-        # if os.path.exists('./run'):
-        #     os.system("chmod a+x run")
-        #     #実行
-        #     #comm = "xfce4-terminal --execute ./run "
-        #     comm= "gnome-terminal --geometry=80x15 --zoom=0.9 -- bash --rcfile ./run"
-        #     subprocess.call(comm.strip().split(" "))
-        #     #os.system(comm)
-        # else:
-        #     message = (_("this folder is not case folder of OpenFOAM.\n  check current directory."))
-        #     ans = QtGui.QMessageBox.critical(None, _("check OpenFOAM case"), message, QtGui.QMessageBox.Yes)
         os.system("chmod a+x run")
         #実行
-        cmd = dexcsCfdTools.makeRunCommand('./run', modelDir, source_env=False)
-        print('cmd = ', cmd)
-        FreeCAD.Console.PrintMessage("Solver run command: " + ' '.join(cmd) + "\n")
         env = QtCore.QProcessEnvironment.systemEnvironment()
-        print('env = ', env)
-        dexcsCfdTools.removeAppimageEnvironment(env)
-        process = QtCore.QProcess()
-        process.setProcessEnvironment(env)
-        working_dir = modelDir
-        if working_dir:
-            process.setWorkingDirectory(working_dir)
-        process.start(cmd[0], cmd[1:])
+        if env.contains("APPIMAGE"):
+            cmd = dexcsCfdTools.makeRunCommand('./run', modelDir, source_env=False)
+            print('cmd = ', cmd)
+            FreeCAD.Console.PrintMessage("Solver run command: " + ' '.join(cmd) + "\n")
+            env = QtCore.QProcessEnvironment.systemEnvironment()
+            print('env = ', env)
+            dexcsCfdTools.removeAppimageEnvironment(env)
+            process = QtCore.QProcess()
+            process.setProcessEnvironment(env)
+            working_dir = modelDir
+            if working_dir:
+                process.setWorkingDirectory(working_dir)
+            process.start(cmd[0], cmd[1:])
+        else:
+            comm= "gnome-terminal --geometry=80x15 --zoom=0.9 -- bash --rcfile ./run"
+            #subprocess.call(comm.strip().split(" "))
+            os.system(comm)
 
 def dummyFunction(): # 何故かこれがないとうまく動かない      
     pass

@@ -84,17 +84,20 @@ if os.path.isdir(constantFolder):
         f.close()
         #実行権付与
         os.system("chmod a+x run")
-        #実行
-        #comm = "xfce4-terminal --execute bash ./run"
-        #comm= "gnome-terminal --geometry=80x15 --zoom=0.9 -- bash --rcfile ./run"
-        #os.system(comm.encode("utf-8"))
-        cmd = dexcsCfdTools.makeRunCommand('./run', modelDir, source_env=False)
-        print('cnd = ', cmd)
+
         env = QtCore.QProcessEnvironment.systemEnvironment()
-        dexcsCfdTools.removeAppimageEnvironment(env)
-        process = QtCore.QProcess()
-        process.setProcessEnvironment(env)
-        process.start(cmd[0], cmd[1:])
+        if env.contains("APPIMAGE"):
+            cmd = dexcsCfdTools.makeRunCommand('./run', modelDir, source_env=False)
+            env = QtCore.QProcessEnvironment.systemEnvironment()
+            dexcsCfdTools.removeAppimageEnvironment(env)
+            process = QtCore.QProcess()
+            process.setProcessEnvironment(env)
+            process.start(cmd[0], cmd[1:])
+        else:
+            #実行
+            #comm = "xfce4-terminal --execute bash ./run"
+            comm= "gnome-terminal --geometry=80x15 --zoom=0.9 -- bash --rcfile ./run"
+            os.system(comm.encode("utf-8"))
     
     else:
         message = (_("there is no polyMesh folder in constant.\n  check current directory.")) 
