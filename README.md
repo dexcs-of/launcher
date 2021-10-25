@@ -24,12 +24,19 @@ http://mogura7.zenno.info/~et/wordpress/ocse/?p=12722
 なお、上書きした場合でも、元の user.cfg ファイルは、 user.cfr.<user>.orig という名前で残すようにしてあるので復
 元は可能。またテキストファイルなので、内容を理解した上での新旧ファイル間での組み合わせ改変は可能である。
 
+## FreeCADの更新
+
+DEXCS2018以前では、FreeCADを更新する必要がある。更新方法は
+
+の記事を参照されたい。
+
 
 ## 動作を確認できているDEXCS for OpenFOAM
 
 - DEXCS2021
 - DEXCS2020
 - DEXCS2019
+- DEXCS2018
 - DEXCS2017
 - DEXCS2016
 - DEXCS2015
