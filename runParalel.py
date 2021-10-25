@@ -34,12 +34,6 @@ if os.path.isfile(caseFileDict) == True:
 systemFolder = modelDir + "/system"
 constantFolder = modelDir + "/constant"
 
-env = QtCore.QProcessEnvironment.systemEnvironment()
-
-if env.contains("APPIMAGE"):
-    message = (_("this FreeCAD is AppImage version.\n  some function of runParallelDialog doesen't work.\n if you want utilize the function, use normal TreeFoam menu.")) 
-    ans = QtGui.QMessageBox.critical(None, _("AppImage Warning"), message, QtGui.QMessageBox.Yes)
-    dexcsCfdTools.removeAppimageEnvironment(env)
 
 
 if os.path.isdir(systemFolder) and os.path.isdir(constantFolder):
@@ -76,49 +70,39 @@ if os.path.isdir(systemFolder) and os.path.isdir(constantFolder):
     f.close()
     #実行権付与
     os.system("chmod a+x run")
-    #実行
-    #comm = "xfce4-terminal --execute ./run"
-    #comm= "gnome-terminal --geometry=80x15 --zoom=0.9 -- bash --rcfile ./run"
-    #subprocess.call(comm .strip().split(" "))
-    #if TreeFoamVersion.startswith('3') :
-    #    message = (_("sorry for TreeFoam Ver.3*, \n  this module cannnot activate correctly.\n You need to use this module from TreeFoam main window."))
-    #    msgBox = QtGui.QMessageBox()
-    #    msgBox.setWindowTitle(_("check TreeFoam version"))
-    #    msgBox.setText(message)
-    #    msgBox.setIcon(QtGui.QMessageBox.Warning)
-    #    tryButton = msgBox.addButton(QtGui.QMessageBox.Ignore)
-    #    abortButton = msgBox.addButton(QtGui.QMessageBox.Abort)
-    #    msgBox.exec_()
-    #    res = msgBox.clickedButton()
-    #
-    #    if res == tryButton:
-    #        os.system(comm)
-    #    else:
-    #        stat = "CANCEL"
-    #else :
-    #os.system(comm)
-    cmd = dexcsCfdTools.makeRunCommand('./run', modelDir, source_env=False)
-    print('cmd = ', cmd)
-    FreeCAD.Console.PrintMessage("Solver run command: " + ' '.join(cmd) + "\n")
+
     env = QtCore.QProcessEnvironment.systemEnvironment()
-    print('env = ', env)
-    #if env_vars:
-    #    for key in env_vars:
-    #        env.insert(key, env_vars[key])
-    dexcsCfdTools.removeAppimageEnvironment(env)
-    process = QtCore.QProcess()
-    process.setProcessEnvironment(env)
-    working_dir = modelDir
-    if working_dir:
-        process.setWorkingDirectory(working_dir)
-    # if platform.system() == "Windows":
-    #     # Run through a wrapper process to allow clean termination
-    #     cmd = [os.path.join(FreeCAD.getHomePath(), "bin", "python.exe"),
-    #            '-u',  # Prevent python from buffering stdout
-    #            os.path.join(os.path.dirname(__file__), "WindowsRunWrapper.py")] + cmd
-    # print("Raw command: ", cmd)
-    process.start(cmd[0], cmd[1:])
-    
+
+    if env.contains("APPIMAGE"):
+        message = (_("this FreeCAD is AppImage version.\n  some function of runParallelDialog doesen't work.\n if you want utilize the function, use normal TreeFoam menu.")) 
+        ans = QtGui.QMessageBox.critical(None, _("AppImage Warning"), message, QtGui.QMessageBox.Yes)
+        dexcsCfdTools.removeAppimageEnvironment(env)
+
+        cmd = dexcsCfdTools.makeRunCommand('./run', modelDir, source_env=False)
+        FreeCAD.Console.PrintMessage("Solver run command: " + ' '.join(cmd) + "\n")
+        env = QtCore.QProcessEnvironment.systemEnvironment()
+        dexcsCfdTools.removeAppimageEnvironment(env)
+        process = QtCore.QProcess()
+        process.setProcessEnvironment(env)
+        working_dir = modelDir
+        if working_dir:
+            process.setWorkingDirectory(working_dir)
+        # if platform.system() == "Windows":
+        #     # Run through a wrapper process to allow clean termination
+        #     cmd = [os.path.join(FreeCAD.getHomePath(), "bin", "python.exe"),
+        #            '-u',  # Prevent python from buffering stdout
+        #            os.path.join(os.path.dirname(__file__), "WindowsRunWrapper.py")] + cmd
+        # print("Raw command: ", cmd)
+        process.start(cmd[0], cmd[1:])
+
+    else:
+
+        #実行
+        #comm = "xfce4-terminal --execute ./run"
+        comm= "gnome-terminal --geometry=80x15 --zoom=0.9 -- bash --rcfile ./run"
+        #subprocess.call(comm .strip().split(" "))
+        os.system(comm)
+
 else:
     message = (_("this folder is not case folder of OpenFOAM.\n  check current directory."))
     ans = QtGui.QMessageBox.critical(None, _("check OpenFOAM case"), message, QtGui.QMessageBox.Yes)
