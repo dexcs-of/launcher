@@ -70,13 +70,10 @@ class dexcsCfdCaseWriterFoam:
         p_new = pathlib.Path(fname)
         
         title =  "#!/bin/bash\n"
-        configDict = pyDexcsSwakSubset.readConfigTreeFoam()
-        envOpenFOAMFix = configDict["bashrcFOAM"]
-        configDict = pyDexcsSwakSubset.readConfigDexcs()
-        envTreeFoam = configDict["TreeFoam"]
-        envOpenFOAMFix = envOpenFOAMFix.replace('$TreeFoamUserPath',envTreeFoam)
-        envOpenFOAMFix = os.path.expanduser(envOpenFOAMFix)
-        envSet = "source " + envOpenFOAMFix + '\n'
+        prefs = dexcsCfdTools.getPreferencesLocation()
+        installation_path = FreeCAD.ParamGet(prefs).GetString("InstallationPath", "")
+        envOpenFOAMFix = os.path.expanduser(installation_path)
+        envSet = "source " + envOpenFOAMFix + '/etc/bashrc\n'
 
         self.ParallelCores = self.solver_obj.ParallelCores
         #print(self.ParallelCores)
