@@ -29,19 +29,17 @@ constantFolder = modelDir + "/constant"
 if os.path.isdir(systemFolder) and os.path.isdir(constantFolder):
 
     CaseFilePath=modelDir
-    #print(CaseFilePath)
     os.chdir(CaseFilePath)
-    #geditの実行ファイル作成
     caseName = CaseFilePath
-    configDict = pyDexcsSwakSubset.readConfigTreeFoam()
-    paraFoamFix = configDict["paraFoam"]
-    #paraFoamFix = os.path.expanduser("~") + "/.TreeFoamUser/app/runParaFoam-DEXCS"
+    prefs = dexcsCfdTools.getPreferencesLocation()
+    ParaviewPath = FreeCAD.ParamGet(prefs).GetString("ParaviewPath", "")
     title =  "#!/bin/bash\n"
-    envSet = ". " + os.path.expanduser("~") + "/.FreeCAD/runTreefoamSubset\n"
-    solverSet = "runParaFoamOptionDialog.py " + paraFoamFix + " " + caseName
-    sleep = ""
-    cont = title + envSet + solverSet + sleep
-    #print(cont)
+    cont = title + "export LD_LIBRARY_PATH=''\n"
+    cont = cont + "a=`pwd`\n"
+    cont = cont + "openName=`basename $a`.foam\n"
+    cont = cont + "touch $openName\n"
+    cont = cont + ParaviewPath + " $openName\n"
+    cont = cont + "rm $openName\n"
     f=open("./run","w")
     f.write(cont)
     f.close()
@@ -49,10 +47,8 @@ if os.path.isdir(systemFolder) and os.path.isdir(constantFolder):
     os.system("chmod a+x run")
     #実行
     cmd = dexcsCfdTools.makeRunCommand('./run', modelDir, source_env=False)
-    print('cmd = ', cmd)
     FreeCAD.Console.PrintMessage("Solver run command: " + ' '.join(cmd) + "\n")
     env = QtCore.QProcessEnvironment.systemEnvironment()
-    print('env = ', env)
     dexcsCfdTools.removeAppimageEnvironment(env)
     process = QtCore.QProcess()
     process.setProcessEnvironment(env)
