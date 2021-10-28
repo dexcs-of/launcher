@@ -28,14 +28,14 @@ http://mogura7.zenno.info/~et/wordpress/ocse/?p=12722
 
 DEXCS2018以前では、FreeCADを最新のAppImage版（FreeCAD_0.19-24276-Linux-Conda_glibc2.12-x86_64.AppImage）に更新する必要がある。更新方法はダウンロードしたAppImage版の収納されたフォルダにて、
 管理者権限にて、たとえば以下のコマンドを入力すれば良い。
-
+<code>
  cp FreeCAD_0.19-24276-Linux-Conda_glibc2.12-x86_64.AppImage /opt/
  ln -s /opt/FreeCAD_0.19-24276-Linux-Conda_glibc2.12-x86_64.AppImage /opt/freecad 
  mv /usr/bin/freecad /usr/bin/freecad.orig
  ln -s /opt/freecad /usr/bin/freecad
  mv /usr/bin/freecad-daily /usr/bin/freecad-daily.orig
  ln -s /opt/freecad /usr/bin/freecad-daily
-
+</code>
 元々インストールされてあった/usr/bin/freecad なり、/usr/bin/freecad-dailyは、.orig の拡張子を付けて残すようにしてあるので、戻したい場合はこれを使えば良い。 
 
 
