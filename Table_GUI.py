@@ -32,6 +32,7 @@ import glob
 import multiprocessing
 import threading
 import time
+import pathlib
 
 #from PyQt4 import QtCore, QtGui
 #from PySide import QtCore, QtGui
@@ -40,6 +41,8 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 import Util_Table
+
+
 
 #プロットツール連携状況に合わせてセットすること
 #from dexcsCfdPostPlot import PostPlot
@@ -53,6 +56,11 @@ fontName = "Monospace"
 #左列挙欄の各ファイルのマトリックスデータとラベル名を辞書式として管理
 Use_checkedfile_Matrixes = {}
 Use_checkedfile_rowLabels  = {}
+Use_checkedfile_Matrixes_other = {}
+Use_checkedfile_rowLabels_other  = {}
+
+other_flag = False
+
 
 #テーブルのカラム表示は一定なのでグローバル変数とした
 column_header = ["id","name","s/f","X","Y", "vec","length"]
@@ -162,9 +170,14 @@ class getFileNamesDialog(QWidget):
         return self.files
 
 
+#class elements_Tree(QWidget):
+#    def __init__(self, parent=None):
+#        super().__init__(parent)
+
 class elements_Tree(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self,ins_filenamegroup, parent=None):
         super().__init__(parent)
+
 
         tree_widget = QTreeWidget()
         self.tree_widget = tree_widget
@@ -189,19 +202,27 @@ class elements_Tree(QWidget):
         #branch2.setData(0, Qt.CheckStateRole, Qt.Checked)
         #branch2.setText(0,"branch2")
 
-        for item in filenamegroup:
-        #for item in namegroup:
-            temp_item = QTreeWidgetItem()
+        if ins_filenamegroup == None:
+            pass
+            #temp_item = QTreeWidgetItem()
+            #temp_item.setData(0, Qt.CheckStateRole, Qt.Unchecked)
+            #temp_item.setText(0, "Dummy")     
+            #self.tree_widget.addTopLevelItem(temp_item)
+            #temp_item.setExpanded(True)
+
+        else:
+            for item in ins_filenamegroup:
+            #for item in namegroup:
+                temp_item = QTreeWidgetItem()
             
-            #temp_item.setData(0, Qt.CheckStateRole, Qt.Checked)
-            #temp_item.setData(0, Qt.CheckStateRole, False )
-            temp_item.setData(0, Qt.CheckStateRole, Qt.Unchecked)
+                #temp_item.setData(0, Qt.CheckStateRole, Qt.Checked)
+                #temp_item.setData(0, Qt.CheckStateRole, False )
+                temp_item.setData(0, Qt.CheckStateRole, Qt.Unchecked)
             
-            temp_item.setText(0, item)
-           
-            
-            self.tree_widget.addTopLevelItem(temp_item)
-            temp_item.setExpanded(True)
+                temp_item.setText(0, item)
+                       
+                self.tree_widget.addTopLevelItem(temp_item)
+                temp_item.setExpanded(True)
 
         #addItem(branch1, "item1-1", 1, 100)
         #addItem(branch1, "item1-2", 2, 200)
@@ -331,7 +352,7 @@ class Ui_MainWindow(object):
         self.showSelectDir = ""
         self.loadDir = ""
 
-    def setupUi(self, MainWindow, Table,elements_tree, showSelectDir, loadDir,typeComboBox ):
+    def setupUi(self, MainWindow, Table, default_tree, other_tree, showSelectDir, loadDir,typeComboBox ):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(509, 270)
 
@@ -357,7 +378,7 @@ class Ui_MainWindow(object):
         self.hLayout_buttons.setObjectName("hLayout_buttons")
 
         #
-        #self.verticalLayout.addLayout(self.hLayout_buttons)
+        self.verticalLayout.addLayout(self.hLayout_buttons)
 
 
 
@@ -365,11 +386,48 @@ class Ui_MainWindow(object):
         self.hLayout_buttons.setObjectName("main_layout")
 
 
-        self.elements_tree = elements_tree
-        self.elements_tree.setObjectName("treewidget")
-                
-        self.main_hLayout.addWidget(self.elements_tree,1)
+        self.Left_verticalLayout = QVBoxLayout()
 
+
+
+        self.defalut_tree = default_tree
+        self.defalut_tree.setObjectName("treewidget")
+                
+        self.Left_verticalLayout.addWidget(self.defalut_tree)
+
+        self.other_tree = other_tree
+        self.other_tree.setObjectName("treewidget2")
+
+        self.Left_verticalLayout.addWidget(self.other_tree)
+
+
+        self.horizontalLayout_3 = QHBoxLayout()
+
+        self.AddFileButton = QPushButton()#self.frame2を削除
+        #multi_lang
+        self.AddFileButton.setObjectName("AddFileButton")
+        self.AddFileButton.setText(_("Add File"))
+        self.horizontalLayout_3.addWidget(self.AddFileButton)
+
+        #button load2
+        self.DeleteFileButton = QPushButton()#self.frame2を削除
+        self.DeleteFileButton.setObjectName("DeleteFileButton")
+        self.DeleteFileButton.setText(_("Delete File"))
+        self.horizontalLayout_3.addWidget(self.DeleteFileButton)
+
+
+        self.mini_horizontalGroupBox = QGroupBox('')
+        self.mini_horizontalGroupBox.setLayout(self.horizontalLayout_3)
+
+        self.Left_verticalLayout.addWidget(self.mini_horizontalGroupBox)
+
+        #group action2
+        self.horizontalGroupBox1 = QGroupBox('')
+        self.horizontalGroupBox1.setLayout(self.Left_verticalLayout)
+        
+        self.main_hLayout.addWidget(self.horizontalGroupBox1,1)
+        
+        
         
         self.fortooltip = QLabel()
         #multi_lang
@@ -378,6 +436,8 @@ class Ui_MainWindow(object):
 
         self.main_hLayout.addWidget(self.fortooltip,0.05)
         
+
+        self.Right_verticalLayout = QVBoxLayout()
         
         #tableをセット
         self.tableWidget = Table                #置き換え
@@ -386,24 +446,21 @@ class Ui_MainWindow(object):
         self.tableWidget.setObjectName("tableWidget")
         #self.tableWidget.setToolTip(_("Test"))
 
-        self.main_hLayout.addWidget(self.tableWidget,2)
+        #self.main_hLayout.addWidget(self.tableWidget,2)
         
         #self.verticalLayout.addWidget(self.tableWidget)
-        self.verticalLayout.addLayout(self.main_hLayout)
+        self.Right_verticalLayout.addWidget(self.tableWidget,8)
 
         self.showSelectDir = showSelectDir
         self.loadDir = loadDir
 
 
 
-        self.vLayout_6 = QVBoxLayout()
-        #self.vLayout_6.addLayout(self.hLayout_6)
+        #self.vLayout_6 = QVBoxLayout()
 
         #button export2
         self.horizontalLayout_6 = QHBoxLayout()
-        
-        
-        
+               
                 #タイトル名
         #  label_depth
         self.label_title = QLabel()
@@ -444,7 +501,8 @@ class Ui_MainWindow(object):
         spacerItem6 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
         self.horizontalLayout_6.addItem(spacerItem6)
 
-        self.vLayout_6.addLayout(self.horizontalLayout_6)
+        #self.vLayout_6.addLayout(self.horizontalLayout_6)
+        self.Right_verticalLayout.addLayout(self.horizontalLayout_6,1)
 
 
         self.horizontalLayout_7 = QHBoxLayout()
@@ -502,8 +560,8 @@ class Ui_MainWindow(object):
 
 
 
-        self.vLayout_6.addLayout(self.horizontalLayout_7)
-
+        #self.vLayout_6.addLayout(self.horizontalLayout_7)
+        self.Right_verticalLayout.addLayout(self.horizontalLayout_7,1)
 
 
 
@@ -530,16 +588,21 @@ class Ui_MainWindow(object):
         spacerItem6 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
         self.horizontalLayout_8.addItem(spacerItem6)
 
-        self.vLayout_6.addLayout(self.horizontalLayout_8)
-
+        #self.vLayout_6.addLayout(self.horizontalLayout_8)
+        self.Right_verticalLayout.addLayout(self.horizontalLayout_8,1)
 
         #group action2
         self.horizontalGroupBox6 = QGroupBox('')
         #self.horizontalGroupBox6.setLayout(self.horizontalLayout_6)
-        self.horizontalGroupBox6.setLayout(self.vLayout_6)
+        self.horizontalGroupBox6.setLayout(self.Right_verticalLayout)
 
 
-        self.verticalLayout.addWidget(self.horizontalGroupBox6)
+        self.main_hLayout.addWidget(self.horizontalGroupBox6,2)
+
+        self.horizontalGroupBox8 = QGroupBox('')
+        self.horizontalGroupBox8.setLayout(self.main_hLayout)
+
+        self.verticalLayout.addWidget(self.horizontalGroupBox8)
 
 
 
@@ -578,7 +641,7 @@ class Ui_MainWindow(object):
         self.button_open.setIconSize(QSize(24,24))
         sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         self.button_open.setSizePolicy(sizePolicy)
-        self.hLayout_buttons.addWidget(self.button_open)
+        #self.hLayout_buttons.addWidget(self.button_open)
 
         #  reloadButton
         self.button_open3 = QPushButton()
@@ -589,12 +652,12 @@ class Ui_MainWindow(object):
         self.button_open3.setIconSize(QSize(24,24))
         sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         self.button_open3.setSizePolicy(sizePolicy)
-        self.hLayout_buttons.addWidget(self.button_open3)
+        #self.hLayout_buttons.addWidget(self.button_open3)
 
         #  showSelectDirを挿入
         self.label_loadDir = QLabel()
         self.label_loadDir.setObjectName("label_loadDir")
-        self.label_loadDir.setText("additonal_postFile: " + self.loadDir)
+        self.label_loadDir.setText("loadFile: " + self.loadDir)
         self.hLayout_buttons.addWidget(self.label_loadDir)
 
         #---------------------
@@ -630,7 +693,9 @@ class gridTable(Ui_MainWindow):
             titleDir = "..." + titleDir[-77:]
         self.showSelectDir = titleDir
 
-        loadDir = init_loadDir
+        loadDir = rowLabels[0]
+        
+        
         if len(loadDir) > 80:
             loadDir = "..." + loadDir[-77:]
         self.loadDir = loadDir
@@ -638,10 +703,13 @@ class gridTable(Ui_MainWindow):
         self.MainWindow = QMainWindow()           #redefine
         self.Table = Util_Table.Table()             #use original tablewidget
         
-        self.elements_tree = elements_Tree()
+        
+        
+        self.default_tree = elements_Tree(filenamegroup)
+        self.other_tree = elements_Tree(None)
         
         self.typeComboBox = QComboBox()
-        self.setupUi(self.MainWindow, self.Table, self.elements_tree, self.showSelectDir, self.loadDir,self.typeComboBox)       #making GUI
+        self.setupUi(self.MainWindow, self.Table, self.default_tree, self.other_tree, self.showSelectDir, self.loadDir,self.typeComboBox)       #making GUI
         #font setting
         font = QFont()
         font.setFamily(fontName)
@@ -726,10 +794,13 @@ class gridTable(Ui_MainWindow):
         self.Table.itemClicked.connect(self.onItemClick)
         self.Table.enterSignal.connect(self.onEnterSignalFromEditor)
         
-        self.elements_tree.tree_widget.itemClicked.connect(self.onfile_enumClick)
-        
+        self.default_tree.tree_widget.itemClicked.connect(self.onfile_enumClick)
+        self.other_tree.tree_widget.itemClicked.connect(self.onfile_enumClick_other)
 
         ###########################################(20200611)追加ボタンと実装のconnect#####################################################################################
+
+        QObject.connect(self.AddFileButton, SIGNAL("clicked()"), self.actionOnAddFileButton)
+        QObject.connect(self.DeleteFileButton, SIGNAL("clicked()"), self.actionOnDeleteFileButton)
         
         QObject.connect(self.PlotButton, SIGNAL("clicked()"), self.actionOnPlotButton)
         QObject.connect(self.SaveButton, SIGNAL("clicked()"), self.actionOnSaveButton)        
@@ -783,17 +854,18 @@ class gridTable(Ui_MainWindow):
     def onDownTable(self):
         logging.debug("----down")
     def onItemClick(self, widgetItem):
-        row = widgetItem.row()
-        col = widgetItem.column()
 
-        text = widgetItem.text()
-        flag = 0
 
         self.maskEvent = True
         
         table = Util_Table.tableWidget(self.tableWidget)
 
         for counter in range(self.tableWidget.rowCount()):
+            table.setCellValue(counter,0,str(counter))
+            
+            
+            if not diy_is_num(table.getCellValue(counter,2)):
+               table.setCellValue(counter,2,"1") 
             if not(table.getCellValue(counter,3) == "Use" or table.getCellValue(counter,3) == "---"):
                table.setCellValue(counter,3,"---")
             if not(table.getCellValue(counter,4) == "Use" or table.getCellValue(counter,4) == "---"):
@@ -803,6 +875,13 @@ class gridTable(Ui_MainWindow):
         table.adjustCells()
         self.maskEvent = False        
 
+        row = widgetItem.row()
+        col = widgetItem.column()
+
+        text = widgetItem.text()
+        flag = 0
+
+
         if text == "Use":
             newText = "---"
         elif text == "---":
@@ -810,11 +889,12 @@ class gridTable(Ui_MainWindow):
 
         else:
             flag = 1
+
         if flag == 0:
 
             table = Util_Table.tableWidget(self.tableWidget)
             table.setCellValue(row, col, newText)
-            self.updateDictMatrixes()
+            self.updateDictMatrixes() 
 
             checkbox_flag = False
             for row in range(self.tableWidget.rowCount()):
@@ -826,11 +906,25 @@ class gridTable(Ui_MainWindow):
 
 
 
+
     def toggle_check(self,checkbox_flag):
-        self.elements_tree.maskEvent = True
-        select_item = self.elements_tree.tree_widget.selectedItems()[0]
-        Index = self.elements_tree.tree_widget.indexOfTopLevelItem(select_item)   
-        item = self.elements_tree.tree_widget.topLevelItem(Index)
+
+        if other_flag == False:        
+            self.default_tree.maskEvent = True
+        else:
+            self.other_tree.maskEvent = True
+
+        if other_flag == False:        
+            select_item = self.default_tree.tree_widget.selectedItems()[0]
+        else:
+            select_item = self.other_tree.tree_widget.selectedItems()[0]
+
+        if other_flag == False:        
+            Index = self.default_tree.tree_widget.indexOfTopLevelItem(select_item)   
+            item = self.default_tree.tree_widget.topLevelItem(Index)
+        else:
+            Index = self.other_tree.tree_widget.indexOfTopLevelItem(select_item)   
+            item = self.other_tree.tree_widget.topLevelItem(Index)
 
         logging.debug("toggle2")
         logging.debug(item.checkState(0))
@@ -842,8 +936,10 @@ class gridTable(Ui_MainWindow):
             item.setCheckState(0,Qt.Unchecked)
             logging.debug("unchecked") 
         #mask解除
-        self.elements_tree.maskEvent = False
-
+        if other_flag == False:
+            self.default_tree.maskEvent = False
+        else:
+            self.other_tree.maskEvent = False
 
     def enterSignalFromEditor(self):
         """ cellに組み込まれたtextEditorが終了した時の処理。
@@ -856,6 +952,8 @@ class gridTable(Ui_MainWindow):
         newText = self.Table.newText
         #textをitemに設定
         if newText != None:
+
+
             row = index.row()
             col = index.column()
             
@@ -871,20 +969,59 @@ class gridTable(Ui_MainWindow):
 
     def onfile_enumClick(self):
         logging.debug("file select")
-        select_item = self.elements_tree.tree_widget.selectedItems()[0]
+        select_item = self.default_tree.tree_widget.selectedItems()[0]
+
+        global other_flag
+        other_flag = False
 
         logging.debug(select_item)
         #絶対パスと相対パスの切り替え箇所１
-        #mapfile = postDir + "/" + filenamegroup[self.elements_tree.tree_widget.indexOfTopLevelItem(select_item)]
-        mapfile = filenamegroup[self.elements_tree.tree_widget.indexOfTopLevelItem(select_item)]
+        #mapfile = postDir + "/" + filenamegroup[self.default_tree.tree_widget.indexOfTopLevelItem(select_item)]
+        mapfile = filenamegroup[self.default_tree.tree_widget.indexOfTopLevelItem(select_item)]
+
+        self.loadDir = mapfile        
+        self.label_loadDir.setText("loadDir: " + self.loadDir)       
+
+                
         logging.debug(mapfile)
 
+        print(mapfile)
         if mapfile in Use_checkedfile_Matrixes:
             logging.debug("mapfile exists")
             self.setEditedMatrixData(mapfile)
         else:
             self.setDefaultMatrix(mapfile )                
-        #logging.debug( self.elements_tree.tree_widget.indexOfTopLevelItem(select_item))
+        #logging.debug( self.default_tree.tree_widget.indexOfTopLevelItem(select_item))
+
+
+    def onfile_enumClick_other(self):
+        print("otherfile select")
+        logging.debug("file select")
+        select_item = self.other_tree.tree_widget.selectedItems()[0]
+
+        global other_flag
+        other_flag = True
+
+        logging.debug(select_item)
+        #絶対パスと相対パスの切り替え箇所１
+        #mapfile = postDir + "/" + filenamegroup[self.default_tree.tree_widget.indexOfTopLevelItem(select_item)]
+        print("seconde")
+        mapfile = filenamegroup_other[self.other_tree.tree_widget.indexOfTopLevelItem(select_item)]
+        
+        self.loadDir = mapfile        
+        self.label_loadDir.setText("loadDir: " + self.loadDir)       
+                
+        logging.debug(mapfile)
+        print("third")
+
+        if mapfile in Use_checkedfile_Matrixes_other:
+            print("mapfile exists")
+            self.setEditedMatrixData(mapfile)
+        else:
+            print("try opening other file")
+            self.setDefaultMatrix(mapfile )                
+        #logging.debug( self.default_tree.tree_widget.indexOfTopLevelItem(select_item))
+
 
 
 
@@ -903,6 +1040,67 @@ class gridTable(Ui_MainWindow):
 
         self.typeComboBox.clear()
         self.typeComboBox.addItems(dplt_system)
+
+
+    def actionOnAddFileButton(self):
+
+        gettingDir = os.getcwd()
+        filename = getFileNamesDialog(gettingDir).show()
+
+        global filenamegroup_other
+
+        if filename in filenamegroup_other:
+            print("Select file already loaded")
+            return
+            
+        p_abs = pathlib.Path(filename[0])
+        #p_abs = pathlib.Path('/home/caeuser/projects/airplane_8param/div2_11111111/postProcessing/forces')
+        #print(p_abs)
+
+        startDir = pathlib.Path(postDir)
+        #print(postDir)
+        #print(startDir)
+        #filenamegroup_other.append(p_abs.relative_to(startDir) )
+
+        rel_filename = (os.path.relpath(filename[0],postDir) )
+        filenamegroup_other.append(rel_filename )
+
+        #logging.debug(filename)
+        print(rel_filename)
+        
+        self.other_tree.maskEvent = True
+
+        #filename = "Test"
+        temp_item = QTreeWidgetItem()
+            
+        #temp_item.setData(0, Qt.CheckStateRole, Qt.Checked)
+        #temp_item.setData(0, Qt.CheckStateRole, False )
+        temp_item.setData(0, Qt.CheckStateRole, Qt.Unchecked)
+            
+        #temp_item.setText(0, str(filename[0]))
+        temp_item.setText(0, rel_filename)
+                       
+        self.other_tree.tree_widget.addTopLevelItem(temp_item)
+        temp_item.setExpanded(True)
+
+        
+        #select_item = self.default_tree.tree_widget.selectedItems()[0]
+        #Index = self.default_tree.tree_widget.indexOfTopLevelItem(select_item)   
+        #item = self.default_tree.tree_widget.topLevelItem(Index)
+        
+        #if checkbox_flag == True:
+            #item.setCheckState(0,Qt.Checked)
+            #logging.debug("checked")
+        #else:
+            #item.setCheckState(0,Qt.Unchecked)
+            #logging.debug("unchecked") 
+        #mask解除
+        
+        self.other_tree.maskEvent = False
+
+
+    def actionOnDeleteFileButton(self):
+        print("not yet impl")
 
 
     def actionOnPlotButton(self):
@@ -1081,7 +1279,12 @@ class gridTable(Ui_MainWindow):
         
         #sorted_Use_checkedfile_Matrixes = sorted(Use_checkedfile_Matrixes.items(), key=lambda x:x[0])
 
-        for file_key,file_cont in Use_checkedfile_Matrixes.items():
+        United_Use_checkedfile_Matrixes = Use_checkedfile_Matrixes
+        United_Use_checkedfile_Matrixes.update(Use_checkedfile_Matrixes_other)
+
+
+        #for file_key,file_cont in Use_checkedfile_Matrixes.items():
+        for file_key,file_cont in United_Use_checkedfile_Matrixes.items():
             for row_count,row_data in enumerate(file_cont):
 
 
@@ -1345,6 +1548,7 @@ class gridTable(Ui_MainWindow):
         mapfiles.append(mapfile)
 
         #for h,name in enumerate(checked_postProcessisng_files):
+        print(mapfile)
         for h,name in enumerate(mapfiles):        
             fileunit_data_columns = []
             #Dir__Name = postDir + "/" + name
@@ -1353,7 +1557,9 @@ class gridTable(Ui_MainWindow):
             
             logging.debug(Dir__Name)
             #絶対パスと相対パスの切り替え箇所２
-            tempf = open(postDir + "/" + name)
+            tempf = open(os.path.normpath(postDir + "/" + name))
+            #tempf = open(postDir + "/" + name)
+            
             #tempf = open(name)
             cont_page = tempf.read().splitlines()            
             tempf.close()
@@ -1450,7 +1656,8 @@ class gridTable(Ui_MainWindow):
                 #colData.append("")
                 colData1.append(colData)
 
-                rowLabels.append(name)
+                #rowLabels.append(name)
+                rowLabels.append(" ")
                                     
             fileunit_data_columns = ([list(x) for x in zip(*fileunit_data_columns)])
 
@@ -1513,8 +1720,14 @@ class gridTable(Ui_MainWindow):
     def setEditedMatrixData(self,mapfile):
         """ cellにデータを設定""" 
 
-        EditedMatrix = Use_checkedfile_Matrixes[mapfile]
-        rowLabels = Use_checkedfile_rowLabels[mapfile]
+        if other_flag == False:
+            EditedMatrix = Use_checkedfile_Matrixes[mapfile]
+            rowLabels = Use_checkedfile_rowLabels[mapfile]
+        else:
+            EditedMatrix = Use_checkedfile_Matrixes_other[mapfile]
+            rowLabels = Use_checkedfile_rowLabels_other[mapfile]
+        
+        
         logging.debug("call prev")
         logging.debug(EditedMatrix)
 
@@ -1536,27 +1749,45 @@ class gridTable(Ui_MainWindow):
         """ cellにデータを設定"""
         global Use_checkedfile_Matrixes
         global Use_checkedfile_rowLabels
+        global Use_checkedfile_Matrixes_other
+        global Use_checkedfile_rowLabels_other        
         
         temp_lists =[]
         rowLabels =[]        
 
         table = Util_Table.tableWidget(self.tableWidget)
         for row in range(self.tableWidget.rowCount()):
-            rowLabels.append(table.getRowLabelValue(row))
+            #rowLabels.append(table.getRowLabelValue(row))
+            rowLabels.append(" ")
             temp_row = []
             for col in range(self.tableWidget.columnCount()):
                 value = str(table.getCellValue(row,col))
                 temp_row.append(value)
             temp_lists.append(temp_row)    
 
-        select_item = self.elements_tree.tree_widget.selectedItems()[0]
+        if other_flag == False:
+            select_item = self.default_tree.tree_widget.selectedItems()[0]
+        else:
+            select_item = self.other_tree.tree_widget.selectedItems()[0]
+        
         #絶対パスと相対パスの切り替え箇所３
-        #filepath = postDir + "/" + filenamegroup[self.elements_tree.tree_widget.indexOfTopLevelItem(select_item)] 
-        filepath = filenamegroup[self.elements_tree.tree_widget.indexOfTopLevelItem(select_item)]
+        #filepath = postDir + "/" + filenamegroup[self.default_tree.tree_widget.indexOfTopLevelItem(select_item)] 
+        if other_flag==False:
+            filepath = filenamegroup[self.default_tree.tree_widget.indexOfTopLevelItem(select_item)]
+        else:
+            filepath = filenamegroup_other[self.other_tree.tree_widget.indexOfTopLevelItem(select_item)]
+
+        print(filepath)        
         #filepath = postDir + "/" + filenamegroup[0]
         logging.debug("matrix for loop success") 
-        Use_checkedfile_rowLabels[filepath] = rowLabels              
-        Use_checkedfile_Matrixes[filepath] = temp_lists
+        if other_flag == False:
+            Use_checkedfile_rowLabels[filepath] = rowLabels              
+            Use_checkedfile_Matrixes[filepath] = temp_lists
+        else:
+            Use_checkedfile_rowLabels_other[filepath] = rowLabels              
+            Use_checkedfile_Matrixes_other[filepath] = temp_lists
+        
+        
         logging.debug("get matrix finished")
 
     def setMatrixData2(self):
@@ -1760,6 +1991,10 @@ if __name__ == "__main__":
             if postfile[-4:] == "dplt" and postfile[0] != ".":
                 dplt_system.append(postfile)
     dplt_system.sort()
+
+
+    filenamegroup_other = []
+
 
     rowLabels = []
     rowLabels.append("blank")
