@@ -1964,6 +1964,8 @@ if __name__ == "__main__":
 
         dpltDir = learnDir + "/system/current.dplt"
 
+        print('dplDir = ',dplDir)
+
         platformDir = learnDir    
 
 
