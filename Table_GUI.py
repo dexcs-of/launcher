@@ -2023,7 +2023,7 @@ if __name__ == "__main__":
         app = QApplication.instance()
         logging.debug("no argument")
     
-
+    print("20211228_gitlab_test")
     # rowLabels = ["score", "param1", "param2", "param3", ""]
     # colLabels = ["score", "sub1", "sub2", "sub3", ""]
     # rowColVals = [[1, 2, 3, 4, ""],
