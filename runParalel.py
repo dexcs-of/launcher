@@ -12,23 +12,16 @@ import dexcsCfdTools
 
 import pythonVerCheck
 import pyDexcsSwakSubset
+import dexcsFunctions
 
-doc = App.ActiveDocument
-name = os.path.splitext(doc.FileName)[0]
-modelDir = os.path.dirname(doc.FileName)
+modelDir = dexcsFunctions.getCaseFileName()
+
 
 TreeFoamVersionFile = "/opt/TreeFoam/TreeFoamVersion"
 #print(TreeFoamVersionFile)
 if os.path.isfile(TreeFoamVersionFile) == True:
     f = open(TreeFoamVersionFile)
     TreeFoamVersion = f.read()
-    f.close()
-
-#モデルファイル置き場がケースファイルの場所（.CaseFileDictで指定）と異なる場合
-caseFileDict = modelDir + "/.CaseFileDict"
-if os.path.isfile(caseFileDict) == True:
-    f = open(caseFileDict)
-    modelDir = f.read()
     f.close()
 
 systemFolder = modelDir + "/system"

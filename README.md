@@ -1,5 +1,5 @@
 # FreeCAD Macro & WorkBentch for DEXCS Launcher
-
+# 更新 2021/12/27
 ## これは何か
 OpenFOAMを使った仮想風洞試験(注1)を、ボタンを順番に押していくだけで実行できるようにしたDEXCSランチャー（FreeCADのマクロとワークベンチファイル）の一式とセットアップツール。
 DEXCS for OpenFOAM で、DEXCS2021より実装されているもので、DEXCS2020に搭載した[DEXCS-FC-Macro](https://gitlab.com/E.Mogura/dexcs-fc-macro)より大幅な変更がある。今後マクロに変更が加えられたら、
@@ -24,7 +24,7 @@ DEXCSランチャーのうち、DEXCSツールバー中のTreeFoamのサブセ�
 上書きしてしまうと、それらの情報が無くなってしまうということである。「 N 」を入力した場合には、
 マクロファイルがアップデートされるだけなので、ツールボタンを自身で作り直す作業が必要になる。作り直す方法については、
 
-http://mogura7.zenno.info/~et/wordpress/ocse/?p=12722
+https://ocse2.com/?p=12722
 
 の記事を参照されたい。
 
@@ -75,7 +75,7 @@ OpenFOAM（含むcfMesh）とParaViewが動く環境であればDEXCSワーク�
 （但し、実際に動作確認している訳ではないので、不具合があればレポートをお願いします）
 CentOS7上で動作確認した以下の記事も参照されたい。
 
-http://mogura7.zenno.info/~et/wordpress/ocse/?p=13506
+https://ocse2.com/?p=13506
 
 * cfMesh ( cartesianMesh )がインストールされており、 configDecs 中に、これを起動する為の(ビルドした)
 OpenFOAM の環境情報が記してある事。

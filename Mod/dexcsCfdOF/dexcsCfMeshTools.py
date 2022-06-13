@@ -491,8 +491,10 @@ class MainControl():
             if obj.ViewObject.Visibility:
                 if hasattr(obj, "Proxy") and isinstance(obj.Proxy, _CfdMeshRefinement):
                     if obj.NumberLayers > 1 :                    
-                        for objList in(obj.LinkedObjects):
-                            __patch__.append(objList.Label) 
+                        #for objList in(obj.LinkedObjects):
+                        for ref in(obj.ShapeRefs):
+                            #__patch__.append(objList.Label) 
+                            __patch__.append(ref[0].Label) 
                             __nLayer__.append(obj.NumberLayers) 
                             __expRatio__.append(obj.ExpansionRatio) 
                             __firstLayerHeight__.append(obj.FirstLayerHeight) 
@@ -643,8 +645,10 @@ class MainControl():
             if obj.ViewObject.Visibility:
                 if hasattr(obj, "Proxy") and isinstance(obj.Proxy, _CfdMeshRefinement):
                     if (not obj.Internal) and (obj.RefinementLevel > 0) :                    
-                        for objList in(obj.LinkedObjects):
-                            __patch__.append(objList.Label) 
+                        #for objList in(obj.LinkedObjects):
+                        for ref in(obj.ShapeRefs):
+                            #__patch__.append(objList.Label) 
+                            __patch__.append(ref[0].Label) 
                             __reflevel__.append(obj.RefinementLevel) 
                             __refThickness__.append(obj.RefinementThickness) 
 
@@ -787,8 +791,10 @@ class MainControl():
             if obj.ViewObject.Visibility:
                 if hasattr(obj, "Proxy") and isinstance(obj.Proxy, _CfdMeshRefinement):
                     if obj.Internal :                    
-                        for objList in(obj.LinkedObjects):
-                            __region__.append(objList.Label) 
+                        #for objList in(obj.LinkedObjects):
+                        for ref in(obj.ShapeRefs):
+                            #__region__.append(objList.Label) 
+                            __region__.append(ref[0].Label) 
                             __reflevel__.append(obj.RefinementLevel) 
         if __region__ :
             for objList in __region__ :
@@ -1059,8 +1065,10 @@ class MainControl():
             if obj.ViewObject.Visibility:
                 if hasattr(obj, "Proxy") and isinstance(obj.Proxy, _CfdMeshRefinement):
                     if obj.NumberLayers > 1 :                    
-                        for objList in(obj.LinkedObjects):
-                            __patch__.append(objList.Label) 
+                        #for objList in(obj.LinkedObjects):
+                        for ref in(obj.ShapeRefs):
+                            #__patch__.append(objList.Label) 
+                            __patch__.append(ref[0].Label) 
                             __nLayer__.append(obj.NumberLayers) 
                             patchNumber = patchNumber + 1
         #print('renameBoundary ',patchNumber)
@@ -1168,13 +1176,13 @@ class MainControl():
         読み込んだCADファイルに格納されたデータのうち、Typeがregion以外のオブジェクトをstlファイルとして出力する。
         """
         from dexcsCfdMeshRefinement import _CfdMeshRefinement
-        #print("makeStlFile")
+        print("makeStlFile")
         ijk = 111
-        #print('CaseFilePath = ' + CaseFilePath)
+        print('CaseFilePath = ' + CaseFilePath)
         modelName = os.path.splitext(os.path.basename(FreeCAD.ActiveDocument.FileName))[0]
         self.stlFileName = CaseFilePath + modelName + '.stl'
         self.fileName = CaseFilePath 
-        #print('stlFileName = ' + self.stlFileName)
+        print('stlFileName = ' + self.stlFileName)
 
         outputStlFile = open(self.stlFileName, 'w')
 
@@ -1185,8 +1193,8 @@ class MainControl():
             if obj.ViewObject.Visibility:
                 if hasattr(obj, "Proxy") and isinstance(obj.Proxy, _CfdMeshRefinement):
                     if obj.Internal :                    
-                        for objList in(obj.LinkedObjects):
-                            __region__.append(objList.Label) 
+                        for ref in(obj.ShapeRefs):
+                            __region__.append(ref[0].Label) 
 
         for obj in doc.Objects:
             if obj.ViewObject.Visibility:
@@ -1199,12 +1207,11 @@ class MainControl():
                             if obj.Label == objRegion :
                                 print('pass ' + obj.Label)
                                 checkRegion=True
-
                         # CfdSolver / Group Object / region指定Obj を除外
                         if obj.isDerivedFrom("Part::FeaturePython") or obj.isDerivedFrom("App::DocumentObjectGroupPython") or checkRegion:
                             pass
                         else:
-                            #print('append '+obj.Label)
+                            print('append '+obj.Label)
                                 
                             __objs__.append(obj)
                             file=self.fileName+obj.Label+'.ast'
@@ -1343,8 +1350,8 @@ class MainControl():
                         if (y[i].strip() == "}") or (y[i].strip() == ")") or (y[i].strip() == "};") or (y[i].strip() == ");") :#右カッコが見つかった
                             k_pop = k_pop - 1 #カッコの深さをー１
                         if (k_pop == 0):
-                        	is2 = i         # 最後の右カッコが見つかった位置（になるはず）
-                        	return is1,is2
+                            is2 = i         # 最後の右カッコが見つかった位置（になるはず）
+                            return is1,is2
 #---------------------------------------------------------------------------
 #---------------------------------------------------------------------------
 

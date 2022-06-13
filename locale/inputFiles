@@ -27,6 +27,8 @@
 ../Mod/dexcsCfdOF/dexcsCfdAnalysis.py
 ../Mod/dexcsCfdOF/dexcsCfdMesh.py
 ../Mod/dexcsCfdOF/dexcsCfdMeshRefinement.py
+../Mod/dexcsCfdOF/dexcsCfdFaceSelectWidget.py
 ../Mod/dexcsCfdOF/dexcsCfdSolverFoam.py
+../Mod/dexcsCfdOF/dexcsCfdPreferencePage.py
 ../exportFSIinp.py
 

@@ -19,9 +19,9 @@ import dexcsCfdTools
 
 import pythonVerCheck
 
-doc = App.ActiveDocument
-name = os.path.splitext(doc.FileName)[0]
-modelDir = os.path.dirname(doc.FileName)
+import dexcsFunctions
+
+modelDir = dexcsFunctions.getCaseFileName()
 
 #TreeFoamVersionFile = os.getenv("TreeFoamPath") + "TreeFoamVersion"
 TreeFoamVersionFile = "/opt/TreeFoam/TreeFoamVersion"
@@ -32,13 +32,6 @@ if os.path.isfile(TreeFoamVersionFile) == True:
     f.close()
 #print(TreeFoamVersion)
    
-#モデルファイル置き場がケースファイルの場所（.CaseFileDictで指定）と異なる場合
-caseFileDict = modelDir + "/.CaseFileDict"
-if os.path.isfile(caseFileDict) == True:
-    f = open(caseFileDict)
-    modelDir = f.read()
-    f.close()
-
 os.chdir(modelDir)
 
 def getFoldersFiles(wdir):      #wdirは、絶対path

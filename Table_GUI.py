@@ -41,6 +41,7 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 import Util_Table
+import dexcsFunctions
 
 
 
@@ -1954,17 +1955,18 @@ if __name__ == "__main__":
                 dpltDir = main_listlized[0]
 
     else:
-        learnDir = os.path.dirname(App.ActiveDocument.FileName)
-        #モデルファイル置き場がケースファイルの場所（.CaseFileDictで指定）と異なる場合
-        caseFileDict = learnDir + "/.CaseFileDict"
-        if os.path.isfile(caseFileDict) == True:
-            main_f = open(caseFileDict)
-            learnDir = main_f.read()
-            main_f.close()
+        # learnDir = os.path.dirname(App.ActiveDocument.FileName)
+        # #モデルファイル置き場がケースファイルの場所（.CaseFileDictで指定）と異なる場合
+        # caseFileDict = learnDir + "/.CaseFileDict"
+        # if os.path.isfile(caseFileDict) == True:
+        #     main_f = open(caseFileDict)
+        #     learnDir = main_f.read()
+        #     main_f.close()
 
+        learnDir = dexcsFunctions.getCaseFileName()
         dpltDir = learnDir + "/system/current.dplt"
 
-        print('dplDir = ',dplDir)
+        print('dpltDir = ',dpltDir)
 
         platformDir = learnDir    
 
@@ -2023,7 +2025,8 @@ if __name__ == "__main__":
         app = QApplication.instance()
         logging.debug("no argument")
     
-
+    print("20211228_gitlab_test")
+    print("20220101_gitlab_test")
     # rowLabels = ["score", "param1", "param2", "param3", ""]
     # colLabels = ["score", "sub1", "sub2", "sub3", ""]
     # rowColVals = [[1, 2, 3, 4, ""],

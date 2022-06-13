@@ -289,6 +289,11 @@ class _TaskPanelCfdMesh:
         else:
             output_path1 = output_path
 
+        print("out1=" + output_path1)
+        current_model_path = os.path.dirname(FreeCAD.ActiveDocument.FileName)
+        print("out2=" + current_model_path)
+        #if output_path1 != current_model_path:
+
         dictName = os.path.dirname(FreeCAD.ActiveDocument.FileName)  + "/.CaseFileDict"
         writeDict = open(dictName , 'w')
         writeDict.writelines(output_path1)

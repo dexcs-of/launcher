@@ -77,7 +77,7 @@ DEXCS_TEMPLATE = "/opt/DEXCS/template"
 def getDefaultOutputPath():
     prefs = getPreferencesLocation()
     output_path = FreeCAD.ParamGet(prefs).GetString("DefaultOutputPath", "")
-    print('output_path = ' + output_path)
+    #print('output_path = ' + output_path)
     if not output_path:
         #output_path = tempfile.gettempdir()
         #output_path = os.path.dirname(FreeCAD.ActiveDocument.FileName) 
@@ -132,8 +132,19 @@ if FreeCAD.GuiUp:
 
 
 def getParentAnalysisObject(obj):
-    """ Return CfdAnalysis object to which this obj belongs in the tree """
-    return obj.getParentGroup()
+    #""" Return CfdAnalysis object to which this obj belongs in the tree """
+    #return obj.getParentGroup()
+    """
+    Return CfdAnalysis object to which this obj belongs in the tree
+    """
+    import dexcsCfdAnalysis
+    parent = obj.getParentGroup()
+    if parent is None:
+        return None
+    elif hasattr(parent, 'Proxy') and isinstance(parent.Proxy, dexcsCfdAnalysis._CfdAnalysis):
+        return parent
+    else:
+        return getParentAnalysisObject(parent)
 
 
 def getPhysicsModel(analysis_object):
@@ -332,6 +343,19 @@ def indexOrDefault(list, findItem, defaultIndex):
         return list.index(findItem)
     except ValueError:
         return defaultIndex
+
+def storeIfChanged(obj, prop, val):
+    cur_val = getattr(obj, prop)
+    if isinstance(cur_val, Units.Quantity):
+        if str(cur_val) != str(val):
+            FreeCADGui.doCommand("App.ActiveDocument.{}.{} = '{}'".format(obj.Name, prop, val))
+    elif cur_val != val:
+        if isinstance(cur_val, str):
+            FreeCADGui.doCommand("App.ActiveDocument.{}.{} = '{}'".format(obj.Name, prop, val))
+        elif isinstance(cur_val, FreeCAD.Vector):
+            FreeCADGui.doCommand("App.ActiveDocument.{}.{} = App.{}".format(obj.Name, prop, val))
+        else:
+            FreeCADGui.doCommand("App.ActiveDocument.{}.{} = {}".format(obj.Name, prop, val))
 
 
 def hide_parts_show_meshes():

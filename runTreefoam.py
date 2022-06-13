@@ -10,16 +10,9 @@ from PySide2 import QtCore
 from PySide import QtGui
 import pythonVerCheck
 
-doc = App.ActiveDocument
-name = os.path.splitext(doc.FileName)[0]
-modelDir = os.path.dirname(doc.FileName)
+import dexcsFunctions
 
-#モデルファイル置き場がケースファイルの場所（.CaseFileDictで指定）と異なる場合
-caseFileDict = modelDir + "/.CaseFileDict"
-if os.path.isfile(caseFileDict) == True:
-    f = open(caseFileDict)
-    modelDir = f.read()
-    f.close()
+modelDir = dexcsFunctions.getCaseFileName()
 
 workDir=modelDir
 

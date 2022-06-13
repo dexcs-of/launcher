@@ -153,29 +153,6 @@ class _ViewProviderCfdSolverFoam:
     def onChanged(self, vobj, prop):
         return
 
-    def doubleClicked(self, vobj):
-        if FreeCADGui.activeWorkbench().name() != 'dexcsCfdOFWorkbench':
-            FreeCADGui.activateWorkbench("dexcsCfdOFWorkbench")
-        doc = FreeCADGui.getDocument(vobj.Object.Document)
-        # it should be possible to find the AnalysisObject although it is not a documentObjectGroup
-        if not dexcsCfdTools.getActiveAnalysis():
-            analysis_obj = dexcsCfdTools.getParentAnalysisObject(self.Object)
-            if analysis_obj:
-                dexcsCfdTools.setActiveAnalysis(analysis_obj)
-            else:
-                FreeCAD.Console.PrintError(
-                    'No Active Analysis is detected from solver object in the active Document!\n')
-        if not doc.getInEdit():
-            if dexcsCfdTools.getActiveAnalysis().Document is FreeCAD.ActiveDocument:
-                if self.Object in dexcsCfdTools.getActiveAnalysis().Group:
-                    doc.setEdit(vobj.Object.Name)
-                else:
-                    FreeCAD.Console.PrintError('Activate the analysis this solver belongs to!\n')
-            else:
-                FreeCAD.Console.PrintError('Active Analysis is not in active Document!\n')
-        else:
-            FreeCAD.Console.PrintError('Task dialog already open\n')
-        return True
 
     def setEdit(self, vobj, mode):
         if dexcsCfdTools.getActiveAnalysis():
@@ -191,6 +168,29 @@ class _ViewProviderCfdSolverFoam:
     def unsetEdit(self, vobj, mode):
         FreeCADGui.Control.closeDialog()
         return
+    def doubleClicked(self, vobj):
+        if FreeCADGui.activeWorkbench().name() != 'dexcsCfdOFWorkbench':
+            FreeCADGui.activateWorkbench("dexcsCfdOFWorkbench")
+        doc = FreeCADGui.getDocument(vobj.Object.Document)
+        # it should be possible to find the AnalysisObject although it is not a documentObjectGroup
+        if not dexcsCfdTools.getActiveAnalysis():
+            analysis_obj = dexcsCfdTools.getParentAnalysisObject(self.Object)
+            if analysis_obj:
+                dexcsCfdTools.setActiveAnalysis(analysis_obj)
+            else:
+                FreeCAD.Console.PrintError(
+                    _("No Active Analysis is detected from solver object in the active Document!\n"))
+        if not doc.getInEdit():
+            if dexcsCfdTools.getActiveAnalysis().Document is FreeCAD.ActiveDocument:
+                if self.Object in dexcsCfdTools.getActiveAnalysis().Group:
+                    doc.setEdit(vobj.Object.Name)
+                else:
+                    FreeCAD.Console.PrintError(_("Activate the analysis this solver belongs to!\n"))
+            else:
+                FreeCAD.Console.PrintError(_("Active Analysis is not in active Document!\n"))
+        else:
+            FreeCAD.Console.PrintError(_("Task dialog already open\n"))
+        return True
 
     def __getstate__(self):
         return None
