@@ -213,14 +213,27 @@ class _ViewProviderCfdMesh:
         return
 
     def doubleClicked(self, vobj):
-        #print('debug3')
-        if FreeCADGui.activeWorkbench().name() != 'dexcsCfdWorkbench':
+        if FreeCADGui.activeWorkbench().name() != 'dexcsCfdOFWorkbench':
             FreeCADGui.activateWorkbench("dexcsCfdOFWorkbench")
-        gui_doc = FreeCADGui.getDocument(vobj.Object.Document)
-        if not gui_doc.getInEdit():
-            gui_doc.setEdit(vobj.Object.Name)
+        doc = FreeCADGui.getDocument(vobj.Object.Document)
+        # it should be possible to find the AnalysisObject although it is not a documentObjectGroup
+        if not dexcsCfdTools.getActiveAnalysis():
+            analysis_obj = dexcsCfdTools.getParentAnalysisObject(self.Object)
+            if analysis_obj:
+                dexcsCfdTools.setActiveAnalysis(analysis_obj)
+            else:
+                FreeCAD.Console.PrintError(
+                    _("No Active Analysis is detected from solver object in the active Document!\n"))
+        if not doc.getInEdit():
+            if dexcsCfdTools.getActiveAnalysis().Document is FreeCAD.ActiveDocument:
+                if self.Object in dexcsCfdTools.getActiveAnalysis().Group:
+                    doc.setEdit(vobj.Object.Name)
+                else:
+                    FreeCAD.Console.PrintError(_("Activate the analysis this solver belongs to!\n"))
+            else:
+                FreeCAD.Console.PrintError(_("Active Analysis is not in active Document!\n"))
         else:
-            FreeCAD.Console.PrintError('Task dialog already open\n')
+            FreeCAD.Console.PrintError(_("Task dialog already open\n"))
         return True
 
     def onDelete(self, feature, subelements):

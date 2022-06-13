@@ -5,16 +5,17 @@ import FreeCAD
 import Mesh
 import os
 import gettext
-from PySide2 import QtGui
-from PySide2 import QtCore
+import PySide
+from PySide import QtGui
+from PySide import QtCore
 import dexcsCfdTools
 
 import pythonVerCheck
 import pyDexcsSwakSubset
 
-doc = App.ActiveDocument
-name = os.path.splitext(doc.FileName)[0]
-modelDir = os.path.dirname(doc.FileName)
+import dexcsFunctions
+
+modelDir = dexcsFunctions.getCaseFileName()
 
 #TreeFoamVersionFile = os.getenv("TreeFoamPath") + "TreeFoamVersion"
 TreeFoamVersionFile = "/opt/TreeFoam/TreeFoamVersion"
@@ -22,15 +23,6 @@ TreeFoamVersionFile = "/opt/TreeFoam/TreeFoamVersion"
 if os.path.isfile(TreeFoamVersionFile) == True:
     f = open(TreeFoamVersionFile)
     TreeFoamVersion = f.read()
-    f.close()
-#print(TreeFoamVersion)
-
-#モデルファイル置き場がケースファイルの場所（.CaseFileDictで指定）と異なる場合
-caseFileDict = modelDir + "/.CaseFileDict"
-
-if os.path.isfile(caseFileDict) == True:
-    f = open(caseFileDict)
-    modelDir = f.read()
     f.close()
 
 systemFolder = modelDir + "/system"

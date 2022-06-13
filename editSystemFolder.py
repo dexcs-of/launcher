@@ -6,14 +6,14 @@ import Mesh
 import os
 import glob
 import sys
-from PySide2 import QtGui
+from PySide import QtGui
 from PySide2 import QtCore
 import dexcsCfdTools
 import pythonVerCheck
 
-doc = App.ActiveDocument
-name = os.path.splitext(doc.FileName)[0]
-modelDir = os.path.dirname(doc.FileName)
+import dexcsFunctions
+
+modelDir = dexcsFunctions.getCaseFileName()
 
 #TreeFoamVersionFile = os.getenv("TreeFoamPath") + "TreeFoamVersion"
 TreeFoamVersionFile = "/opt/TreeFoam/TreeFoamVersion"
@@ -23,19 +23,12 @@ if os.path.isfile(TreeFoamVersionFile) == True:
     TreeFoamVersion = f.read()
     f.close()
    
-#モデルファイル置き場がケースファイルの場所（.CaseFileDictで指定）と異なる場合
-caseFileDict = modelDir + "/.CaseFileDict"
-if os.path.isfile(caseFileDict) == True:
-    f = open(caseFileDict)
-    modelDir = f.read()
-    f.close()
-
 os.chdir(modelDir)
 
 systemFolder = modelDir + "/system"
 constantFolder = modelDir + "/constant"
 
-if os.path.isdir(constantFolder):
+if os.path.isdir(systemFolder):
 
     envSet = ". " + os.path.expanduser("~") + "/.FreeCAD/runTreefoamSubset;"
     wdir = modelDir + "/system"
@@ -79,7 +72,7 @@ if os.path.isdir(constantFolder):
         os.system(comm.encode("utf-8"))
 
 else:
-    message = (_("there is no constant folder.\n  check current directory."))
+    message = (_("there is no system folder.\n  check current directory."))
     ans = QtGui.QMessageBox.critical(None, _("check OpenFOAM case"), message, QtGui.QMessageBox.Yes)
 
 def dummyFunction(): # 何故かこれがないとうまく動かない      

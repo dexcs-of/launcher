@@ -8,9 +8,9 @@ from PySide import QtGui
 from PySide import QtCore
 import dexcsCfdTools
 
-doc = App.ActiveDocument
-name = os.path.splitext(doc.FileName)[0]
-modelDir = os.path.dirname(doc.FileName)
+import dexcsFunctions
+
+modelDir = dexcsFunctions.getCaseFileName()
 
 #モデルファイル置き場がケースファイルの場所（.CaseFileDictで指定）と異なる場合
 caseFileDict = modelDir + "/.CaseFileDict"

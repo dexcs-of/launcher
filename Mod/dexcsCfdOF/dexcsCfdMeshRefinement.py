@@ -94,6 +94,19 @@ class _CfdMeshRefinement:
 
     def initProperties(self, obj):
         # Common to all
+        addObjectProperty(obj, 'ShapeRefs', [], "App::PropertyLinkSubList", "", "List of mesh refinement objects")
+        # if addObjectProperty(obj, 'ShapeRefs', [], "App::PropertyLinkSubList", "", "List of mesh refinement objects"):
+        #     # Backward compat
+        #     if 'References' in obj.PropertiesList:
+        #         doc = FreeCAD.getDocument(obj.Document.Name)
+        #         for r in obj.References:
+        #             if not r[1]:
+        #                 obj.ShapeRefs += [doc.getObject(r[0])]
+        #             else:
+        #                 obj.ShapeRefs += [(doc.getObject(r[0]), r[1])]
+        #         obj.removeProperty('References')
+        #         obj.removeProperty('LinkedObjects')
+
         #addObjectProperty(obj, "RelativeLength", 0.75, "App::PropertyFloat", "",
         #                  "Set relative length of the elements for this region")
         addObjectProperty(obj, "CellSize", "0 m", "App::PropertyLength", "",
@@ -188,12 +201,17 @@ class _ViewProviderCfdMeshRefinement:
 
     def setEdit(self, vobj, mode=0):
         for obj in FreeCAD.ActiveDocument.Objects:
-            if hasattr(obj, "Proxy") and isinstance(obj.Proxy, _CfdMesh) and (self.Object in obj.Group):
-                #obj.Part.ViewObject.show()
-                pass
+           if hasattr(obj, "Proxy") and isinstance(obj.Proxy, _CfdMesh) and (self.Object in obj.Group):
+               #obj.Part.ViewObject.show()
+               pass
         taskd = _dexcsTaskPanelCfdMeshRefinement._TaskPanelCfdMeshRefinement(self.Object)
         taskd.obj = vobj.Object
         FreeCADGui.Control.showDialog(taskd)
+        # import importlib
+        # importlib.reload(_dexcsTaskPanelCfdMeshRefinement)
+        # self.taskd = _dexcsTaskPanelCfdMeshRefinement._TaskPanelCfdMeshRefinement(self.Object)
+        # self.taskd.obj = vobj.Object
+        # FreeCADGui.Control.showDialog(self.taskd)
         return True
 
     def unsetEdit(self, vobj, mode=0):

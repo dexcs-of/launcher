@@ -9,10 +9,9 @@ import PySide
 from PySide import QtGui
 
 import pythonVerCheck
+import dexcsFunctions
 
-doc = App.ActiveDocument
-modelDir = os.path.dirname(doc.FileName)
-os.chdir(modelDir)
+modelDir = dexcsFunctions.getCaseFileName()
 
 systemFolder = modelDir + "/system"
 constantFolder = modelDir + "/constant"

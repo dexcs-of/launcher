@@ -10,10 +10,10 @@
 　(1)　inputFilesに変換用のファイルを記述
 　(2)　getStringsForTranslateを実行
         ./getStringsForTranslate<enter>
-　(3)　出来上がった「trrfoam.po」ファイルに訳文を追記する。
+　(3)　出来上がった「ja.po」ファイルに訳文を追記する。
 　(4)　makeMoFileを実行して「mo」ファイル作成
         ./makeMoFile<enter>
-　(5)　出来上がった「treefoam.mo」を「en_US」フォルダ内にコピーする
+　(5)　出来上がった「CfMeshSetting.mo」を「ja」フォルダ内にコピーする
 
 上記の方法は、絶えず上書きするので、コメント行が増えていく。この為、適当な時期に
 「deleteComLines.py」を実行して、コメント行を削除しておく。

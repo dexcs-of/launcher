@@ -1,5 +1,12 @@
 # FreeCAD Macro & WorkBentch for DEXCS Launcher
-# 更新 2021/12/27
+# 更新 2022/6/13
+DEXCS2022 の正式公開に向けて、諸々改定版を暫定公開
+
+改定内容は、
+ https://ocse2.com/?p=13966
+ 
+の記事を参照されたい。
+
 ## これは何か
 OpenFOAMを使った仮想風洞試験(注1)を、ボタンを順番に押していくだけで実行できるようにしたDEXCSランチャー（FreeCADのマクロとワークベンチファイル）の一式とセットアップツール。
 DEXCS for OpenFOAM で、DEXCS2021より実装されているもので、DEXCS2020に搭載した[DEXCS-FC-Macro](https://gitlab.com/E.Mogura/dexcs-fc-macro)より大幅な変更がある。今後マクロに変更が加えられたら、

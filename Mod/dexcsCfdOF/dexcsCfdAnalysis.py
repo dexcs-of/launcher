@@ -1,4 +1,5 @@
-# ***************************************************************************
+# -*- coding: utf-8 -*-
+# # ***************************************************************************
 # *                                                                         *
 # *   Copyright (c) 2013-2015 - Juergen Riegel <FreeCAD@juergen-riegel.net> *
 # *   Copyright (c) 2017 Johan Heyns (CSIR) <jheyns@csir.co.za>             *
@@ -24,22 +25,18 @@
 # *                                                                         *
 # ***************************************************************************
 
+from multiprocessing import parent_process
 import FreeCAD
 import dexcsCfdTools
 from dexcsCfdTools import addObjectProperty
 import os
+import platform
 if FreeCAD.GuiUp:
     import FreeCADGui
-    from PySide import QtCore
+from PySide import QtCore, QtGui
+from PySide.QtGui import *
 import pythonVerCheck
-#import sys
-# import gettext
 
-# localedir = os.path.expanduser("~") + "/.FreeCAD/Mod/dexcsCfdOF/locale"
-# if sys.version_info.major == 3:
-# 	gettext.install("dexcsCfMeshSetting", localedir)
-# else:
-# 	gettext.install("dexcsCfMeshSetting", localedir, unicode=True)
 
 
 def makeCfdAnalysis(name):
@@ -57,26 +54,103 @@ class _CfdAnalysis:
     def __init__(self, obj):
         obj.Proxy = self
         self.Type = "dexcsCfdAnalysis"
+        print("deb:__init__")
         self.initProperties(obj)
 
     def initProperties(self, obj):
+        print("deb_CfdAnalysis-initProperties")
+        print(obj.Label)
         model = FreeCAD.ActiveDocument.FileName
         prefs = dexcsCfdTools.getPreferencesLocation()
         model_Dir = FreeCAD.ParamGet(prefs).GetString("DefaultOutputPath", "")
         if os.path.exists(model_Dir):
-            modelDir = model_Dir
+            model_Dir = model_Dir
         else:
-            modelDir = os.path.dirname(model)
+            model_Dir = os.path.dirname(model)
         templateCase = FreeCAD.ParamGet(prefs).GetString("DefaultTemplateCase", "")
-        addObjectProperty(obj, "OutputPath", modelDir, "App::PropertyPath", "",
-                          "Path to which cases are written (blank to use system default)")
+        addObjectProperty(obj, "OutputPath", model_Dir, "App::PropertyPath", "",
+                           "Path to which cases are written (blank to use system default)")
         addObjectProperty(obj, "TemplateCase", templateCase, "App::PropertyPath", "",
-                          "Path to Template case Dir (blank to use system default)")
+                           "Path to Template case Dir (blank to use system default)")
         addObjectProperty(obj, "IsActiveAnalysis", False, "App::PropertyBool", "", "Active analysis object in document")
         obj.setEditorMode("IsActiveAnalysis", 1)  # Make read-only (2 = hidden)
+        addObjectProperty(obj, 'NeedsMeshRewrite', True, "App::PropertyBool", "", "Mesh setup needs to be re-written")
+        addObjectProperty(obj, 'NeedsCaseRewrite', True, "App::PropertyBool", "", "Case setup needs to be re-written")
+        addObjectProperty(obj, 'NeedsMeshRerun', True, "App::PropertyBool", "", "Mesher needs to be re-run before running solver")
+
+    def restoredProperties(self, obj):
+
+        env = QtCore.QProcessEnvironment.systemEnvironment()
+
+        model = FreeCAD.ActiveDocument.FileName
+        prefs = dexcsCfdTools.getPreferencesLocation()
+        model_Dir = FreeCAD.ParamGet(prefs).GetString("DefaultOutputPath", "")
+        if os.path.exists(model_Dir):
+            defaultModel_Dir = model_Dir
+        else:
+            defaultModel_Dir = os.path.dirname(model)
+
+        setDictOutput_dir = ""
+        dictName = os.path.dirname(FreeCAD.ActiveDocument.FileName)  + "/.CaseFileDict"
+        if os.path.isfile(dictName) == True:
+            f = open(dictName)
+            tempDirName = f.read()
+            f.close()
+            if os.path.isdir(tempDirName) == True:
+                 setDictOutput_dir = tempDirName
+
+        if obj.IsActiveAnalysis:
+            outputPath = obj.OutputPath
+            if ( defaultModel_Dir == outputPath ) or ( setDictOutput_dir == outputPath) :
+                pass
+            else:
+                message = _("The OutputPath of Active Analysis Container is \n") + outputPath
+                message = message + _("\n This is not the Default Setting Path.\n\n\t Do you change the OutputPath ?")
+                dialog = QtGui.QMessageBox.question(None,"Question",message, QtGui.QMessageBox.No, QtGui.QMessageBox.Yes)
+                if dialog == QtGui.QMessageBox.Yes:
+
+                    if env.contains("APPIMAGE"):
+                        message = _("This FreeCAD is AppImage version.\n ")
+                        message = message + _("AppImage cannot change the OutputPAth while loading process.\n\n") 
+                        message = message + _("so if you want change the OutputPAth of Analysis Container,\n") 
+                        message = message + _("change the property manually after lodaing process,\n") 
+                        ans = QtGui.QMessageBox.critical(None, _("AppImage Warning"), message, QtGui.QMessageBox.Yes)
+                        dexcsCfdTools.removeAppimageEnvironment(env)
+                    else:
+                        #d = QFileDialog().getExistingDirectory(None, 'Choose Output directory', defaultModel_Dir)
+                        d = QtGui.QFileDialog().getExistingDirectory(None, _('Choose output directory'), defaultModel_Dir)
+                        if d and os.access(d, os.R_OK):
+                            outputPath = d
+                if outputPath != defaultModel_Dir:
+                    writeDict = open(dictName , 'w')
+                    writeDict.writelines(outputPath)
+                    writeDict.close()
+
+            obj.OutputPath = outputPath
+
+
+        # active_analysis = dexcsCfdTools.getActiveAnalysis()
+        # if active_analysis:
+        #     print(active_analysis.OutputPath)
+        #print(model_Dir)
+        #templateCase = FreeCAD.ParamGet(prefs).GetString("DefaultTemplateCase", "")
+        # addObjectProperty(obj, "OutputPath", model_Dir, "App::PropertyPath", "",
+        #                    "Path to which cases are written (blank to use system default)")
+        # #obj.OutputPath = model_Dir
+        # addObjectProperty(obj, "TemplateCase", templateCase, "App::PropertyPath", "",
+        #                    "Path to Template case Dir (blank to use system default)")
+        # addObjectProperty(obj, "IsActiveAnalysis", False, "App::PropertyBool", "", "Active analysis object in document")
+        # obj.setEditorMode("IsActiveAnalysis", 1)  # Make read-only (2 = hidden)
+        # addObjectProperty(obj, 'NeedsMeshRewrite', True, "App::PropertyBool", "", "Mesh setup needs to be re-written")
+        # addObjectProperty(obj, 'NeedsCaseRewrite', True, "App::PropertyBool", "", "Case setup needs to be re-written")
+        # addObjectProperty(obj, 'NeedsMeshRerun', True, "App::PropertyBool", "", "Mesher needs to be re-run before running solver")
 
     def onDocumentRestored(self, obj):
-        self.initProperties(obj)
+        print("deb:restored")
+        self.restoredProperties(obj)
+
+def dummyFunction(): # 何故かこれがないとうまく動かない      
+        pass
 
 class _CommandCfdAnalysis:
     """ The Cfd_Analysis command definition """
@@ -135,11 +209,21 @@ class _ViewProviderCfdAnalysis:
         return
 
     def doubleClicked(self, vobj):
+        #print("deb:AnalysisiContainerDoubleClicced")
+        outputPath1 = dexcsCfdTools.getActiveAnalysis().OutputPath
+        #print(outputPath1)
         if not dexcsCfdTools.getActiveAnalysis() == self.Object:
             if FreeCADGui.activeWorkbench().name() != 'dexcsCfdOFWorkbench':
                 FreeCADGui.activateWorkbench("dexcsCfdOFWorkbench")
             dexcsCfdTools.setActiveAnalysis(self.Object)
-            return True
+            _CfdAnalysis.restoredProperties(self,self.Object)
+        outputPath2 = self.Object.OutputPath
+        #print(outputPath2)
+        if outputPath1 == outputPath2 :
+            message = _("The OutputPath of Active Analysis Container is not changed.\n") 
+            message = message + _("\n Please note that the contents of the case file at this point are the previous AnalysisContainer.")
+            message = message + _("\n You will need to recreate the case file to continue working.")
+            dialog = QtGui.QMessageBox.critical(None,"Question",message, QtGui.QMessageBox.Yes)
         return True
 
     def makePartTransparent(self, vobj):

@@ -229,8 +229,8 @@ class Model:
         ymin = float(Model.INF_STR)
         zmax = -float(Model.INF_STR)
         zmin = float(Model.INF_STR)
-        for obj in self.doc.Objects:
-                print('obj = ',obj)
+        # for obj in self.doc.Objects:
+        #         print('obj = ',obj)
         for obj in self.doc.Objects:
             assert(obj != None), "None obj in getBoundingBoxOfCadObjects"
             #assert(obj.ViewObject != None), "None ViewObject in getBoundingBoxOfCadObjects"
@@ -269,8 +269,11 @@ class Model:
         """
         for obj in self.doc.Objects:    
             if obj.ViewObject.Visibility:    
+                if obj.isDerivedFrom("Part::FeaturePython") or obj.isDerivedFrom("App::DocumentObjectGroupPython"):
+                    pass
+                else:
             #if obj.Label:    # FreeCADで読み込んだモデルのすべてのobj
-                fcListData = fcListData + [[ obj.Label, Model.PATCH_STR, Model.EMPTY_STR, 0, 3, "1.2"]]
+                    fcListData = fcListData + [[ obj.Label, Model.PATCH_STR, Model.EMPTY_STR, 0, 3, "1.2"]]
         #print(fcListData)
         return fcListData
  
@@ -1012,11 +1015,21 @@ class ViewControl():
         text = dirName
         self.cfMeshFrame.pathLabel.setText(text)
         
+        from dexcsCfdAnalysis import _CfdAnalysis
+        for obj in FreeCAD.ActiveDocument.Objects:
+            #print(obj)
+            if hasattr(obj, 'Proxy') and isinstance(obj.Proxy, _CfdAnalysis):
+                if obj.IsActiveAnalysis:
+                    #print("deb:"+dirName)
+                    obj.OutputPath = dirName
+
         dictName = os.path.dirname(App.ActiveDocument.FileName) + MainControl.SLASH_STR + ".CaseFileDict"
         #print(dictName)
         writeDict = open(dictName , 'w')
         writeDict.writelines(text)
         writeDict.close()
+
+
 
     def actionOnButtonFocused(self):
         """
@@ -1236,22 +1249,22 @@ class ViewControl():
             	for j in range(NR):
                     #print (i, j, str(typeDefLabelList[i]), str(self.cfMeshFrame.grid.table.GetValue(j,0)))
                     if str(typeDefLabelList[i]) ==  str(self.cfMeshFrame.grid.table.GetValue(j,0)):
-                    	self.cfMeshFrame.grid.table.SetValue(j, 1, typeBoundaryList[i])        
-                    	text=typeBoundaryList[i]
-                    	if text == "wall" : 
-                    	    index = 1
-                    	elif text == "symmetryPlane" : 
-                    	    index = 2
-                    	elif text == "region" : 
-                    	    index = 3
-                    	elif text == "overset" : 
-                    	    index = 4
-                    	elif text == "empty" : 
-                    	    index = 5
-                    	else:
-                    	    index = 0
-                    	self.comboBox = self.cfMeshFrame.grid.tablewidget.cellWidget(j,1)
-                    	self.comboBox.setCurrentIndex(index)
+                        self.cfMeshFrame.grid.table.SetValue(j, 1, typeBoundaryList[i])        
+                        text=typeBoundaryList[i]
+                        if text == "wall" : 
+                            index = 1
+                        elif text == "symmetryPlane" : 
+                            index = 2
+                        elif text == "region" : 
+                            index = 3
+                        elif text == "overset" : 
+                            index = 4
+                        elif text == "empty" : 
+                            index = 5
+                        else:
+                            index = 0
+                        self.comboBox = self.cfMeshFrame.grid.tablewidget.cellWidget(j,1)
+                        self.comboBox.setCurrentIndex(index)
          
         search_str = "localRefinement"
         is1, is2 = self.mainControl.searchLocationKakko(y,search_str)
@@ -1262,11 +1275,10 @@ class ViewControl():
                 counter += 1
                 myList = y[counter].strip()
                 if myList and ( not x[counter].strip().startswith("/")):
-            	   	localRefLabelList.append(myList)
-            	   	#cellSize.append( self.mainControl.searchVal1( y, counter, "cellSize") )
-            	   	cellSize.append( self.mainControl.searchVal1( y, counter, searchText) )
-            	   	iss1, iss2 = self.mainControl.searchLocationKakko1(y,counter)
-            	   	counter = iss2
+                    localRefLabelList.append(myList)
+                    cellSize.append( self.mainControl.searchVal1( y, counter, searchText) )
+                    iss1, iss2 = self.mainControl.searchLocationKakko1(y,counter)
+                    counter = iss2
         #print (search_str, "=", localRefLabelList)
         #print ("cellSize = ", cellSize)
 
@@ -1275,10 +1287,10 @@ class ViewControl():
             	for j in range(NR):
                     #print (str(localRefLabelList[i]), str(self.cfMeshFrame.grid.table.GetValue(j,0)))
                     if str(localRefLabelList[i]) ==  str(self.cfMeshFrame.grid.table.GetValue(j,0)):
-                    	self.cfMeshFrame.grid.table.SetValue(j, 2, cellSize[i])
-                    	self.item = QtGui.QTableWidgetItem(cellSize[i])
-                    	self.cfMeshFrame.grid.tablewidget.setCurrentCell( j, 2)
-                    	self.cfMeshFrame.grid.tablewidget.setItem( j, 2, self.item)
+                        self.cfMeshFrame.grid.table.SetValue(j, 2, cellSize[i])
+                        self.item = QtGui.QTableWidgetItem(cellSize[i])
+                        self.cfMeshFrame.grid.tablewidget.setCurrentCell( j, 2)
+                        self.cfMeshFrame.grid.tablewidget.setItem( j, 2, self.item)
 
         search_str = "patchBoundaryLayers"
         is1, is2 = self.mainControl.searchLocationKakko(y,search_str)
@@ -1287,33 +1299,33 @@ class ViewControl():
         RatioList=[]
         counter = is1
         while counter<is2-1:
-                counter += 1
-                myList = y[counter].strip()
-                if myList and ( not x[counter].strip().startswith("/")):
-            	   	boundaryLayerList.append(myList)
-            	   	nLayerList.append( self.mainControl.searchVal1( y, counter, "nLayers") )
-            	   	RatioList.append( self.mainControl.searchVal1( y, counter, "thicknessRatio") )
-            	   	iss1, iss2 = self.mainControl.searchLocationKakko1(y,counter)
-            	   	counter = iss2
+            counter += 1
+            myList = y[counter].strip()
+            if myList and ( not x[counter].strip().startswith("/")):
+                boundaryLayerList.append(myList)
+                nLayerList.append( self.mainControl.searchVal1( y, counter, "nLayers") )
+                RatioList.append( self.mainControl.searchVal1( y, counter, "thicknessRatio") )
+                iss1, iss2 = self.mainControl.searchLocationKakko1(y,counter)
+                counter = iss2
         #print (search_str, "=", boundaryLayerList)
         #print ("nLayer = ", nLayerList)
         #print ("Ratio = ", RatioList)
 
         for i in range(len(boundaryLayerList)):
-            	for j in range(NR):
-            		if str(boundaryLayerList[i]) ==  str(self.cfMeshFrame.grid.table.GetValue(j,0)):
-            			self.checkBox=QtGui.QCheckBox()
-            			self.checkBox.stateChanged.connect(partial(self.cfMeshFrame.grid.actionOnStateChangeOnCheckBox,j))
-            			self.checkBox.setCheckState(QtCore.Qt.Checked)
-            			self.cfMeshFrame.grid.tablewidget.setCellWidget( j, 3, self.checkBox)
-            			self.cfMeshFrame.grid.table.SetValue(j,4,int(nLayerList[i]))
-            			self.item = QtGui.QTableWidgetItem(nLayerList[i])
-            			self.cfMeshFrame.grid.tablewidget.setCurrentCell( j, 4)
-            			self.cfMeshFrame.grid.tablewidget.setItem( j, 4, self.item)
-            			self.cfMeshFrame.grid.table.SetValue(j, 5, RatioList[i])
-            			self.item = QtGui.QTableWidgetItem(RatioList[i])
-            			self.cfMeshFrame.grid.tablewidget.setCurrentCell( j, 5)
-            			self.cfMeshFrame.grid.tablewidget.setItem( j, 5, self.item)
+                for j in range(NR):
+                    if str(boundaryLayerList[i]) ==  str(self.cfMeshFrame.grid.table.GetValue(j,0)):
+                        self.checkBox=QtGui.QCheckBox()
+                        self.checkBox.stateChanged.connect(partial(self.cfMeshFrame.grid.actionOnStateChangeOnCheckBox,j))
+                        self.checkBox.setCheckState(QtCore.Qt.Checked)
+                        self.cfMeshFrame.grid.tablewidget.setCellWidget( j, 3, self.checkBox)
+                        self.cfMeshFrame.grid.table.SetValue(j,4,int(nLayerList[i]))
+                        self.item = QtGui.QTableWidgetItem(nLayerList[i])
+                        self.cfMeshFrame.grid.tablewidget.setCurrentCell( j, 4)
+                        self.cfMeshFrame.grid.tablewidget.setItem( j, 4, self.item)
+                        self.cfMeshFrame.grid.table.SetValue(j, 5, RatioList[i])
+                        self.item = QtGui.QTableWidgetItem(RatioList[i])
+                        self.cfMeshFrame.grid.tablewidget.setCurrentCell( j, 5)
+                        self.cfMeshFrame.grid.tablewidget.setItem( j, 5, self.item)
 
         search_str = "objectRefinements"
         is1, is2 = self.mainControl.searchLocationKakko(y,search_str)
@@ -1324,29 +1336,26 @@ class ViewControl():
                 counter += 1
                 myList = y[counter].strip()
                 if myList and ( not x[counter].strip().startswith("/")):
-            	   	objectRefList.append(myList)
-            	   	#cellSizeList.append( self.mainControl.searchVal1( y, counter, "cellSize") )
-                   	## 2019/7/15 分割レベルとセルサイズの不整合を調整するパラメタ（objRefPar）を導入
-            	   	objRefPar = 1.1
-            	   	if searchText == 'cellSize' and self.mainControl.searchVal1( y, counter, searchText) != None:
-            	   		#print ( self.mainControl.searchVal1( y, counter, searchText))
-
-            	   		cellSizeList.append( str(float(self.mainControl.searchVal1( y, counter, searchText)) / objRefPar ) )
-            	   	else :
-            	   		cellSizeList.append( self.mainControl.searchVal1( y, counter, searchText) )
-            	   	iss1, iss2 = self.mainControl.searchLocationKakko1(y,counter)
-            	   	counter = iss2
-        #print (search_str, "=", objectRefList)
-        #print ("cellSize = ", cellSizeList)
+                    objectRefList.append(myList)
+                    #cellSizeList.append( self.mainControl.searchVal1( y, counter, "cellSize") )
+                    ## 2019/7/15 分割レベルとセルサイズの不整合を調整するパラメタ（objRefPar）を導入
+                    objRefPar = 1.1
+                    if searchText == 'cellSize' and self.mainControl.searchVal1( y, counter, searchText) != None:
+                   	    #print ( self.mainControl.searchVal1( y, counter, searchText))
+                        cellSizeList.append( str(float(self.mainControl.searchVal1( y, counter, searchText)) / objRefPar ) )
+                    else :
+                        cellSizeList.append( self.mainControl.searchVal1( y, counter, searchText) )
+                    iss1, iss2 = self.mainControl.searchLocationKakko1(y,counter)
+                    counter = iss2
 
         for i in range(len(objectRefList)):
             	for j in range(NR):
-            		if str(objectRefList[i]) ==  str(self.cfMeshFrame.grid.table.GetValue(j,0)):
-            			self.cfMeshFrame.grid.table.SetValue(j, 1, 'region')
-            			self.cfMeshFrame.grid.table.SetValue(j, 2, cellSizeList[i])
-            			self.item = QtGui.QTableWidgetItem(cellSizeList[i])
-            			self.cfMeshFrame.grid.tablewidget.setCurrentCell( j, 2)
-            			self.cfMeshFrame.grid.tablewidget.setItem( j, 2, self.item)
+                    if str(objectRefList[i]) ==  str(self.cfMeshFrame.grid.table.GetValue(j,0)):
+                        self.cfMeshFrame.grid.table.SetValue(j, 1, 'region')
+                        self.cfMeshFrame.grid.table.SetValue(j, 2, cellSizeList[i])
+                        self.item = QtGui.QTableWidgetItem(cellSizeList[i])
+                        self.cfMeshFrame.grid.tablewidget.setCurrentCell( j, 2)
+                        self.cfMeshFrame.grid.tablewidget.setItem( j, 2, self.item)
 
     def actionOnExportButton(self):
         """
@@ -1572,25 +1581,6 @@ class MainControl():
         #comm = "xfce4-terminal --execute ./run"
         comm = "gnome-terminal --geometry=80x15 --zoom=0.9 -- bash --rcfile ./run &"
         process = (subprocess.Popen(comm, stdout=subprocess.PIPE, shell=True).communicate()[0]).decode('utf-8')
-        #print('コマンドは\n'+process+'です')
-        #os.system(comm)
-
-        #command = '. ' + MainControl.BASHRC_PATH_4_OPENFOAM + ';'
-        #command = command + 'cd ' + CaseFilePath + ';'
-        #command = command + MainControl.CARTESIAN_MESH
-
-        #print("command =" + command)
-        #os.system(command)
-        #path_to_output_file = CaseFilePath + '/log.cartesianMesh'
-        #myoutput = open(path_to_output_file,'w')
-        #try:
-        #    res = subprocess.call(command,stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
-            #output, errors = res.communicate()
-            #res = subprocess.call(command, shell=True)
-            #os.system(command)
-        #except:
-        #    print ("Error.")
-
 
     def perform(self, CaseFilePath):
         """
@@ -1852,8 +1842,8 @@ class MainControl():
                     refLevel = 0
                     refValue = float(self.viewControl.get_maxCellSizeValue())/float(self.viewControl.get_gridTableValue(iRow-1,2))
                     while refValue>1:
-                     	refLevel = refLevel + 1
-                     	refValue = refValue/2                				
+                        refLevel = refLevel + 1
+                        refValue = refValue/2                				
                     strings5 = [
                     '\t' + str(self.viewControl.get_gridTableValue(iRow-1,0)) + '\n',
                     '\t{\n',
@@ -1872,8 +1862,8 @@ class MainControl():
                     refSize = str(self.viewControl.get_maxCellSizeValue())
                     refValue = float(self.viewControl.get_maxCellSizeValue())/float(self.viewControl.get_gridTableValue(iRow-1,2))
                     while refValue>1:
-                     	refValue = refValue - 1
-                     	refSize = str(float(refSize)/2) 
+                        refValue = refValue - 1
+                        refSize = str(float(refSize)/2) 
                     strings5 = [
                     '\t' + str(self.viewControl.get_gridTableValue(iRow-1,0)) + '\n',
                     '\t{\n',
@@ -2183,12 +2173,12 @@ class MainControl():
                         importFile = open(file,'r')
                         temp = importFile.readlines()
                         for line in temp:
-                        	if 'endsolid' in line:
-                        		outputStlFile.write('endsolid ' + obj.Label + '\n')
-                        	elif 'solid' in line:
-                        		outputStlFile.write('solid ' + obj.Label + '\n')
-                        	else:
-                        		outputStlFile.write(line)
+                            if 'endsolid' in line:
+                                outputStlFile.write('endsolid ' + obj.Label + '\n')
+                            elif 'solid' in line:
+                                outputStlFile.write('solid ' + obj.Label + '\n')
+                            else:
+                                outputStlFile.write(line)
                         importFile.close
                         os.remove(file)
                 k = k + 1
@@ -2218,7 +2208,6 @@ class MainControl():
         self.viewControl = ViewControl(self)
         self.dirName = os.path.dirname(self.caseFilePath)
         self.viewControl.setLayout(self.fcListData, self.dirName, cellMax)
-        #print ("dirName = ", self.dirName)
 
     def setupView(self):
         """
@@ -2232,6 +2221,10 @@ class MainControl():
         except ValueError:
             message = _('FreeCAD library not found. Check the FREECADPATH variable. ')        
             wx.MessageBox(message,'Error')
+        import dexcsCfdTools
+
+        from dexcsCfdAnalysis import _CfdAnalysis
+
 
         self.caseFilePath = App.ActiveDocument.FileName        
         model = Model(self.caseFilePath)
@@ -2240,17 +2233,29 @@ class MainControl():
         sumOf3Edges = model.get_sumOf3EdgesOfCadObjects()
         cellMax = Decimal(sumOf3Edges/60)#適切に数値を丸める
         #print ("cellMax = %6.2lf" % cellMax)
+
+
+        outputPath1 = ""
+        for obj in FreeCAD.ActiveDocument.Objects:
+            if hasattr(obj, 'Proxy') and isinstance(obj.Proxy, _CfdAnalysis):
+                if obj.IsActiveAnalysis:
+                    outputPath1 = obj.OutputPath
+
+        if outputPath1:
+            self.dirName = outputPath1
+        else:
+            self.dirName = os.path.dirname(self.caseFilePath)
+            #モデルファイルがケースファイルの置き場所にない場合（.CaseFileDict）
+            caseFileDict = self.dirName + "/.CaseFileDict"
+            if os.path.isfile(caseFileDict) == True:
+                f = open(caseFileDict)
+                tempDirName = f.read()
+                f.close()
+                if os.path.isdir(tempDirName) == True:
+                    self.dirName = tempDirName
+                #print(self.dirName)
+        print(self.dirName)
         self.viewControl = ViewControl(self)
-        self.dirName = os.path.dirname(self.caseFilePath)
-        #モデルファイルがケースファイルの置き場所にない場合（.CaseFileDict）
-        caseFileDict = self.dirName + "/.CaseFileDict"
-        if os.path.isfile(caseFileDict) == True:
-            f = open(caseFileDict)
-            tempDirName = f.read()
-            f.close()
-            if os.path.isdir(tempDirName) == True:
-                self.dirName = tempDirName
-            #print(self.dirName)
         self.viewControl.setLayout(self.fcListData, self.dirName, cellMax)
         #print ("dirName = ", self.dirName)
     #---------------------------------------------------------------------------
@@ -2314,8 +2319,8 @@ class MainControl():
                         if (y[i].strip() == "}") or (y[i].strip() == ")") or (y[i].strip() == "};") or (y[i].strip() == ");") :#右カッコが見つかった
                             k_pop = k_pop - 1 #カッコの深さをー１
                         if (k_pop == 0):
-                        	is2 = i         # 最後の右カッコが見つかった位置（になるはず）
-                        	return is1,is2
+                            is2 = i         # 最後の右カッコが見つかった位置（になるはず）
+                            return is1,is2
 #---------------------------------------------------------------------------
 #---------------------------------------------------------------------------
 
