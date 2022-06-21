@@ -210,7 +210,12 @@ class _ViewProviderCfdAnalysis:
 
     def doubleClicked(self, vobj):
         #print("deb:AnalysisiContainerDoubleClicced")
-        outputPath1 = dexcsCfdTools.getActiveAnalysis().OutputPath
+        if dexcsCfdTools.getActiveAnalysis():
+            outputPath1 = dexcsCfdTools.getActiveAnalysis().OutputPath
+        else:
+            dexcsCfdTools.setActiveAnalysis(self.Object)
+            #outputPath1 = self.Object.OutputPath
+            return True
         #print(outputPath1)
         if not dexcsCfdTools.getActiveAnalysis() == self.Object:
             if FreeCADGui.activeWorkbench().name() != 'dexcsCfdOFWorkbench':

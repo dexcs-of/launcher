@@ -111,10 +111,11 @@ class CfdFaceSelectWidget:
         for i in FreeCADGui.ActiveDocument.Document.Objects:
             if i.ViewObject.Visibility:
                 if "Shape" in i.PropertiesList:
-                    if not i.Shape.isNull() and \
-                            not (hasattr(i, 'Proxy') and isinstance(i.Proxy, CfdFluidBoundary._CfdFluidBoundary)) and \
-                            not (hasattr(i, 'Proxy') and isinstance(i.Proxy, CfdMeshRefinement._CfdMeshRefinement)) and \
-                            not (hasattr(i, 'Proxy') and isinstance(i.Proxy, CfdZone._CfdZone)):
+                    if not i.Shape.isNull() :
+                    # if not i.Shape.isNull() and \
+                    #         not (hasattr(i, 'Proxy') and isinstance(i.Proxy, CfdFluidBoundary._CfdFluidBoundary)) and \
+                    #         not (hasattr(i, 'Proxy') and isinstance(i.Proxy, CfdMeshRefinement._CfdMeshRefinement)) and \
+                    #         not (hasattr(i, 'Proxy') and isinstance(i.Proxy, CfdZone._CfdZone)):
                         self.shapeNames.append(i.Name)
                         self.shapeLabels.append(i.Label)
 
