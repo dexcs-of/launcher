@@ -1,4 +1,7 @@
 # FreeCAD Macro & WorkBentch for DEXCS Launcher
+# 更新 2022/7/14
+cfMeshの2D版（cartesianMesh2D）も使えるようにした。
+
 # 更新 2022/6/13
 DEXCS2022 の正式公開に向けて、諸々改定版を暫定公開
 
