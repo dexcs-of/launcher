@@ -313,7 +313,10 @@ class MainControl():
         caseName = CaseFilePath
         title =  "#!/bin/bash\n"
         envSet = ". " + MainControl.BASHRC_PATH_4_OPENFOAM + ";\n"
-        solverSet = "cartesianMesh | tee cfmesh.log\n"
+        if self.mesh_obj.ElementDimension == '2D':
+            solverSet = "cartesian2DMesh | tee cfmesh.log\n"
+        else:
+            solverSet = "cartesianMesh | tee cfmesh.log\n"
         sleep = "sleep 2\n"
         cont = title + envSet + solverSet + sleep
         f=open("./Allmesh","w")
