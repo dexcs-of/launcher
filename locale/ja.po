@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-13 06:39+0900\n"
+"POT-Creation-Date: 2022-07-14 17:09+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -468,6 +468,7 @@ msgstr "プロット"
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:69
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:60
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:71
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:73
 msgid "Edit"
 msgstr "編集"
 
@@ -655,6 +656,7 @@ msgstr "計算結果"
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:85
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:56
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:87
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:89
 msgid "Status"
 msgstr "状態"
 
@@ -665,6 +667,7 @@ msgstr "状態"
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:67
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:57
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:69
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:71
 msgid "Stop"
 msgstr "停止"
 
@@ -707,6 +710,7 @@ msgstr "ケース作成"
 #: ../_dexcsTaskPanelCfdMesh.py:66
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:66
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:68
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:70
 msgid "Feature Angle(deg)"
 msgstr "特徴角（度）"
 
@@ -714,6 +718,7 @@ msgstr "特徴角（度）"
 #: ../_dexcsTaskPanelCfdMesh.py:68
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:68
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:70
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:72
 msgid "Scale to Meter:"
 msgstr "スケール（to meter）"
 
@@ -721,6 +726,7 @@ msgstr "スケール（to meter）"
 #: ../_dexcsTaskPanelCfdMesh.py:75 ../_dexcsTaskPanelCfdMesh.py:70
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:70
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:72
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:74
 msgid "Run mesher"
 msgstr "実行"
 
@@ -728,6 +734,7 @@ msgstr "実行"
 #: ../_dexcsTaskPanelCfdMesh.py:76 ../_dexcsTaskPanelCfdMesh.py:71
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:71
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:73
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:75
 msgid "Mesh verification"
 msgstr "メッシュ確認"
 
@@ -736,6 +743,7 @@ msgstr "メッシュ確認"
 #: ../_dexcsTaskPanelCfdMesh.py:74
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:74
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:76
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:78
 msgid "CheckMesh"
 msgstr "チェックメッシュ"
 
@@ -744,6 +752,7 @@ msgstr "チェックメッシュ"
 #: ../_dexcsTaskPanelCfdMesh.py:75
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:75
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:77
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:79
 msgid "Mesh Parameters"
 msgstr "cfMesh 基本パラメタ"
 
@@ -752,6 +761,7 @@ msgstr "cfMesh 基本パラメタ"
 #: ../_dexcsTaskPanelCfdMesh.py:76
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:76
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:78
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:80
 msgid "optimiseLayer"
 msgstr "レイヤー最適化"
 
@@ -760,6 +770,7 @@ msgstr "レイヤー最適化"
 #: ../_dexcsTaskPanelCfdMesh.py:77
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:77
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:79
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:81
 msgid "maxNumIterations"
 msgstr "maxNumIterations"
 
@@ -767,6 +778,7 @@ msgstr "maxNumIterations"
 #: ../_dexcsTaskPanelCfdMesh.py:83 ../_dexcsTaskPanelCfdMesh.py:78
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:78
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:80
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:82
 msgid "maximum allowed thickness:"
 msgstr "maximum allowed thickness:"
 
@@ -774,6 +786,7 @@ msgstr "maximum allowed thickness:"
 #: ../_dexcsTaskPanelCfdMesh.py:84 ../_dexcsTaskPanelCfdMesh.py:79
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:79
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:81
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:83
 msgid "featureSizeFactor"
 msgstr "featureSizeFactor"
 
@@ -781,6 +794,7 @@ msgstr "featureSizeFactor"
 #: ../_dexcsTaskPanelCfdMesh.py:85 ../_dexcsTaskPanelCfdMesh.py:80
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:80
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:82
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:84
 msgid "reCalculateNormals"
 msgstr "reCalculateNormals"
 
@@ -788,6 +802,7 @@ msgstr "reCalculateNormals"
 #: ../_dexcsTaskPanelCfdMesh.py:86 ../_dexcsTaskPanelCfdMesh.py:81
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:81
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:83
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:85
 msgid "Number of iterations:"
 msgstr "Number of iterations:"
 
@@ -795,6 +810,7 @@ msgstr "Number of iterations:"
 #: ../_dexcsTaskPanelCfdMesh.py:87 ../_dexcsTaskPanelCfdMesh.py:82
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:82
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:84
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:86
 msgid "keepCellsIntersectingBoundary"
 msgstr "keepCellsIntersectingBoundary"
 
@@ -802,6 +818,7 @@ msgstr "keepCellsIntersectingBoundary"
 #: ../_dexcsTaskPanelCfdMesh.py:88 ../_dexcsTaskPanelCfdMesh.py:83
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:83
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:85
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:87
 msgid "Base element size:"
 msgstr "基本セルサイズ"
 
@@ -818,6 +835,7 @@ msgstr "メッシュ作成"
 #: ../_dexcsTaskPanelCfdMesh.py:73
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:73
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:75
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:77
 msgid "Mesh<"
 msgstr "メッシュケース"
 
@@ -1042,6 +1060,7 @@ msgstr "依存関係をチェック"
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdSolverControl.py:197
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:313
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:318
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:320
 msgid "Please edit the case input files externally at: {}\n"
 msgstr "ファイルマネージャにて以下のケースフォルダーを編集して下さい : {}\n"
 
@@ -1090,18 +1109,21 @@ msgstr "領域再構築に失敗"
 #: ../_dexcsTaskPanelCfdMesh.py:72
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:72
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:74
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:76
 msgid "Mesher"
 msgstr "メッシュ作成"
 
 #: ../_dexcsTaskPanelCfdMesh.py:84
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:84
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:86
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:88
 msgid "workflowControls(stopAfter):"
 msgstr ""
 
 #: ../_dexcsTaskPanelCfdMesh.py:124
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:124
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:126
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:128
 msgid "Enter 0 to use default value"
 msgstr "0 はデフォルト値を使用"
 
@@ -1112,6 +1134,8 @@ msgstr "0 はデフォルト値を使用"
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:425
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:330
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:430
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:332
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:432
 msgid "Executing: "
 msgstr "計算中: "
 
@@ -1119,6 +1143,7 @@ msgstr "計算中: "
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:332
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:334
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:339
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:341
 msgid "Mesher started"
 msgstr "メッシュ作成を開始"
 
@@ -1126,6 +1151,7 @@ msgstr "メッシュ作成を開始"
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:334
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:336
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:341
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:343
 msgid "Error starting meshing process"
 msgstr "メッシュ作成の開始に失敗"
 
@@ -1136,6 +1162,8 @@ msgstr "メッシュ作成の開始に失敗"
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:439
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:344
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:444
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:346
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:446
 msgid "Error "
 msgstr "エラー "
 
@@ -1143,6 +1171,7 @@ msgstr "エラー "
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:343
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:345
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:350
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:352
 msgid "Meshing manually stopped"
 msgstr "メッシュ作成を手動停止"
 
@@ -1150,6 +1179,7 @@ msgstr "メッシュ作成を手動停止"
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:344
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:346
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:351
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:353
 msgid "Meshing interrupted"
 msgstr "メッシュ作成が中止された"
 
@@ -1157,6 +1187,7 @@ msgstr "メッシュ作成が中止された"
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:358
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:360
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:365
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:367
 msgid "Meshing completed"
 msgstr "メッシュ作成が完了"
 
@@ -1164,6 +1195,7 @@ msgstr "メッシュ作成が完了"
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:371
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:373
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:378
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:380
 msgid "Meshing exited with error"
 msgstr "メッシュ作成がエラー終了"
 
@@ -1171,6 +1203,7 @@ msgstr "メッシュ作成がエラー終了"
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:393
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:395
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:400
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:402
 msgid "Reading mesh ..."
 msgstr "メッシュ読み込み中 ..."
 
@@ -1178,6 +1211,7 @@ msgstr "メッシュ読み込み中 ..."
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:395
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:397
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:402
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:404
 msgid "Triangulated representation of the surface mesh is shown - "
 msgstr "表面メッシュの状態が表示されるので,"
 
@@ -1185,6 +1219,7 @@ msgstr "表面メッシュの状態が表示されるので,"
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:396
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:398
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:403
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:405
 msgid "Please view in Paraview for accurate display.\n"
 msgstr "Paraviewで詳細に観察してみて下さい.\n"
 
@@ -1192,6 +1227,7 @@ msgstr "Paraviewで詳細に観察してみて下さい.\n"
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:405
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:407
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:412
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:414
 msgid "Searching for an internal vector point ..."
 msgstr ""
 
@@ -1199,6 +1235,7 @@ msgstr ""
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:420
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:422
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:427
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:429
 msgid "Running {} ..."
 msgstr "実行中 {} ..."
 
@@ -1206,6 +1243,7 @@ msgstr "実行中 {} ..."
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:432
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:434
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:439
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:441
 msgid "checkMesh started"
 msgstr "チェックメッシュを開始"
 
@@ -1213,6 +1251,7 @@ msgstr "チェックメッシュを開始"
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:434
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:436
 #: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:441
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:443
 msgid "Error starting checkMeshing process"
 msgstr "チェックメッシュの開始に失敗"
 
@@ -1372,10 +1411,12 @@ msgid "Select in model"
 msgstr "選択パーツ"
 
 #: ../Mod/dexcsCfdOF/dexcsCfdFaceSelectWidget.py:277
+#: ../Mod/dexcsCfdOF/dexcsCfdFaceSelectWidget.py:278
 msgid "Choose solid objects from the list."
 msgstr "細分化対象パーツにチェック"
 
 #: ../Mod/dexcsCfdOF/dexcsCfdFaceSelectWidget.py:279
+#: ../Mod/dexcsCfdOF/dexcsCfdFaceSelectWidget.py:280
 msgid ""
 "Choose solid objects from the list and select one or more of the sub-"
 "components associated with the currently selected shape."
@@ -1510,19 +1551,23 @@ msgid "change the property manually after lodaing process,\n"
 msgstr "ローディング後に、手作業で変更して下さい。\n"
 
 #: ../Mod/dexcsCfdOF/dexcsCfdAnalysis.py:223
+#: ../Mod/dexcsCfdOF/dexcsCfdAnalysis.py:228
 msgid "The OutputPath of Active Analysis Container is not changed.\n"
 msgstr "アクティブ解析コンテナの出力先は変更されませんでした。\n"
 
 #: ../Mod/dexcsCfdOF/dexcsCfdAnalysis.py:224
+#: ../Mod/dexcsCfdOF/dexcsCfdAnalysis.py:229
 msgid ""
 "\n"
 " Please note that the contents of the case file at this point are the "
 "previous AnalysisContainer."
 msgstr ""
 "\n"
-" 現時点でのケースファイルの内容は、変更前の解析コンテナに基づくものである点に留意下さい。"
+" 現時点でのケースファイルの内容は、変更前の解析コンテナに基づくものである点に"
+"留意下さい。"
 
 #: ../Mod/dexcsCfdOF/dexcsCfdAnalysis.py:225
+#: ../Mod/dexcsCfdOF/dexcsCfdAnalysis.py:230
 msgid ""
 "\n"
 " You will need to recreate the case file to continue working."
@@ -1532,22 +1577,33 @@ msgstr ""
 
 #: ../Mod/dexcsCfdOF/dexcsCfdMesh.py:226
 #: ../Mod/dexcsCfdOF/dexcsCfdSolverFoam.py:182
+#: ../Mod/dexcsCfdOF/dexcsCfdMesh.py:227
 msgid ""
 "No Active Analysis is detected from solver object in the active Document!\n"
-msgstr ""
-"このソルバーコンテナはアクティブ解析コンテナのものでありません!\n"
+msgstr "このソルバーコンテナはアクティブ解析コンテナのものでありません!\n"
 
 #: ../Mod/dexcsCfdOF/dexcsCfdMesh.py:232
 #: ../Mod/dexcsCfdOF/dexcsCfdSolverFoam.py:188
+#: ../Mod/dexcsCfdOF/dexcsCfdMesh.py:233
 msgid "Activate the analysis this solver belongs to!\n"
 msgstr "先に解析コンテナをアクティベートして下さい!\n"
 
 #: ../Mod/dexcsCfdOF/dexcsCfdMesh.py:234
 #: ../Mod/dexcsCfdOF/dexcsCfdSolverFoam.py:190
+#: ../Mod/dexcsCfdOF/dexcsCfdMesh.py:235
 msgid "Active Analysis is not in active Document!\n"
 msgstr "有効な解析コンテナがありません!\n"
 
 #: ../Mod/dexcsCfdOF/dexcsCfdMesh.py:236
 #: ../Mod/dexcsCfdOF/dexcsCfdSolverFoam.py:192
+#: ../Mod/dexcsCfdOF/dexcsCfdMesh.py:237
 msgid "Task dialog already open\n"
 msgstr "タスクダイアログが残っています\n"
+
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:68
+msgid "Mesh Tool"
+msgstr "メッシュツール"
+
+#: ../Mod/dexcsCfdOF/_dexcsTaskPanelCfdMesh.py:69
+msgid "dimension"
+msgstr "3D/2D"

@@ -120,7 +120,8 @@ class _CfdMesh:
         if addObjectProperty(obj, "MeshUtility", _CfdMesh.known_mesh_utility, "App::PropertyEnumeration",
                              "Mesh Parameters", "Meshing utilities"):
             obj.MeshUtility = 'cfMesh'
-
+        # addObjectProperty(obj, "MeshUtility", _CfdMesh.known_mesh_utility, "App::PropertyEnumeration",
+        #                       "Mesh Parameters", "Meshing utilities")
         ### <--addDexcs 
         addObjectProperty(obj, "FeatureAngle", 30, "App::PropertyFloat", "Mesh Parameters",
                           "Feature Angle of STL parts")
@@ -158,9 +159,9 @@ class _CfdMesh:
         #addObjectProperty(obj, 'EdgeRefinement', 1, "App::PropertyFloat", "Mesh Parameters",
         #                  "Relative edge (feature) refinement")
 
-        #if addObjectProperty(obj, 'ElementDimension', _CfdMesh.known_element_dimensions, "App::PropertyEnumeration",
-        #                     "Mesh Parameters", "Dimension of mesh elements (Default 3D)"):
-        #    obj.ElementDimension = '3D'
+        if addObjectProperty(obj, 'ElementDimension', _CfdMesh.known_element_dimensions, "App::PropertyEnumeration",
+                             "Mesh Parameters", "Dimension of mesh elements (Default 3D)"):
+            obj.ElementDimension = '3D'
 
     def onDocumentRestored(self, obj):
         self.initProperties(obj)

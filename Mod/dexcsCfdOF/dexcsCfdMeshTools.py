@@ -88,8 +88,8 @@ class CfdMeshTools:
         # Only used by gmsh - what purpose?
         self.clmin = 0.0
 
-        #self.dimension = self.mesh_obj.ElementDimension
-        self.dimension = '3D'
+        self.dimension = self.mesh_obj.ElementDimension
+        #self.dimension = '3D'
 
         self.cf_settings = {}
         self.snappy_settings = {}
