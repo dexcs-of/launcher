@@ -198,13 +198,13 @@ class CfdMeshTools:
         return Units.Quantity(self.clmax, Units.Length)
 
     def getFilePaths(self, output_dir):
-        print('output_dir = ' + output_dir)
+        #print('output_dir = ' + output_dir)
         if not hasattr(self.mesh_obj, 'CaseName'):  # Backward compat
             #self.mesh_obj.CaseName = 'meshCase'
             self.mesh_obj.CaseName = ''
         #self.case_name = self.mesh_obj.CaseName
         self.case_name = ''
-        print('self.case_name ' + self.case_name)
+        #print('self.case_name ' + self.case_name)
         self.meshCaseDir = os.path.join(output_dir, self.case_name)
         self.constantDir = os.path.join(self.meshCaseDir, 'constant')
         self.polyMeshDir = os.path.join(self.constantDir, 'polyMesh')

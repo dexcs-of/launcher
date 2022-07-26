@@ -25,6 +25,19 @@ import pythonVerCheck
 import pyDexcsSwakSubset
 from dexcsCfdMesh import _CfdMesh
 
+from selectType import Ui_Dialog
+
+class Test(QDialog):
+    def __init__(self,parent=None):
+        super(Test, self).__init__(parent)
+        self.ui = Ui_Dialog()
+        self.ui.setupUi(self)
+        
+        patchList = ['dexcs', 'inlet', 'outlet', 'wall']
+        for patchName in patchList:
+            print(patchName)
+            newitem = QTableWidgetItem(patchName)
+            self.ui._addrow(newitem)
 
 
 class Model:
@@ -106,7 +119,7 @@ class MainControl():
             if hasattr(obj, "Proxy") and isinstance(obj.Proxy, _CfdMesh):
                self.mesh_obj = obj
 
-        print("DEXCS MainControl / " + self.mesh_obj.Label)
+        #print("DEXCS MainControl / " + self.mesh_obj.Label)
 
     def checkMeshPerform(self, CaseFilePath):
         """
@@ -241,7 +254,7 @@ class MainControl():
         """
         exportボタン押下後の処理を全て行う。
         """
-        print ("MainControl::perform")
+        #print ("MainControl::perform")
 
         ijk = 99
         #print(_("hello %d") % ijk)
@@ -513,16 +526,15 @@ class MainControl():
                             __removeCells__.append(objList.Label)
 
         keepCellsListString = ""
-        print(__keepCells__)
         if __keepCells__ :
             for objList in __keepCells__:
                 #keepCellsListString = keepCellsListString + "\t" + "dexcs" + "\n\t{\n\t\tkeepCells 1; //1 active or 0 inactive \n\t}\n"
                 keepCellsListString = keepCellsListString + "\t" + objList + "\n\t{\n\t\tkeepCells 1; //1 active or 0 inactive \n\t}\n"
         else:
             keepCellsListString = keepCellsListString + "//\t" + "patchName" + "\n//\t{\n//\t\tkeepCells 1; //1 active or 0 inactive \n//\t}\n"
+        #print("keepCellsListString:" +  keepCellsListString)
 
         removeCellsListString = ""
-        print(__keepCells__)
         if __removeCells__ :
             for objList in __removeCells__:
                 removeCellsListString = removeCellsListString + "\t" + objList + "\n\t{\n\t\tkeepCells 0; //0 remove or 1 keep \n\t}\n"
@@ -643,6 +655,7 @@ class MainControl():
         __patch__ = []
         __reflevel__ = []
         __refThickness__ = []
+        __patchType__ = []
         doc = FreeCAD.activeDocument()
         for obj in doc.Objects:
             if obj.ViewObject.Visibility:
@@ -654,17 +667,21 @@ class MainControl():
                             __patch__.append(ref[0].Label) 
                             __reflevel__.append(obj.RefinementLevel) 
                             __refThickness__.append(obj.RefinementThickness) 
+                            __patchType__.append(obj.patchType) 
 
         if __patch__ :
+            print('found patchRefinement')
             patchNumber = 0
             for objList in __patch__ :
                 for obj in doc.Objects:
                     if obj.Label == objList :
+                        print('patch '+objList)
 
                         #RefStr = str(int( 1.0 / __relativeLength__[patchNumber])-1)
                         RefStr = str(__reflevel__[patchNumber])
                         RefThickness = str(__refThickness__[patchNumber]).replace('m','')
                         RefThickness = str(float(RefThickness)/1000)
+                        print('RefLevel '+RefStr)
 
                         strings5 = [
                         '\t' + objList + '\n',
@@ -1075,6 +1092,7 @@ class MainControl():
                             __nLayer__.append(obj.NumberLayers) 
                             patchNumber = patchNumber + 1
         #print('renameBoundary ',patchNumber)
+
         for obj in doc.Objects:
             #print('search obj::',obj)
             if obj.ViewObject.Visibility:
@@ -1102,20 +1120,22 @@ class MainControl():
                         #print(obj.Label , 'is region')
                 if  regionLabel == 0:
 
-                    changeLabel = 0
+                    changeType = 0
                     if patchNumber > 0 :
                         for i in range(patchNumber):
-                            #print('__patch__',__patch__[i])
                             #print('obj',obj.Label)
+                            #print('__patch__',__patch__[i])
+                            #print('__patchType__',__patchType__[i])
                             if obj.Label == __patch__[i] :
-                                changeLabel = 1
-                        #print('changeLabel ',changeLabel)
-                    if changeLabel == 1:
+                                changeType = 1
+                                _patchType = __patchType__[i]
+                        #print('changeType ',changeType)
+                    if changeType == 1:
                         strings9 = [
                         '\t\t' + str(obj.Label) + '\n',
                         '\t\t{\n',
                         '\t\t\tnewName '+ str(obj.Label) + ';\n',
-                        '\t\t\ttype wall;\n',
+                        '\t\t\ttype ' + _patchType + ';\n',
                         '\t\t}\n',
                         ]
                     else:
@@ -1126,6 +1146,7 @@ class MainControl():
                         '\t\t\ttype patch;\n',
                         '\t\t}\n',
                         ]
+        
                     meshDict.writelines(strings9)
 
         # iRow=0

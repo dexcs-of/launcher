@@ -1,4 +1,11 @@
 # FreeCAD Macro & WorkBentch for DEXCS Launcher
+# 更新 2022/7/27
+patch type について従来は、レイヤー有りのパッチを wall、その他は patch としていたが、これを廃止。
+デフォルトは patch とし、その他（wall, symmetry, overset, empty）を「メッシュ細分化タスク画面」で選択変更できるようにした。
+patch type だけを変更したい場合には、新たにメッシュ細分化タスク画面を作成し、細分化レベル=0 として、patch type と、対象パッチを指定する。対象パッチが複数の細分化タスク画面で重複し、指定値が異なっていた場合の動作はチェック出来ていない。
+
+その他、デバッグ用のプリント文を大幅に抑制（コメントアウト）した。
+
 # 更新 2022/7/14
 cfMeshの2D版（cartesianMesh2D）も使えるようにした。
 

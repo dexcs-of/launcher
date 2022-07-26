@@ -203,6 +203,7 @@ class _TaskPanelCfdMesh:
             self.form.optimizer_frame.setVisible(False)
 
 
+
     def store(self):
         FreeCADGui.doCommand("FreeCAD.ActiveDocument.{}.MeshUtility "
                              "= '{}'".format(self.mesh_obj.Name, self.form.cb_meshTool.currentText()))
@@ -291,9 +292,9 @@ class _TaskPanelCfdMesh:
         else:
             output_path1 = output_path
 
-        print("out1=" + output_path1)
+        print("output dir = " + output_path1)
         current_model_path = os.path.dirname(FreeCAD.ActiveDocument.FileName)
-        print("out2=" + current_model_path)
+        print("model dir = " + current_model_path)
         #if output_path1 != current_model_path:
 
         dictName = os.path.dirname(FreeCAD.ActiveDocument.FileName)  + "/.CaseFileDict"
