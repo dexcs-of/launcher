@@ -109,15 +109,16 @@ class _CfdAnalysis:
                 dialog = QtGui.QMessageBox.question(None,"Question",message, QtGui.QMessageBox.No, QtGui.QMessageBox.Yes)
                 if dialog == QtGui.QMessageBox.Yes:
 
-                    # if env.contains("APPIMAGE"):
-                    #     message = _("This FreeCAD is AppImage version.\n ")
-                    #     message = message + _("AppImage cannot change the OutputPAth while loading process.\n\n") 
-                    #     message = message + _("so if you want change the OutputPAth of Analysis Container,\n") 
-                    #     message = message + _("change the property manually after lodaing process,\n") 
-                    #     ans = QtGui.QMessageBox.critical(None, _("AppImage Warning"), message, QtGui.QMessageBox.Yes)
-                    #     dexcsCfdTools.removeAppimageEnvironment(env)
-                    # else:
-                        d = QFileDialog.getExistingDirectory(None, 'Choose Output directory', defaultModel_Dir)
+                    if env.contains("APPIMAGE"):
+                        message = _("This FreeCAD is AppImage version.\n ")
+                        message = message + _("AppImage cannot change the OutputPAth while loading process.\n\n") 
+                        message = message + _("so if you want change the OutputPAth of Analysis Container,\n") 
+                        message = message + _("change the property manually after lodaing process,\n") 
+                        ans = QtGui.QMessageBox.critical(None, _("AppImage Warning"), message, QtGui.QMessageBox.Yes)
+                        dexcsCfdTools.removeAppimageEnvironment(env)
+                    else:
+                        #d = QFileDialog().getExistingDirectory(None, 'Choose Output directory', defaultModel_Dir)
+                        d = QtGui.QFileDialog().getExistingDirectory(None, _('Choose output directory'), defaultModel_Dir)
                         if d and os.access(d, os.R_OK):
                             outputPath = d
                 if outputPath != defaultModel_Dir:
@@ -127,8 +128,25 @@ class _CfdAnalysis:
 
             obj.OutputPath = outputPath
 
+
+        # active_analysis = dexcsCfdTools.getActiveAnalysis()
+        # if active_analysis:
+        #     print(active_analysis.OutputPath)
+        #print(model_Dir)
+        #templateCase = FreeCAD.ParamGet(prefs).GetString("DefaultTemplateCase", "")
+        # addObjectProperty(obj, "OutputPath", model_Dir, "App::PropertyPath", "",
+        #                    "Path to which cases are written (blank to use system default)")
+        # #obj.OutputPath = model_Dir
+        # addObjectProperty(obj, "TemplateCase", templateCase, "App::PropertyPath", "",
+        #                    "Path to Template case Dir (blank to use system default)")
+        # addObjectProperty(obj, "IsActiveAnalysis", False, "App::PropertyBool", "", "Active analysis object in document")
+        # obj.setEditorMode("IsActiveAnalysis", 1)  # Make read-only (2 = hidden)
+        # addObjectProperty(obj, 'NeedsMeshRewrite', True, "App::PropertyBool", "", "Mesh setup needs to be re-written")
+        # addObjectProperty(obj, 'NeedsCaseRewrite', True, "App::PropertyBool", "", "Case setup needs to be re-written")
+        # addObjectProperty(obj, 'NeedsMeshRerun', True, "App::PropertyBool", "", "Mesher needs to be re-run before running solver")
+
     def onDocumentRestored(self, obj):
-        print("deb:restored")
+        #print("deb:restored")
         self.restoredProperties(obj)
 
 def dummyFunction(): # 何故かこれがないとうまく動かない      

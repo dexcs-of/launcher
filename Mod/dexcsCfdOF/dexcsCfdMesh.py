@@ -94,6 +94,7 @@ class _CfdMesh:
     #known_mesh_utility = ['cfMesh', 'snappyHexMesh', 'gmsh']
     known_mesh_utility = ['cfMesh']
     known_workflowControls = ['none', 'templateGeneration', 'surfaceTopology', 'surfaceProjection', 'patchAssignment', 'edgeExtraction', 'boundaryLayerGeneration', 'meshOptimisation', 'boundaryLayerRefinement']
+    known_patchType = ['patch', 'wall', 'symmetry', 'overset', 'empty']
 
     def __init__(self, obj):
         self.Type = "dexcsCfdMesh"
@@ -143,6 +144,21 @@ class _CfdMesh:
                           "maximum allowed thickness variation of thickness between two neighbouring points, devided by the distance between the points")
         addObjectProperty(obj, "workflowControls", _CfdMesh.known_workflowControls, "App::PropertyEnumeration",
                              "Mesh Parameters", "workflowControls")
+        addObjectProperty(obj, "patchTypeSetting", False, "App::PropertyBool", "Patch Type Settings",
+                          "activates setting of boundary type")
+        addObjectProperty(obj, 'patchTypeLists', [], "App::PropertySheat", "Patch Type Settings", "List of non-patch type boundary")
+        # if addObjectProperty(obj, 'patchTypeLists', [], "App::PropertyLinkList", "Patch Type Settings", "List of non-patch type boundary"):
+        #      # Backward compat
+        #      if 'References' in obj.PropertiesList:
+        #          doc = FreeCAD.getDocument(obj.Document.Name)
+        #          for r in obj.References:
+        #              if not r[1]:
+        #                  obj.ShapeRefs += [doc.getObject(r[0])]
+        #              else:
+        #                  obj.ShapeRefs += [(doc.getObject(r[0]), r[1])]
+        #          obj.removeProperty('References')
+        #          obj.removeProperty('LinkedObjects')
+
         ### addDexcs -->
 
 
@@ -198,11 +214,11 @@ class _ViewProviderCfdMesh:
         return
 
     def setEdit(self, vobj, mode):
-        print('debug4 '+vobj.Object.Name)
+        #print('debug4 '+vobj.Object.Name)
         for obj in FreeCAD.ActiveDocument.Objects:
             if hasattr(obj, 'Proxy') and isinstance(obj.Proxy, _CfdMesh):
                 obj.ViewObject.show()
-        print('debug6'+self.Object.Name)
+        #print('debug6'+self.Object.Name)
         import _dexcsTaskPanelCfdMesh
         taskd = _dexcsTaskPanelCfdMesh._TaskPanelCfdMesh(self.Object)
         taskd.obj = vobj.Object
