@@ -25,8 +25,6 @@ import pythonVerCheck
 import pyDexcsSwakSubset
 from dexcsCfdMesh import _CfdMesh
 
-from selectType import Ui_Dialog
-
 class Test(QDialog):
     def __init__(self,parent=None):
         super(Test, self).__init__(parent)

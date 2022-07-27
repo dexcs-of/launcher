@@ -146,7 +146,6 @@ class _CfdMesh:
                              "Mesh Parameters", "workflowControls")
         addObjectProperty(obj, "patchTypeSetting", False, "App::PropertyBool", "Patch Type Settings",
                           "activates setting of boundary type")
-        addObjectProperty(obj, 'patchTypeLists', [], "App::PropertySheat", "Patch Type Settings", "List of non-patch type boundary")
         # if addObjectProperty(obj, 'patchTypeLists', [], "App::PropertyLinkList", "Patch Type Settings", "List of non-patch type boundary"):
         #      # Backward compat
         #      if 'References' in obj.PropertiesList:
