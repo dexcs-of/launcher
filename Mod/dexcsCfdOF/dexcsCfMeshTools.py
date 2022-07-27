@@ -1075,19 +1075,19 @@ class MainControl():
         ]
         meshDict.writelines(strings8)
 
-        __patch__ = []
-        __nLayer__ = []
         patchNumber = 0
+        __patch__ = []
+        __patchType__ = []
         doc = FreeCAD.activeDocument()
         for obj in doc.Objects:
             if obj.ViewObject.Visibility:
                 if hasattr(obj, "Proxy") and isinstance(obj.Proxy, _CfdMeshRefinement):
-                    if obj.NumberLayers > 1 :                    
+                    if (not obj.Internal) and (obj.RefinementLevel > 0) :                    
                         #for objList in(obj.LinkedObjects):
                         for ref in(obj.ShapeRefs):
                             #__patch__.append(objList.Label) 
                             __patch__.append(ref[0].Label) 
-                            __nLayer__.append(obj.NumberLayers) 
+                            __patchType__.append(obj.patchType) 
                             patchNumber = patchNumber + 1
         #print('renameBoundary ',patchNumber)
 
