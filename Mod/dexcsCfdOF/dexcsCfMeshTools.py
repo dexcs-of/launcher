@@ -1082,7 +1082,7 @@ class MainControl():
         for obj in doc.Objects:
             if obj.ViewObject.Visibility:
                 if hasattr(obj, "Proxy") and isinstance(obj.Proxy, _CfdMeshRefinement):
-                    if (not obj.Internal) and (obj.RefinementLevel > 0) :                    
+                    if (not obj.Internal) :                    
                         #for objList in(obj.LinkedObjects):
                         for ref in(obj.ShapeRefs):
                             #__patch__.append(objList.Label) 
