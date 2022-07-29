@@ -313,7 +313,25 @@ class MainControl():
 
         zeroFolder = CaseFilePath + "0" 
         if not os.path.isdir(zeroFolder):
-            command = "cp -rf " + templateSolver + "/0 " + CaseFilePath + "/"
+            tempZero = templateSolver + "/0"
+            tempZeroOrig = templateSolver + "/0.orig"
+            if os.path.isdir(tempZero):
+                command = "cp -rf " + tempZero +  " " + CaseFilePath + "/"
+            elif os.path.isdir(tempZeroOrig):
+                command = "cp -rf " + tempZeroOrig +  " " + CaseFilePath + "/0"
+            else :
+                command = "mkdir 0"
+
+            os.system(command)
+
+        #copy All* script
+        command = "cp -f " + templateSolver + "/All* " + CaseFilePath + "/"
+        #print(command)
+        os.system(command)
+
+        if os.path.exists(CaseFilePath + "/Allrun"):
+            command = "mv " + CaseFilePath + "/Allrun " + CaseFilePath + "/Allrun.orig"
+            #print(command)
             os.system(command)
 
         #self.makeMeshDict(CaseFilePath, meshObj)
