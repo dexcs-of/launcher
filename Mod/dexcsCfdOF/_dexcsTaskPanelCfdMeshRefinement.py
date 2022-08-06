@@ -233,8 +233,9 @@ class _TaskPanelCfdMeshRefinement:
         self.form.check_keepCells.setChecked(self.obj.KeepCell)
         self.form.check_removeCells.setChecked(self.obj.RemoveCell)
         self.form.check_allowdiscont.setChecked(self.obj.AllowDiscont)
-        if (self.obj.KeepCell == True) or (self.obj.RemoveCell == True): 
-            self.form.check_moreoption.setChecked(self.obj.KeepCell)
+        if (self.obj.KeepCell == True) or (self.obj.RemoveCell == True) or (self.obj.RefinementThickness > 0): 
+            #self.form.check_moreoption.setChecked(self.obj.KeepCell)
+            self.form.check_moreoption.setChecked(True)
 
 
         if not self.mesh_obj.MeshUtility == "gmsh":
@@ -258,6 +259,7 @@ class _TaskPanelCfdMeshRefinement:
             self.form.moreoption_frame.setVisible(False)
             self.form.check_keepCells.setChecked(False)
             self.form.check_removeCells.setChecked(False)
+            setQuantity(self.form.if_refinethick, 0)
         if self.form.check_boundlayer.isChecked():
             if self.form.if_numlayer.value()==1:
                 self.form.if_numlayer.setValue(3)
