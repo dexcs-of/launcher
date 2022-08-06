@@ -94,7 +94,7 @@ class _CfdMesh:
     #known_mesh_utility = ['cfMesh', 'snappyHexMesh', 'gmsh']
     known_mesh_utility = ['cfMesh']
     known_workflowControls = ['none', 'templateGeneration', 'surfaceTopology', 'surfaceProjection', 'patchAssignment', 'edgeExtraction', 'boundaryLayerGeneration', 'meshOptimisation', 'boundaryLayerRefinement']
-    known_patchType = ['patch', 'wall', 'symmetry', 'overset', 'cyclic', 'cyclicAMI', 'wedge', 'empty', 'symmetryPlane']
+    known_patchType = ['patch', 'wall', 'symmetry', 'overset', 'cyclic', 'wedge', 'empty', 'symmetryPlane']
 
     def __init__(self, obj):
         self.Type = "dexcsCfdMesh"
