@@ -421,7 +421,6 @@ class MainControl():
                ]
         meshDict.writelines(strings)
 
-
         #minCellSizeValue = self.viewControl.get_minCellSizeValue()
         minCellSizeValue = dexcsCfdDict_minCellSize
         if str(minCellSizeValue) != Model.EMPTY_STR:
@@ -912,11 +911,12 @@ class MainControl():
                             strings7 = [
                             '\t' + objList + '\n',
                             '\t{\n',
-                            '\t\ttype line;\n',
+                            '\t\ttype cone;\n',
                             '\t\tadditionalRefinementLevels\t' + RefStr + ';\n',
                             '\t\tp0 (' + str(p0X) + MainControl.SPACE_STR + str(p0Y) + MainControl.SPACE_STR + str(p0Z) + ');\n',
                             '\t\tp1 (' + str(p1X) + MainControl.SPACE_STR + str(p1Y) + MainControl.SPACE_STR + str(p1Z) + ');\n',
-                            '\t\trefinementThickness\t' + str(obj.Radius.Value) + ';\n',
+                            '\t\tradius0\t' + str(obj.Radius.Value) + ';\n',
+                            '\t\tradius1\t' + str(obj.Radius.Value) + ';\n',
                             '\t}\n'
                                          ]
                          else :
