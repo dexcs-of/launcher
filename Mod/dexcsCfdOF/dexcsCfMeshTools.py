@@ -534,11 +534,13 @@ class MainControl():
                             else: 
                                 __allowDiscont__.append('0') 
                     if obj.KeepCell == 1:
-                        for objList in(obj.LinkedObjects):
-                            __keepCells__.append(objList.Label)
+                        for ref in(obj.ShapeRefs):
+                            __keepCells__.append(ref[0].Label)
                     if obj.RemoveCell == 1:
-                        for objList in(obj.LinkedObjects):
-                            __removeCells__.append(objList.Label)
+                        for ref in(obj.ShapeRefs):
+                            __removeCells__.append(ref[0].Label)
+        print(__keepCells__)
+        print(__removeCells__)
 
         keepCellsListString = ""
         if __keepCells__ :
@@ -547,7 +549,6 @@ class MainControl():
                 keepCellsListString = keepCellsListString + "\t" + objList + "\n\t{\n\t\tkeepCells 1; //1 active or 0 inactive \n\t}\n"
         else:
             keepCellsListString = keepCellsListString + "//\t" + "patchName" + "\n//\t{\n//\t\tkeepCells 1; //1 active or 0 inactive \n//\t}\n"
-        #print("keepCellsListString:" +  keepCellsListString)
 
         removeCellsListString = ""
         if __removeCells__ :
