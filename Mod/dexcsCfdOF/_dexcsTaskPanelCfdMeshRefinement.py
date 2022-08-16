@@ -137,7 +137,7 @@ class _TaskPanelCfdMeshRefinement:
         self.form.if_numlayer.setToolTip(_("Number of boundary layers if the reference surface is an external or "
                                          "mesh patch"))
         self.form.if_expratio.setToolTip(_("Expansion ratio of boundary layers (limited to be greater than 1.0 and "
-                                         "smaller than 1.2)"))
+                                         "smaller than 1.5)"))
         self.form.if_firstlayerheight.setToolTip(_("Maximum first cell height (ignored if set to 0.0)"))
         #self.form.if_edgerefinement.setToolTip("Number of edge or feature refinement levels")
         FreeCADGui.Selection.addObserver(self)
