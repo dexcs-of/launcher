@@ -421,7 +421,6 @@ class MainControl():
                ]
         meshDict.writelines(strings)
 
-
         #minCellSizeValue = self.viewControl.get_minCellSizeValue()
         minCellSizeValue = dexcsCfdDict_minCellSize
         if str(minCellSizeValue) != Model.EMPTY_STR:
@@ -535,11 +534,13 @@ class MainControl():
                             else: 
                                 __allowDiscont__.append('0') 
                     if obj.KeepCell == 1:
-                        for objList in(obj.LinkedObjects):
-                            __keepCells__.append(objList.Label)
+                        for ref in(obj.ShapeRefs):
+                            __keepCells__.append(ref[0].Label)
                     if obj.RemoveCell == 1:
-                        for objList in(obj.LinkedObjects):
-                            __removeCells__.append(objList.Label)
+                        for ref in(obj.ShapeRefs):
+                            __removeCells__.append(ref[0].Label)
+        print(__keepCells__)
+        print(__removeCells__)
 
         keepCellsListString = ""
         if __keepCells__ :
@@ -548,7 +549,6 @@ class MainControl():
                 keepCellsListString = keepCellsListString + "\t" + objList + "\n\t{\n\t\tkeepCells 1; //1 active or 0 inactive \n\t}\n"
         else:
             keepCellsListString = keepCellsListString + "//\t" + "patchName" + "\n//\t{\n//\t\tkeepCells 1; //1 active or 0 inactive \n//\t}\n"
-        #print("keepCellsListString:" +  keepCellsListString)
 
         removeCellsListString = ""
         if __removeCells__ :
@@ -696,7 +696,8 @@ class MainControl():
                         #RefStr = str(int( 1.0 / __relativeLength__[patchNumber])-1)
                         RefStr = str(__reflevel__[patchNumber])
                         RefThickness = str(__refThickness__[patchNumber]).replace('m','')
-                        RefThickness = str(float(RefThickness)/1000)
+                        #RefThickness = str(float(RefThickness)/1000)
+                        RefThickness = str(float(RefThickness))
                         print('RefLevel '+RefStr)
 
                         strings5 = [
@@ -911,11 +912,12 @@ class MainControl():
                             strings7 = [
                             '\t' + objList + '\n',
                             '\t{\n',
-                            '\t\ttype line;\n',
+                            '\t\ttype cone;\n',
                             '\t\tadditionalRefinementLevels\t' + RefStr + ';\n',
                             '\t\tp0 (' + str(p0X) + MainControl.SPACE_STR + str(p0Y) + MainControl.SPACE_STR + str(p0Z) + ');\n',
                             '\t\tp1 (' + str(p1X) + MainControl.SPACE_STR + str(p1Y) + MainControl.SPACE_STR + str(p1Z) + ');\n',
-                            '\t\trefinementThickness\t' + str(obj.Radius.Value) + ';\n',
+                            '\t\tradius0\t' + str(obj.Radius.Value) + ';\n',
+                            '\t\tradius1\t' + str(obj.Radius.Value) + ';\n',
                             '\t}\n'
                                          ]
                          else :

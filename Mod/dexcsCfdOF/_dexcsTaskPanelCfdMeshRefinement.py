@@ -137,7 +137,7 @@ class _TaskPanelCfdMeshRefinement:
         self.form.if_numlayer.setToolTip(_("Number of boundary layers if the reference surface is an external or "
                                          "mesh patch"))
         self.form.if_expratio.setToolTip(_("Expansion ratio of boundary layers (limited to be greater than 1.0 and "
-                                         "smaller than 1.2)"))
+                                         "smaller than 1.5)"))
         self.form.if_firstlayerheight.setToolTip(_("Maximum first cell height (ignored if set to 0.0)"))
         #self.form.if_edgerefinement.setToolTip("Number of edge or feature refinement levels")
         FreeCADGui.Selection.addObserver(self)
@@ -233,8 +233,9 @@ class _TaskPanelCfdMeshRefinement:
         self.form.check_keepCells.setChecked(self.obj.KeepCell)
         self.form.check_removeCells.setChecked(self.obj.RemoveCell)
         self.form.check_allowdiscont.setChecked(self.obj.AllowDiscont)
-        if (self.obj.KeepCell == True) or (self.obj.RemoveCell == True): 
-            self.form.check_moreoption.setChecked(self.obj.KeepCell)
+        if (self.obj.KeepCell == True) or (self.obj.RemoveCell == True) or (self.obj.RefinementThickness > 0): 
+            #self.form.check_moreoption.setChecked(self.obj.KeepCell)
+            self.form.check_moreoption.setChecked(True)
 
 
         if not self.mesh_obj.MeshUtility == "gmsh":
@@ -258,6 +259,7 @@ class _TaskPanelCfdMeshRefinement:
             self.form.moreoption_frame.setVisible(False)
             self.form.check_keepCells.setChecked(False)
             self.form.check_removeCells.setChecked(False)
+            setQuantity(self.form.if_refinethick, 0)
         if self.form.check_boundlayer.isChecked():
             if self.form.if_numlayer.value()==1:
                 self.form.if_numlayer.setValue(3)
