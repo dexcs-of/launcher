@@ -83,13 +83,12 @@ class _CfdAnalysis:
         env = QtCore.QProcessEnvironment.systemEnvironment()
 
         model = FreeCAD.ActiveDocument.FileName
-        # prefs = dexcsCfdTools.getPreferencesLocation()
-        # model_Dir = FreeCAD.ParamGet(prefs).GetString("DefaultOutputPath", "")
-        # if os.path.exists(model_Dir):
-        #     defaultModel_Dir = model_Dir
-        # else:
-        #     defaultModel_Dir = os.path.dirname(model)
-        defaultModel_Dir = os.path.dirname(model)
+        prefs = dexcsCfdTools.getPreferencesLocation()
+        model_Dir = FreeCAD.ParamGet(prefs).GetString("DefaultOutputPath", "")
+        if os.path.exists(model_Dir):
+            defaultModel_Dir = model_Dir
+        else:
+            defaultModel_Dir = os.path.dirname(model)
 
         setDictOutput_dir = ""
         dictName = os.path.dirname(FreeCAD.ActiveDocument.FileName)  + "/.CaseFileDict"
@@ -120,9 +119,6 @@ class _CfdAnalysis:
  
                 if dialog == QtGui.QMessageBox.RestoreDefaults:
 
-                    model = FreeCAD.ActiveDocument.FileName
-                    prefs = dexcsCfdTools.getPreferencesLocation()
-                    FreeCAD.ParamGet(prefs).SetString("DefaultOutputPath", defaultModel_Dir)
                     outputPath = defaultModel_Dir
  
                 if dialog == QtGui.QMessageBox.Yes:
