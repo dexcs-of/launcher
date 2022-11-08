@@ -842,49 +842,49 @@ class MainControl():
                          if obj.isDerivedFrom("Part::Box"):
                             print(' Box')
                             print('RefLevel '+RefStr)
-                            centerX = obj.Placement.Base.x + obj.Length.Value * 0.5
-                            centerY = obj.Placement.Base.y + obj.Width.Value * 0.5
-                            centerZ = obj.Placement.Base.z + obj.Height.Value * 0.5
+                            centerX = ( obj.Placement.Base.x + obj.Length.Value * 0.5 ) * self.mesh_obj.ScaleToMeter
+                            centerY = ( obj.Placement.Base.y + obj.Width.Value * 0.5 ) * self.mesh_obj.ScaleToMeter
+                            centerZ = ( obj.Placement.Base.z + obj.Height.Value * 0.5 ) * self.mesh_obj.ScaleToMeter
                             strings7 = [
                             '\t' + objList + '\n',
                             '\t{\n',
                             '\t\ttype box;\n',
                             '\t\tadditionalRefinementLevels\t' + RefStr + ';\n',
                             '\t\tcentre (' + str(centerX) + MainControl.SPACE_STR + str(centerY) + MainControl.SPACE_STR + str(centerZ) + ');\n',
-                            '\t\tlengthX\t' + str(obj.Length.Value) + ';\n',
-                            '\t\tlengthY\t' + str(obj.Width.Value) + ';\n',
-                            '\t\tlengthZ\t' + str(obj.Height.Value) + ';\n',
+                            '\t\tlengthX\t' + str(obj.Length.Value * self.mesh_obj.ScaleToMeter) + ';\n',
+                            '\t\tlengthY\t' + str(obj.Width.Value * self.mesh_obj.ScaleToMeter) + ';\n',
+                            '\t\tlengthZ\t' + str(obj.Height.Value * self.mesh_obj.ScaleToMeter) + ';\n',
                             '\t}\n'
                                          ]
                          elif obj.isDerivedFrom("Part::Sphere"):
                             print(' Sphere')
                             print('RefLevel '+RefStr)
-                            centerX = obj.Placement.Base.x 
-                            centerY = obj.Placement.Base.y 
-                            centerZ = obj.Placement.Base.z 
+                            centerX = obj.Placement.Base.x  * self.mesh_obj.ScaleToMeter
+                            centerY = obj.Placement.Base.y  * self.mesh_obj.ScaleToMeter
+                            centerZ = obj.Placement.Base.z  * self.mesh_obj.ScaleToMeter
                             strings7 = [
                             '\t' + objList + '\n',
                             '\t{\n',
                             '\t\ttype sphere;\n',
                             '\t\tadditionalRefinementLevels\t' + RefStr + ';\n',
                             '\t\tcentre (' + str(centerX) + MainControl.SPACE_STR + str(centerY) + MainControl.SPACE_STR + str(centerZ) + ');\n',
-                            '\t\tradius\t' + str(obj.Radius.Value) + ';\n',
+                            '\t\tradius\t' + str(obj.Radius.Value * self.mesh_obj.ScaleToMeter) + ';\n',
                             '\t\trefinementThickness\t' + '0' + ';\n',
                             '\t}\n'
                                          ]
                          elif obj.isDerivedFrom("Part::Cone"):
                             print(' Cone')
                             print('RefLevel '+RefStr)
-                            center = FreeCAD.Vector(0, 0, - obj.Height.Value)
-                            pos = FreeCAD.Vector(obj.Placement.Base.x, obj.Placement.Base.y, obj.Placement.Base.z + obj.Height.Value)
+                            center = FreeCAD.Vector(0, 0, - obj.Height.Value * self.mesh_obj.ScaleToMeter)
+                            pos = FreeCAD.Vector(obj.Placement.Base.x * self.mesh_obj.ScaleToMeter, obj.Placement.Base.y * self.mesh_obj.ScaleToMeter, obj.Placement.Base.z * self.mesh_obj.ScaleToMeter + obj.Height.Value * self.mesh_obj.ScaleToMeter)
                             rot = FreeCAD.Rotation(obj.Placement.Rotation)
                             cylinderHead = FreeCAD.Placement(pos, rot, center)
-                            p0X = obj.Placement.Base.x
-                            p0Y = obj.Placement.Base.y
-                            p0Z = obj.Placement.Base.z
-                            p1X = cylinderHead.Base.x
-                            p1Y = cylinderHead.Base.y
-                            p1Z = cylinderHead.Base.z
+                            p0X = obj.Placement.Base.x  * self.mesh_obj.ScaleToMeter
+                            p0Y = obj.Placement.Base.y  * self.mesh_obj.ScaleToMeter
+                            p0Z = obj.Placement.Base.z  * self.mesh_obj.ScaleToMeter
+                            p1X = cylinderHead.Base.x 
+                            p1Y = cylinderHead.Base.y 
+                            p1Z = cylinderHead.Base.z 
                             strings7 = [
                             '\t' + objList + '\n',
                             '\t{\n',
@@ -892,23 +892,23 @@ class MainControl():
                             '\t\tadditionalRefinementLevels\t' + RefStr + ';\n',
                             '\t\tp0 (' + str(p0X) + MainControl.SPACE_STR + str(p0Y) + MainControl.SPACE_STR + str(p0Z) + ');\n',
                             '\t\tp1 (' + str(p1X) + MainControl.SPACE_STR + str(p1Y) + MainControl.SPACE_STR + str(p1Z) + ');\n',
-                            '\t\tradius0\t' + str(obj.Radius1.Value) + ';\n',
-                            '\t\tradius1\t' + str(obj.Radius2.Value) + ';\n',
+                            '\t\tradius0\t' + str(obj.Radius1.Value * self.mesh_obj.ScaleToMeter) + ';\n',
+                            '\t\tradius1\t' + str(obj.Radius2.Value * self.mesh_obj.ScaleToMeter) + ';\n',
                             '\t}\n'
                                          ]
                          elif obj.isDerivedFrom("Part::Cylinder"):
                             print(' Cylinder')
                             print('RefLevel '+RefStr)
-                            center = FreeCAD.Vector(0, 0, - obj.Height.Value)
-                            pos = FreeCAD.Vector(obj.Placement.Base.x, obj.Placement.Base.y, obj.Placement.Base.z + obj.Height.Value)
+                            center = FreeCAD.Vector(0, 0, - obj.Height.Value * self.mesh_obj.ScaleToMeter)
+                            pos = FreeCAD.Vector(obj.Placement.Base.x * self.mesh_obj.ScaleToMeter, obj.Placement.Base.y * self.mesh_obj.ScaleToMeter, (obj.Placement.Base.z + obj.Height.Value) * self.mesh_obj.ScaleToMeter)
                             rot = FreeCAD.Rotation(obj.Placement.Rotation)
                             cylinderHead = FreeCAD.Placement(pos, rot, center)
-                            p0X = obj.Placement.Base.x
-                            p0Y = obj.Placement.Base.y
-                            p0Z = obj.Placement.Base.z
-                            p1X = cylinderHead.Base.x
-                            p1Y = cylinderHead.Base.y
-                            p1Z = cylinderHead.Base.z
+                            p0X = obj.Placement.Base.x * self.mesh_obj.ScaleToMeter
+                            p0Y = obj.Placement.Base.y * self.mesh_obj.ScaleToMeter
+                            p0Z = obj.Placement.Base.z * self.mesh_obj.ScaleToMeter
+                            p1X = cylinderHead.Base.x 
+                            p1Y = cylinderHead.Base.y 
+                            p1Z = cylinderHead.Base.z 
                             strings7 = [
                             '\t' + objList + '\n',
                             '\t{\n',
@@ -916,17 +916,17 @@ class MainControl():
                             '\t\tadditionalRefinementLevels\t' + RefStr + ';\n',
                             '\t\tp0 (' + str(p0X) + MainControl.SPACE_STR + str(p0Y) + MainControl.SPACE_STR + str(p0Z) + ');\n',
                             '\t\tp1 (' + str(p1X) + MainControl.SPACE_STR + str(p1Y) + MainControl.SPACE_STR + str(p1Z) + ');\n',
-                            '\t\tradius0\t' + str(obj.Radius.Value) + ';\n',
-                            '\t\tradius1\t' + str(obj.Radius.Value) + ';\n',
+                            '\t\tradius0\t' + str(obj.Radius.Value * self.mesh_obj.ScaleToMeter) + ';\n',
+                            '\t\tradius1\t' + str(obj.Radius.Value * self.mesh_obj.ScaleToMeter) + ';\n',
                             '\t}\n'
                                          ]
                          else :
-                            xmax = obj.Shape.BoundBox.XMax
-                            xmin = obj.Shape.BoundBox.XMin
-                            ymax = obj.Shape.BoundBox.YMax
-                            ymin = obj.Shape.BoundBox.YMin
-                            zmax = obj.Shape.BoundBox.ZMax
-                            zmin = obj.Shape.BoundBox.ZMin
+                            xmax = obj.Shape.BoundBox.XMax * self.mesh_obj.ScaleToMeter
+                            xmin = obj.Shape.BoundBox.XMin * self.mesh_obj.ScaleToMeter
+                            ymax = obj.Shape.BoundBox.YMax * self.mesh_obj.ScaleToMeter
+                            ymin = obj.Shape.BoundBox.YMin * self.mesh_obj.ScaleToMeter
+                            zmax = obj.Shape.BoundBox.ZMax * self.mesh_obj.ScaleToMeter
+                            zmin = obj.Shape.BoundBox.ZMin * self.mesh_obj.ScaleToMeter
                             centerX = 0.5*(xmax+xmin)
                             centerY = 0.5*(ymax+ymin)
                             centerZ = 0.5*(zmax+zmin)
