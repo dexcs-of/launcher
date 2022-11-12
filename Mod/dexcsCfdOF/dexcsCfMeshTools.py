@@ -697,7 +697,7 @@ class MainControl():
                         RefStr = str(__reflevel__[patchNumber])
                         RefThickness = str(__refThickness__[patchNumber]).replace('m','')
                         #RefThickness = str(float(RefThickness)/1000)
-                        RefThickness = str(float(RefThickness))
+                        RefThickness = str(float(RefThickness)*self.mesh_obj.ScaleToMeter)
                         print('RefLevel '+RefStr)
 
                         strings5 = [
