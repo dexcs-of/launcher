@@ -105,6 +105,7 @@ def convertPrPInpFile(caseDir,modelName,solverInp,scale_factor,solidName,young,p
 	for i in range(len(y)):
 		i = i + 1
 		if ( y[i].strip() == '*Cload'):
+			iCload = i
 			i = i + 1
 			match = None
 			while (match is None):
@@ -117,20 +118,29 @@ def convertPrPInpFile(caseDir,modelName,solverInp,scale_factor,solidName,young,p
 				# *英大文字で始まる（コマンド）カードを探す
 				match = re.search( deckCommand, y[i] )
 			break
-	# 重複ノードを削除して順番に並び替える
-	cNodeList = sorted(list(set(nodeList)), key=int )
-
-	namFile = open(namFileName , 'w')
-	namFile.writelines('*NSET,NSET=Nsurface\n')        
-
-	for i in range(len(cNodeList)):
-		namFile.writelines(cNodeList[i])
-		namFile.writelines(',\n')
-	namFile.close()
-
-
 	inpFile = open(inpFileName , 'w')
-	inpFile.writelines('*INCLUDE, INPUT=interface.nam\n')
+
+	if len(nodeList) > 0:
+		# 重複ノードを削除して順番に並び替える
+		cNodeList = sorted(list(set(nodeList)), key=int )
+	
+		namFile = open(namFileName , 'w')
+		namFile.writelines('*NSET,NSET=Nsurface\n')        
+
+		for i in range(len(cNodeList)):
+			namFile.writelines(cNodeList[i])
+			namFile.writelines(',\n')
+		namFile.close()
+
+		inpFile.writelines('*INCLUDE, INPUT=interface.nam\n')
+	else:
+		Concentrated_force = y[iCload+1].split(",")[0]
+		print("patch Name is " + Concentrated_force)
+
+	for i in range(len(y)):
+		if Concentrated_force in y[i]:
+			y[i] = y[i].replace(Concentrated_force, 'Nsurface')	
+	
 	inpFile.writelines('*INCLUDE, INPUT=allnodes.nam\n')
 
 
@@ -209,7 +219,7 @@ def convertPrPInpFile(caseDir,modelName,solverInp,scale_factor,solidName,young,p
 			if ( i == iDynamic ):
 				# 時間刻み、最終時刻の値
 				inpFile.writelines(str(dT) + ', '+ str(finalTime) + '\n')
-	
+
 	inpFile.close()
 
 def convertInpFile(caseDir,modelName,solverInp,scale_factor,solidName,young,poison,density,dT,prt_frq,finalTime):
