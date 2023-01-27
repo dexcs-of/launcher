@@ -130,8 +130,8 @@ def convertPrPInpFile(caseDir,modelName,solverInp,scale_factor,solidName,young,p
 
 
 	inpFile = open(inpFileName , 'w')
-	inpFile.writelines('*INCLUDE, INPUT=Solid/interface.nam\n')
-	inpFile.writelines('*INCLUDE, INPUT=Solid/allnodes.nam\n')
+	inpFile.writelines('*INCLUDE, INPUT=interface.nam\n')
+	inpFile.writelines('*INCLUDE, INPUT=allnodes.nam\n')
 
 
 	if ( int(prt_frq) > 0 ):
@@ -142,6 +142,10 @@ def convertPrPInpFile(caseDir,modelName,solverInp,scale_factor,solidName,young,p
 			if ( y[i].strip() == '*El file'):
 				#*EL FILEカードは書き換える
 				y[i] = '*EL FILE' + ", FREQUENCY=" + str(prt_frq)
+	for i in range(len(y)):
+		if ( y[i].strip()[0:6] == '*Shell'):
+			# *Shellの寸法をスケール変更
+			y[i+1] = str( float(y[i+1]) * s_f )
 	for i in range(len(y)):
 		if ( y[i].strip() == '*Elastic'):
 			# dataカードは書き換える
@@ -299,8 +303,8 @@ def convertInpFile(caseDir,modelName,solverInp,scale_factor,solidName,young,pois
 
 
 	inpFile = open(inpFileName , 'w')
-	inpFile.writelines('*INCLUDE, INPUT=Solid/interface.nam\n')
-	inpFile.writelines('*INCLUDE, INPUT=Solid/allnodes.nam\n')
+	inpFile.writelines('*INCLUDE, INPUT=interface.nam\n')
+	inpFile.writelines('*INCLUDE, INPUT=allnodes.nam\n')
 
 
 	if ( int(prt_frq) > 0 ):
