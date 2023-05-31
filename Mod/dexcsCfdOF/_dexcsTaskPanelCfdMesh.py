@@ -65,6 +65,8 @@ class _TaskPanelCfdMesh:
 
         self.form.setWindowTitle(_("dexcsCFD Mesh"))
         self.form.pb_write_mesh.setText(_("Write mesh case"))
+        self.form.l_meshTool.setText(_("Mesh Tool"))
+        self.form.l_dimension.setText(_("dimension"))
         self.form.l_featureAngle.setText(_("Feature Angle(deg)"))
         self.form.pb_stop_mesh.setText(_("Stop"))
         self.form.l_scaleToMeter.setText(_("Scale to Meter:"))
@@ -95,7 +97,7 @@ class _TaskPanelCfdMesh:
                                               stdoutHook=self.gotOutputLines,
                                               stderrHook=self.gotErrorLines)
 
-        #self.form.cb_utility.activated.connect(self.choose_utility)
+        self.form.cb_meshTool.activated.connect(self.choose_utility)
 
         self.Timer = QtCore.QTimer()
         self.Timer.setInterval(1000)
@@ -119,8 +121,8 @@ class _TaskPanelCfdMesh:
         self.form.optimizer_frame.setVisible(False)
         self.form.check_reCalculateNormals.setChecked(True)
 
-        #self.form.cb_dimension.addItems(_CfdMesh.known_element_dimensions)
-        #self.form.cb_utility.addItems(_CfdMesh.known_mesh_utility)
+        self.form.cb_dimension.addItems(_CfdMesh.known_element_dimensions)
+        self.form.cb_meshTool.addItems(_CfdMesh.known_mesh_utility)
         self.form.cb_workflowControls.addItems(_CfdMesh.known_workflowControls)
 
         self.form.if_max.setToolTip(_("Enter 0 to use default value"))
@@ -166,8 +168,8 @@ class _TaskPanelCfdMesh:
         self.form.if_featureSizeFactor.setValue(self.mesh_obj.opt_featureSizeFactor) 
         self.form.check_reCalculateNormals.setChecked(self.mesh_obj.opt_reCalculateNormals) 
         self.form.if_relThicknessTol.setValue(self.mesh_obj.opt_relThicknessTol) 
-        index_utility = self.form.cb_workflowControls.findText(self.mesh_obj.MeshUtility)
-        self.form.cb_workflowControls.setCurrentIndex(index_utility)
+        index_utility = self.form.cb_meshTool.findText(self.mesh_obj.MeshUtility)
+        self.form.cb_meshTool.setCurrentIndex(index_utility)
         ### addDexcs -->
 
         #point_in_mesh = self.mesh_obj.PointInMesh.copy()
@@ -177,8 +179,8 @@ class _TaskPanelCfdMesh:
         #self.form.if_cellsbetweenlevels.setValue(self.mesh_obj.CellsBetweenLevels)
         #self.form.if_edgerefine.setValue(self.mesh_obj.EdgeRefinement)
 
-        #index_dimension = self.form.cb_dimension.findText(self.mesh_obj.ElementDimension)
-        #self.form.cb_dimension.setCurrentIndex(index_dimension)
+        index_dimension = self.form.cb_dimension.findText(self.mesh_obj.ElementDimension)
+        self.form.cb_dimension.setCurrentIndex(index_dimension)
         index_workflowControls = self.form.cb_workflowControls.findText(self.mesh_obj.workflowControls)
         self.form.cb_workflowControls.setCurrentIndex(index_workflowControls)
 
@@ -201,9 +203,10 @@ class _TaskPanelCfdMesh:
             self.form.optimizer_frame.setVisible(False)
 
 
+
     def store(self):
-        #FreeCADGui.doCommand("FreeCAD.ActiveDocument.{}.MeshUtility "
-        #                     "= '{}'".format(self.mesh_obj.Name, self.form.cb_utility.currentText()))
+        FreeCADGui.doCommand("FreeCAD.ActiveDocument.{}.MeshUtility "
+                             "= '{}'".format(self.mesh_obj.Name, self.form.cb_meshTool.currentText()))
         FreeCADGui.doCommand("\nFreeCAD.ActiveDocument.{}.BaseCellSize "
                              "= '{}'".format(self.mesh_obj.Name, getQuantity(self.form.if_max)))
 
@@ -230,8 +233,8 @@ class _TaskPanelCfdMesh:
                              "= '{}'".format(self.mesh_obj.Name, self.form.cb_workflowControls.currentText()))
         ### addDexcs -->
 
-        #FreeCADGui.doCommand("FreeCAD.ActiveDocument.{}.ElementDimension "
-        #                     "= '{}'".format(self.mesh_obj.Name, self.form.cb_dimension.currentText()))
+        FreeCADGui.doCommand("FreeCAD.ActiveDocument.{}.ElementDimension "
+                             "= '{}'".format(self.mesh_obj.Name, self.form.cb_dimension.currentText()))
         #FreeCADGui.doCommand("FreeCAD.ActiveDocument.{}.CellsBetweenLevels "
         #                     "= {}".format(self.mesh_obj.Name, self.form.if_cellsbetweenlevels.value()))
         #FreeCADGui.doCommand("FreeCAD.ActiveDocument.{}.EdgeRefinement "
@@ -289,9 +292,9 @@ class _TaskPanelCfdMesh:
         else:
             output_path1 = output_path
 
-        print("out1=" + output_path1)
+        print("output dir = " + output_path1)
         current_model_path = os.path.dirname(FreeCAD.ActiveDocument.FileName)
-        print("out2=" + current_model_path)
+        print("model dir = " + current_model_path)
         #if output_path1 != current_model_path:
 
         dictName = os.path.dirname(FreeCAD.ActiveDocument.FileName)  + "/.CaseFileDict"

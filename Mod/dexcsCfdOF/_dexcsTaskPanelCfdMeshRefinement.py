@@ -35,6 +35,7 @@ import dexcsCfdMeshRefinement
 from FreeCAD import Units
 import re
 import pythonVerCheck
+from dexcsCfdMesh import _CfdMesh
 
 # import sys
 # import gettext
@@ -69,6 +70,7 @@ class _TaskPanelCfdMeshRefinement:
         self.form.volumeRefinementToggle.setText(_("Internal Volume"))
         self.form.label_7.setText(_("Cartesian Mesh: Type of Refinement"))
         self.form.label_cellsize.setText(_("Real cell size:"))
+        self.form.label_patchType.setText(_("Patch type:"))
         self.form.label_reflevel.setText(_("Refinement level:"))
         self.form.label_11.setText(_("Boundary Layers"))
         self.form.label_12.setText(_("More Option"))
@@ -80,6 +82,10 @@ class _TaskPanelCfdMeshRefinement:
         self.form.check_keepCells.setText(_("keepCellsIntersectingPatches"))
         self.form.label_4.setText(_("Objects"))
         self.form.label.setText(_("Objects"))
+
+        #self.form.cb_patchType.addItems(["patch","wall", "symmetry", "overset", "empty"])
+        self.form.cb_patchType.addItems(_CfdMesh.known_patchType)
+
 
 
         self.ReferencesOrig = list(self.obj.References)
@@ -123,8 +129,6 @@ class _TaskPanelCfdMeshRefinement:
         self.form.if_reflevel.valueChanged.connect(self.changeCellSize)
         self.form.if_cellsize.valueChanged.connect(self.changeBaseCellSize)
 
-
-
         self.form.surfaceRefinementToggle.toggled.connect(self.changeInternal)
         self.form.volumeRefinementToggle.toggled.connect(self.changeInternal)
 
@@ -133,7 +137,7 @@ class _TaskPanelCfdMeshRefinement:
         self.form.if_numlayer.setToolTip(_("Number of boundary layers if the reference surface is an external or "
                                          "mesh patch"))
         self.form.if_expratio.setToolTip(_("Expansion ratio of boundary layers (limited to be greater than 1.0 and "
-                                         "smaller than 1.2)"))
+                                         "smaller than 1.5)"))
         self.form.if_firstlayerheight.setToolTip(_("Maximum first cell height (ignored if set to 0.0)"))
         #self.form.if_edgerefinement.setToolTip("Number of edge or feature refinement levels")
         FreeCADGui.Selection.addObserver(self)
@@ -173,7 +177,8 @@ class _TaskPanelCfdMeshRefinement:
                              "= '{}'".format(self.obj.Name, getQuantity(self.form.if_cellsize)))
         FreeCADGui.doCommand("FreeCAD.ActiveDocument.{}.RefinementLevel "
                              "= {}".format(self.obj.Name, self.form.if_reflevel.value()))
-
+        FreeCADGui.doCommand("FreeCAD.ActiveDocument.{}.patchType "
+                             "= '{}'".format(self.obj.Name, self.form.cb_patchType.currentText()))
         FreeCADGui.doCommand("FreeCAD.ActiveDocument.{}.KeepCell "
                              "= {}".format(self.obj.Name, self.form.check_keepCells.isChecked()))
         FreeCADGui.doCommand("FreeCAD.ActiveDocument.{}.RemoveCell "
@@ -222,12 +227,15 @@ class _TaskPanelCfdMeshRefinement:
         """ fills the widgets """
         self.form.if_reflevel.setValue(self.obj.RefinementLevel)
         setQuantity(self.form.if_cellsize, self.obj.CellSize)
+        index_patchType = self.form.cb_patchType.findText(self.obj.patchType)
+        self.form.cb_patchType.setCurrentIndex(index_patchType)
 
         self.form.check_keepCells.setChecked(self.obj.KeepCell)
         self.form.check_removeCells.setChecked(self.obj.RemoveCell)
         self.form.check_allowdiscont.setChecked(self.obj.AllowDiscont)
-        if (self.obj.KeepCell == True) or (self.obj.RemoveCell == True): 
-            self.form.check_moreoption.setChecked(self.obj.KeepCell)
+        if (self.obj.KeepCell == True) or (self.obj.RemoveCell == True) or (self.obj.RefinementThickness > 0): 
+            #self.form.check_moreoption.setChecked(self.obj.KeepCell)
+            self.form.check_moreoption.setChecked(True)
 
 
         if not self.mesh_obj.MeshUtility == "gmsh":
@@ -251,6 +259,7 @@ class _TaskPanelCfdMeshRefinement:
             self.form.moreoption_frame.setVisible(False)
             self.form.check_keepCells.setChecked(False)
             self.form.check_removeCells.setChecked(False)
+            setQuantity(self.form.if_refinethick, 0)
         if self.form.check_boundlayer.isChecked():
             if self.form.if_numlayer.value()==1:
                 self.form.if_numlayer.setValue(3)
@@ -259,6 +268,8 @@ class _TaskPanelCfdMeshRefinement:
             self.form.cf_frame.setVisible(False)
             self.form.snappy_frame.setVisible(False)
         if self.form.volumeRefinementToggle.isChecked():
+            self.form.label_patchType.setVisible(False)
+            self.form.cb_patchType.setVisible(False)
             self.form.cf_frame.setVisible(False)
             self.form.snappy_frame.setVisible(False)
             self.form.ReferencesFrame.setVisible(False)
@@ -269,6 +280,8 @@ class _TaskPanelCfdMeshRefinement:
                 self.form.snappy_frame.setVisible(True)
                 self.form.snappySurfaceFrame.setVisible(False)
         else:
+            self.form.label_patchType.setVisible(True)
+            self.form.cb_patchType.setVisible(True)
             self.form.ReferencesFrame.setVisible(True)
             self.form.cartesianInternalVolumeFrame.setVisible(False)
             if self.mesh_obj.MeshUtility == 'cfMesh':

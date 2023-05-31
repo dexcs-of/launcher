@@ -94,6 +94,7 @@ class _CfdMesh:
     #known_mesh_utility = ['cfMesh', 'snappyHexMesh', 'gmsh']
     known_mesh_utility = ['cfMesh']
     known_workflowControls = ['none', 'templateGeneration', 'surfaceTopology', 'surfaceProjection', 'patchAssignment', 'edgeExtraction', 'boundaryLayerGeneration', 'meshOptimisation', 'boundaryLayerRefinement']
+    known_patchType = ['patch', 'wall', 'symmetry', 'overset', 'cyclic', 'wedge', 'empty', 'symmetryPlane']
 
     def __init__(self, obj):
         self.Type = "dexcsCfdMesh"
@@ -120,7 +121,8 @@ class _CfdMesh:
         if addObjectProperty(obj, "MeshUtility", _CfdMesh.known_mesh_utility, "App::PropertyEnumeration",
                              "Mesh Parameters", "Meshing utilities"):
             obj.MeshUtility = 'cfMesh'
-
+        # addObjectProperty(obj, "MeshUtility", _CfdMesh.known_mesh_utility, "App::PropertyEnumeration",
+        #                       "Mesh Parameters", "Meshing utilities")
         ### <--addDexcs 
         addObjectProperty(obj, "FeatureAngle", 30, "App::PropertyFloat", "Mesh Parameters",
                           "Feature Angle of STL parts")
@@ -142,6 +144,20 @@ class _CfdMesh:
                           "maximum allowed thickness variation of thickness between two neighbouring points, devided by the distance between the points")
         addObjectProperty(obj, "workflowControls", _CfdMesh.known_workflowControls, "App::PropertyEnumeration",
                              "Mesh Parameters", "workflowControls")
+        addObjectProperty(obj, "patchTypeSetting", False, "App::PropertyBool", "Patch Type Settings",
+                          "activates setting of boundary type")
+        # if addObjectProperty(obj, 'patchTypeLists', [], "App::PropertyLinkList", "Patch Type Settings", "List of non-patch type boundary"):
+        #      # Backward compat
+        #      if 'References' in obj.PropertiesList:
+        #          doc = FreeCAD.getDocument(obj.Document.Name)
+        #          for r in obj.References:
+        #              if not r[1]:
+        #                  obj.ShapeRefs += [doc.getObject(r[0])]
+        #              else:
+        #                  obj.ShapeRefs += [(doc.getObject(r[0]), r[1])]
+        #          obj.removeProperty('References')
+        #          obj.removeProperty('LinkedObjects')
+
         ### addDexcs -->
 
 
@@ -158,9 +174,9 @@ class _CfdMesh:
         #addObjectProperty(obj, 'EdgeRefinement', 1, "App::PropertyFloat", "Mesh Parameters",
         #                  "Relative edge (feature) refinement")
 
-        #if addObjectProperty(obj, 'ElementDimension', _CfdMesh.known_element_dimensions, "App::PropertyEnumeration",
-        #                     "Mesh Parameters", "Dimension of mesh elements (Default 3D)"):
-        #    obj.ElementDimension = '3D'
+        if addObjectProperty(obj, 'ElementDimension', _CfdMesh.known_element_dimensions, "App::PropertyEnumeration",
+                             "Mesh Parameters", "Dimension of mesh elements (Default 3D)"):
+            obj.ElementDimension = '3D'
 
     def onDocumentRestored(self, obj):
         self.initProperties(obj)
@@ -197,11 +213,11 @@ class _ViewProviderCfdMesh:
         return
 
     def setEdit(self, vobj, mode):
-        print('debug4 '+vobj.Object.Name)
+        #print('debug4 '+vobj.Object.Name)
         for obj in FreeCAD.ActiveDocument.Objects:
             if hasattr(obj, 'Proxy') and isinstance(obj.Proxy, _CfdMesh):
                 obj.ViewObject.show()
-        print('debug6'+self.Object.Name)
+        #print('debug6'+self.Object.Name)
         import _dexcsTaskPanelCfdMesh
         taskd = _dexcsTaskPanelCfdMesh._TaskPanelCfdMesh(self.Object)
         taskd.obj = vobj.Object

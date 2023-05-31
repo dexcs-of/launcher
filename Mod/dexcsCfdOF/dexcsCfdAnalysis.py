@@ -101,12 +101,26 @@ class _CfdAnalysis:
 
         if obj.IsActiveAnalysis:
             outputPath = obj.OutputPath
+            # print("outputPath : " + outputPath)
+            # print("defaultModel_Dir : " + defaultModel_Dir)
+            # print("setDictOutput_dir : " + setDictOutput_dir)
+
             if ( defaultModel_Dir == outputPath ) or ( setDictOutput_dir == outputPath) :
                 pass
             else:
                 message = _("The OutputPath of Active Analysis Container is \n") + outputPath
                 message = message + _("\n This is not the Default Setting Path.\n\n\t Do you change the OutputPath ?")
-                dialog = QtGui.QMessageBox.question(None,"Question",message, QtGui.QMessageBox.No, QtGui.QMessageBox.Yes)
+                # dialog = QtGui.QMessageBox.question(None,"Question",message, QtGui.QMessageBox.No, QtGui.QMessageBox.Yes)
+                msgBox = QtGui.QMessageBox()
+                msgBox.setText(message)
+                msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.RestoreDefaults | QMessageBox.No)
+                msgBox.setDefaultButton(QMessageBox.RestoreDefaults)
+                dialog = msgBox.exec_()
+ 
+                if dialog == QtGui.QMessageBox.RestoreDefaults:
+
+                    outputPath = defaultModel_Dir
+ 
                 if dialog == QtGui.QMessageBox.Yes:
 
                     if env.contains("APPIMAGE"):
@@ -117,10 +131,17 @@ class _CfdAnalysis:
                         ans = QtGui.QMessageBox.critical(None, _("AppImage Warning"), message, QtGui.QMessageBox.Yes)
                         dexcsCfdTools.removeAppimageEnvironment(env)
                     else:
-                        #d = QFileDialog().getExistingDirectory(None, 'Choose Output directory', defaultModel_Dir)
                         d = QtGui.QFileDialog().getExistingDirectory(None, _('Choose output directory'), defaultModel_Dir)
+
+                        #msgBox = QtGui.QFileDialog()
+                        #msgBox.ShowDirsOnly
+                        #msgBox.setDirectory(defaultModel_Dir)
+                        #msgBox.setLabelText(_('Choose output directory'))
+                        #d = msgBox.exec_()
+
                         if d and os.access(d, os.R_OK):
                             outputPath = d
+
                 if outputPath != defaultModel_Dir:
                     writeDict = open(dictName , 'w')
                     writeDict.writelines(outputPath)
@@ -146,7 +167,7 @@ class _CfdAnalysis:
         # addObjectProperty(obj, 'NeedsMeshRerun', True, "App::PropertyBool", "", "Mesher needs to be re-run before running solver")
 
     def onDocumentRestored(self, obj):
-        print("deb:restored")
+        #print("deb:restored")
         self.restoredProperties(obj)
 
 def dummyFunction(): # 何故かこれがないとうまく動かない      

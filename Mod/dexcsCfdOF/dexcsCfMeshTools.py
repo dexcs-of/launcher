@@ -25,6 +25,17 @@ import pythonVerCheck
 import pyDexcsSwakSubset
 from dexcsCfdMesh import _CfdMesh
 
+class Test(QDialog):
+    def __init__(self,parent=None):
+        super(Test, self).__init__(parent)
+        self.ui = Ui_Dialog()
+        self.ui.setupUi(self)
+        
+        patchList = ['dexcs', 'inlet', 'outlet', 'wall']
+        for patchName in patchList:
+            print(patchName)
+            newitem = QTableWidgetItem(patchName)
+            self.ui._addrow(newitem)
 
 
 class Model:
@@ -106,7 +117,7 @@ class MainControl():
             if hasattr(obj, "Proxy") and isinstance(obj.Proxy, _CfdMesh):
                self.mesh_obj = obj
 
-        print("DEXCS MainControl / " + self.mesh_obj.Label)
+        #print("DEXCS MainControl / " + self.mesh_obj.Label)
 
     def checkMeshPerform(self, CaseFilePath):
         """
@@ -241,7 +252,7 @@ class MainControl():
         """
         exportボタン押下後の処理を全て行う。
         """
-        print ("MainControl::perform")
+        #print ("MainControl::perform")
 
         ijk = 99
         #print(_("hello %d") % ijk)
@@ -302,7 +313,25 @@ class MainControl():
 
         zeroFolder = CaseFilePath + "0" 
         if not os.path.isdir(zeroFolder):
-            command = "cp -rf " + templateSolver + "/0 " + CaseFilePath + "/"
+            tempZero = templateSolver + "/0"
+            tempZeroOrig = templateSolver + "/0.orig"
+            if os.path.isdir(tempZero):
+                command = "cp -rf " + tempZero +  " " + CaseFilePath + "/"
+            elif os.path.isdir(tempZeroOrig):
+                command = "cp -rf " + tempZeroOrig +  " " + CaseFilePath + "/0"
+            else :
+                command = "mkdir 0"
+
+            os.system(command)
+
+        #copy All* script
+        command = "cp -f " + templateSolver + "/All* " + CaseFilePath + "/"
+        #print(command)
+        os.system(command)
+
+        if os.path.exists(CaseFilePath + "/Allrun"):
+            command = "mv " + CaseFilePath + "/Allrun " + CaseFilePath + "/Allrun.orig"
+            #print(command)
             os.system(command)
 
         #self.makeMeshDict(CaseFilePath, meshObj)
@@ -313,7 +342,10 @@ class MainControl():
         caseName = CaseFilePath
         title =  "#!/bin/bash\n"
         envSet = ". " + MainControl.BASHRC_PATH_4_OPENFOAM + ";\n"
-        solverSet = "cartesianMesh | tee cfmesh.log\n"
+        if self.mesh_obj.ElementDimension == '2D':
+            solverSet = "cartesian2DMesh | tee cfmesh.log\n"
+        else:
+            solverSet = "cartesianMesh | tee cfmesh.log\n"
         sleep = "sleep 2\n"
         cont = title + envSet + solverSet + sleep
         f=open("./Allmesh","w")
@@ -388,7 +420,6 @@ class MainControl():
                '// minimum cell size allowed in the automatic refinement procedure (optional)\n',
                ]
         meshDict.writelines(strings)
-
 
         #minCellSizeValue = self.viewControl.get_minCellSizeValue()
         minCellSizeValue = dexcsCfdDict_minCellSize
@@ -503,14 +534,15 @@ class MainControl():
                             else: 
                                 __allowDiscont__.append('0') 
                     if obj.KeepCell == 1:
-                        for objList in(obj.LinkedObjects):
-                            __keepCells__.append(objList.Label)
+                        for ref in(obj.ShapeRefs):
+                            __keepCells__.append(ref[0].Label)
                     if obj.RemoveCell == 1:
-                        for objList in(obj.LinkedObjects):
-                            __removeCells__.append(objList.Label)
+                        for ref in(obj.ShapeRefs):
+                            __removeCells__.append(ref[0].Label)
+        print(__keepCells__)
+        print(__removeCells__)
 
         keepCellsListString = ""
-        print(__keepCells__)
         if __keepCells__ :
             for objList in __keepCells__:
                 #keepCellsListString = keepCellsListString + "\t" + "dexcs" + "\n\t{\n\t\tkeepCells 1; //1 active or 0 inactive \n\t}\n"
@@ -519,7 +551,6 @@ class MainControl():
             keepCellsListString = keepCellsListString + "//\t" + "patchName" + "\n//\t{\n//\t\tkeepCells 1; //1 active or 0 inactive \n//\t}\n"
 
         removeCellsListString = ""
-        print(__keepCells__)
         if __removeCells__ :
             for objList in __removeCells__:
                 removeCellsListString = removeCellsListString + "\t" + objList + "\n\t{\n\t\tkeepCells 0; //0 remove or 1 keep \n\t}\n"
@@ -640,6 +671,7 @@ class MainControl():
         __patch__ = []
         __reflevel__ = []
         __refThickness__ = []
+        __patchType__ = []
         doc = FreeCAD.activeDocument()
         for obj in doc.Objects:
             if obj.ViewObject.Visibility:
@@ -651,17 +683,22 @@ class MainControl():
                             __patch__.append(ref[0].Label) 
                             __reflevel__.append(obj.RefinementLevel) 
                             __refThickness__.append(obj.RefinementThickness) 
+                            __patchType__.append(obj.patchType) 
 
         if __patch__ :
+            print('found patchRefinement')
             patchNumber = 0
             for objList in __patch__ :
                 for obj in doc.Objects:
                     if obj.Label == objList :
+                        print('patch '+objList)
 
                         #RefStr = str(int( 1.0 / __relativeLength__[patchNumber])-1)
                         RefStr = str(__reflevel__[patchNumber])
                         RefThickness = str(__refThickness__[patchNumber]).replace('m','')
-                        RefThickness = str(float(RefThickness)/1000)
+                        #RefThickness = str(float(RefThickness)/1000)
+                        RefThickness = str(float(RefThickness)*self.mesh_obj.ScaleToMeter)
+                        print('RefLevel '+RefStr)
 
                         strings5 = [
                         '\t' + objList + '\n',
@@ -805,49 +842,49 @@ class MainControl():
                          if obj.isDerivedFrom("Part::Box"):
                             print(' Box')
                             print('RefLevel '+RefStr)
-                            centerX = obj.Placement.Base.x + obj.Length.Value * 0.5
-                            centerY = obj.Placement.Base.y + obj.Width.Value * 0.5
-                            centerZ = obj.Placement.Base.z + obj.Height.Value * 0.5
+                            centerX = ( obj.Placement.Base.x + obj.Length.Value * 0.5 ) * self.mesh_obj.ScaleToMeter
+                            centerY = ( obj.Placement.Base.y + obj.Width.Value * 0.5 ) * self.mesh_obj.ScaleToMeter
+                            centerZ = ( obj.Placement.Base.z + obj.Height.Value * 0.5 ) * self.mesh_obj.ScaleToMeter
                             strings7 = [
                             '\t' + objList + '\n',
                             '\t{\n',
                             '\t\ttype box;\n',
                             '\t\tadditionalRefinementLevels\t' + RefStr + ';\n',
                             '\t\tcentre (' + str(centerX) + MainControl.SPACE_STR + str(centerY) + MainControl.SPACE_STR + str(centerZ) + ');\n',
-                            '\t\tlengthX\t' + str(obj.Length.Value) + ';\n',
-                            '\t\tlengthY\t' + str(obj.Width.Value) + ';\n',
-                            '\t\tlengthZ\t' + str(obj.Height.Value) + ';\n',
+                            '\t\tlengthX\t' + str(obj.Length.Value * self.mesh_obj.ScaleToMeter) + ';\n',
+                            '\t\tlengthY\t' + str(obj.Width.Value * self.mesh_obj.ScaleToMeter) + ';\n',
+                            '\t\tlengthZ\t' + str(obj.Height.Value * self.mesh_obj.ScaleToMeter) + ';\n',
                             '\t}\n'
                                          ]
                          elif obj.isDerivedFrom("Part::Sphere"):
                             print(' Sphere')
                             print('RefLevel '+RefStr)
-                            centerX = obj.Placement.Base.x 
-                            centerY = obj.Placement.Base.y 
-                            centerZ = obj.Placement.Base.z 
+                            centerX = obj.Placement.Base.x  * self.mesh_obj.ScaleToMeter
+                            centerY = obj.Placement.Base.y  * self.mesh_obj.ScaleToMeter
+                            centerZ = obj.Placement.Base.z  * self.mesh_obj.ScaleToMeter
                             strings7 = [
                             '\t' + objList + '\n',
                             '\t{\n',
                             '\t\ttype sphere;\n',
                             '\t\tadditionalRefinementLevels\t' + RefStr + ';\n',
                             '\t\tcentre (' + str(centerX) + MainControl.SPACE_STR + str(centerY) + MainControl.SPACE_STR + str(centerZ) + ');\n',
-                            '\t\tradius\t' + str(obj.Radius.Value) + ';\n',
+                            '\t\tradius\t' + str(obj.Radius.Value * self.mesh_obj.ScaleToMeter) + ';\n',
                             '\t\trefinementThickness\t' + '0' + ';\n',
                             '\t}\n'
                                          ]
                          elif obj.isDerivedFrom("Part::Cone"):
                             print(' Cone')
                             print('RefLevel '+RefStr)
-                            center = FreeCAD.Vector(0, 0, - obj.Height.Value)
-                            pos = FreeCAD.Vector(obj.Placement.Base.x, obj.Placement.Base.y, obj.Placement.Base.z + obj.Height.Value)
+                            center = FreeCAD.Vector(0, 0, - obj.Height.Value * self.mesh_obj.ScaleToMeter)
+                            pos = FreeCAD.Vector(obj.Placement.Base.x * self.mesh_obj.ScaleToMeter, obj.Placement.Base.y * self.mesh_obj.ScaleToMeter, obj.Placement.Base.z * self.mesh_obj.ScaleToMeter + obj.Height.Value * self.mesh_obj.ScaleToMeter)
                             rot = FreeCAD.Rotation(obj.Placement.Rotation)
                             cylinderHead = FreeCAD.Placement(pos, rot, center)
-                            p0X = obj.Placement.Base.x
-                            p0Y = obj.Placement.Base.y
-                            p0Z = obj.Placement.Base.z
-                            p1X = cylinderHead.Base.x
-                            p1Y = cylinderHead.Base.y
-                            p1Z = cylinderHead.Base.z
+                            p0X = obj.Placement.Base.x  * self.mesh_obj.ScaleToMeter
+                            p0Y = obj.Placement.Base.y  * self.mesh_obj.ScaleToMeter
+                            p0Z = obj.Placement.Base.z  * self.mesh_obj.ScaleToMeter
+                            p1X = cylinderHead.Base.x 
+                            p1Y = cylinderHead.Base.y 
+                            p1Z = cylinderHead.Base.z 
                             strings7 = [
                             '\t' + objList + '\n',
                             '\t{\n',
@@ -855,40 +892,41 @@ class MainControl():
                             '\t\tadditionalRefinementLevels\t' + RefStr + ';\n',
                             '\t\tp0 (' + str(p0X) + MainControl.SPACE_STR + str(p0Y) + MainControl.SPACE_STR + str(p0Z) + ');\n',
                             '\t\tp1 (' + str(p1X) + MainControl.SPACE_STR + str(p1Y) + MainControl.SPACE_STR + str(p1Z) + ');\n',
-                            '\t\tradius0\t' + str(obj.Radius1.Value) + ';\n',
-                            '\t\tradius1\t' + str(obj.Radius2.Value) + ';\n',
+                            '\t\tradius0\t' + str(obj.Radius1.Value * self.mesh_obj.ScaleToMeter) + ';\n',
+                            '\t\tradius1\t' + str(obj.Radius2.Value * self.mesh_obj.ScaleToMeter) + ';\n',
                             '\t}\n'
                                          ]
                          elif obj.isDerivedFrom("Part::Cylinder"):
                             print(' Cylinder')
                             print('RefLevel '+RefStr)
-                            center = FreeCAD.Vector(0, 0, - obj.Height.Value)
-                            pos = FreeCAD.Vector(obj.Placement.Base.x, obj.Placement.Base.y, obj.Placement.Base.z + obj.Height.Value)
+                            center = FreeCAD.Vector(0, 0, - obj.Height.Value * self.mesh_obj.ScaleToMeter)
+                            pos = FreeCAD.Vector(obj.Placement.Base.x * self.mesh_obj.ScaleToMeter, obj.Placement.Base.y * self.mesh_obj.ScaleToMeter, (obj.Placement.Base.z + obj.Height.Value) * self.mesh_obj.ScaleToMeter)
                             rot = FreeCAD.Rotation(obj.Placement.Rotation)
                             cylinderHead = FreeCAD.Placement(pos, rot, center)
-                            p0X = obj.Placement.Base.x
-                            p0Y = obj.Placement.Base.y
-                            p0Z = obj.Placement.Base.z
-                            p1X = cylinderHead.Base.x
-                            p1Y = cylinderHead.Base.y
-                            p1Z = cylinderHead.Base.z
+                            p0X = obj.Placement.Base.x * self.mesh_obj.ScaleToMeter
+                            p0Y = obj.Placement.Base.y * self.mesh_obj.ScaleToMeter
+                            p0Z = obj.Placement.Base.z * self.mesh_obj.ScaleToMeter
+                            p1X = cylinderHead.Base.x 
+                            p1Y = cylinderHead.Base.y 
+                            p1Z = cylinderHead.Base.z 
                             strings7 = [
                             '\t' + objList + '\n',
                             '\t{\n',
-                            '\t\ttype line;\n',
+                            '\t\ttype cone;\n',
                             '\t\tadditionalRefinementLevels\t' + RefStr + ';\n',
                             '\t\tp0 (' + str(p0X) + MainControl.SPACE_STR + str(p0Y) + MainControl.SPACE_STR + str(p0Z) + ');\n',
                             '\t\tp1 (' + str(p1X) + MainControl.SPACE_STR + str(p1Y) + MainControl.SPACE_STR + str(p1Z) + ');\n',
-                            '\t\trefinementThickness\t' + str(obj.Radius.Value) + ';\n',
+                            '\t\tradius0\t' + str(obj.Radius.Value * self.mesh_obj.ScaleToMeter) + ';\n',
+                            '\t\tradius1\t' + str(obj.Radius.Value * self.mesh_obj.ScaleToMeter) + ';\n',
                             '\t}\n'
                                          ]
                          else :
-                            xmax = obj.Shape.BoundBox.XMax
-                            xmin = obj.Shape.BoundBox.XMin
-                            ymax = obj.Shape.BoundBox.YMax
-                            ymin = obj.Shape.BoundBox.YMin
-                            zmax = obj.Shape.BoundBox.ZMax
-                            zmin = obj.Shape.BoundBox.ZMin
+                            xmax = obj.Shape.BoundBox.XMax * self.mesh_obj.ScaleToMeter
+                            xmin = obj.Shape.BoundBox.XMin * self.mesh_obj.ScaleToMeter
+                            ymax = obj.Shape.BoundBox.YMax * self.mesh_obj.ScaleToMeter
+                            ymin = obj.Shape.BoundBox.YMin * self.mesh_obj.ScaleToMeter
+                            zmax = obj.Shape.BoundBox.ZMax * self.mesh_obj.ScaleToMeter
+                            zmin = obj.Shape.BoundBox.ZMin * self.mesh_obj.ScaleToMeter
                             centerX = 0.5*(xmax+xmin)
                             centerY = 0.5*(ymax+ymin)
                             centerZ = 0.5*(zmax+zmin)
@@ -1057,21 +1095,22 @@ class MainControl():
         ]
         meshDict.writelines(strings8)
 
-        __patch__ = []
-        __nLayer__ = []
         patchNumber = 0
+        __patch__ = []
+        __patchType__ = []
         doc = FreeCAD.activeDocument()
         for obj in doc.Objects:
             if obj.ViewObject.Visibility:
                 if hasattr(obj, "Proxy") and isinstance(obj.Proxy, _CfdMeshRefinement):
-                    if obj.NumberLayers > 1 :                    
+                    if (not obj.Internal) :                    
                         #for objList in(obj.LinkedObjects):
                         for ref in(obj.ShapeRefs):
                             #__patch__.append(objList.Label) 
                             __patch__.append(ref[0].Label) 
-                            __nLayer__.append(obj.NumberLayers) 
+                            __patchType__.append(obj.patchType) 
                             patchNumber = patchNumber + 1
         #print('renameBoundary ',patchNumber)
+
         for obj in doc.Objects:
             #print('search obj::',obj)
             if obj.ViewObject.Visibility:
@@ -1099,20 +1138,22 @@ class MainControl():
                         #print(obj.Label , 'is region')
                 if  regionLabel == 0:
 
-                    changeLabel = 0
+                    changeType = 0
                     if patchNumber > 0 :
                         for i in range(patchNumber):
-                            #print('__patch__',__patch__[i])
                             #print('obj',obj.Label)
+                            #print('__patch__',__patch__[i])
+                            #print('__patchType__',__patchType__[i])
                             if obj.Label == __patch__[i] :
-                                changeLabel = 1
-                        #print('changeLabel ',changeLabel)
-                    if changeLabel == 1:
+                                changeType = 1
+                                _patchType = __patchType__[i]
+                        #print('changeType ',changeType)
+                    if changeType == 1:
                         strings9 = [
                         '\t\t' + str(obj.Label) + '\n',
                         '\t\t{\n',
                         '\t\t\tnewName '+ str(obj.Label) + ';\n',
-                        '\t\t\ttype wall;\n',
+                        '\t\t\ttype ' + _patchType + ';\n',
                         '\t\t}\n',
                         ]
                     else:
@@ -1123,6 +1164,7 @@ class MainControl():
                         '\t\t\ttype patch;\n',
                         '\t\t}\n',
                         ]
+        
                     meshDict.writelines(strings9)
 
         # iRow=0

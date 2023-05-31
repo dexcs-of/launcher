@@ -88,8 +88,8 @@ class CfdMeshTools:
         # Only used by gmsh - what purpose?
         self.clmin = 0.0
 
-        #self.dimension = self.mesh_obj.ElementDimension
-        self.dimension = '3D'
+        self.dimension = self.mesh_obj.ElementDimension
+        #self.dimension = '3D'
 
         self.cf_settings = {}
         self.snappy_settings = {}
@@ -198,13 +198,13 @@ class CfdMeshTools:
         return Units.Quantity(self.clmax, Units.Length)
 
     def getFilePaths(self, output_dir):
-        print('output_dir = ' + output_dir)
+        #print('output_dir = ' + output_dir)
         if not hasattr(self.mesh_obj, 'CaseName'):  # Backward compat
             #self.mesh_obj.CaseName = 'meshCase'
             self.mesh_obj.CaseName = ''
         #self.case_name = self.mesh_obj.CaseName
         self.case_name = ''
-        print('self.case_name ' + self.case_name)
+        #print('self.case_name ' + self.case_name)
         self.meshCaseDir = os.path.join(output_dir, self.case_name)
         self.constantDir = os.path.join(self.meshCaseDir, 'constant')
         self.polyMeshDir = os.path.join(self.constantDir, 'polyMesh')
@@ -490,7 +490,7 @@ class CfdMeshTools:
                     if len(self.patch_faces[k][mr_id+1]):
                         # Limit expansion ratio to greater than 1.0 and less than 1.2
                         expratio = mr_obj.ExpansionRatio
-                        expratio = min(1.2, max(1.0, expratio))
+                        expratio = min(1.5, max(1.0, expratio))
 
                         cf_settings['BoundaryLayers'][self.patch_names[k][mr_id+1]] = {
                             'NumberLayers': mr_obj.NumberLayers,

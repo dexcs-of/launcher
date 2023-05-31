@@ -1,4 +1,10 @@
 # FreeCAD Macro & WorkBentch for DEXCS Launcher
+# 更新 2022/10/6
+DEXCS2022 の正式公開
+
+# 更新 2022/7/14
+cfMeshの2D版（cartesianMesh2D）も使えるようにした。
+
 # 更新 2022/6/13
 DEXCS2022 の正式公開に向けて、諸々改定版を暫定公開
 
@@ -12,7 +18,7 @@ OpenFOAMを使った仮想風洞試験(注1)を、ボタンを順番に押して
 DEXCS for OpenFOAM で、DEXCS2021より実装されているもので、DEXCS2020に搭載した[DEXCS-FC-Macro](https://gitlab.com/E.Mogura/dexcs-fc-macro)より大幅な変更がある。今後マクロに変更が加えられたら、
 変更部分だけを更新しても良いし、同梱のセットアップツールで全体のアップデートも可能。
 
-（注1）デフォルトで仮想風洞試験のパラメタセットになっているというだけで、任意の雛形に変更は可能です。
+（注1）デフォルトで仮想風洞試験のパラメタセットになっているというだけで、任意の雛形（OpenFOAMの標準チュートリアルを含む）に変更は可能です。
 　　　　
 ## 注意事項
 能書きや、セットアップ方法の記述内容がそのまま通用するかどうかの検証は十分出来ていないので、間違い・不正確な表現や不明点があったらご指摘願いたい。
@@ -43,13 +49,13 @@ https://ocse2.com/?p=12722
 
 ## FreeCADの更新
 
-DEXCS2019以前では、FreeCADを最新のAppImage版（FreeCAD_0.19-24276-Linux-Conda_glibc2.12-x86_64.AppImage）に更新する必要がある。
+DEXCS2019以前では、FreeCADを最新のAppImage版（FreeCAD-0.20.0-Linux-x86_64.AppImage）に更新する必要がある。
 更新方法はダウンロードしたAppImage版の収納されたフォルダにて、
 管理者権限にて、たとえば以下のコマンドを入力すれば良い。
 ```
-	chmod +x FreeCAD_0.19-24276-Linux-Conda_glibc2.12-x86_64.AppImage
-	cp FreeCAD_0.19-24276-Linux-Conda_glibc2.12-x86_64.AppImage /opt/
-	ln -s /opt/FreeCAD_0.19-24276-Linux-Conda_glibc2.12-x86_64.AppImage /opt/freecad 
+	chmod +x FreeCAD-0.20.0-Linux-x86_64.AppImage
+	cp FreeCAD-0.20.0-Linux-x86_64.AppImage /opt/
+	ln -s /opt/FreeCAD-0.20.0-Linux-x86_64.AppImage /opt/freecad 
 	mv /usr/bin/freecad /usr/bin/freecad.orig
 	ln -s /opt/freecad /usr/bin/freecad
 	mv /usr/bin/freecad-daily /usr/bin/freecad-daily.orig
@@ -64,6 +70,7 @@ FreeCADの「編集」⇒「設定」メニューの「dexcsCfdOf」で、OpenFO
 
 ## 動作を確認できているDEXCS for OpenFOAM
 
+* DEXCS2022
 * DEXCS2021
 * DEXCS2020
 * DEXCS2019
@@ -74,7 +81,7 @@ FreeCADの「編集」⇒「設定」メニューの「dexcsCfdOf」で、OpenFO
 （但し、DEXCS2019以前では、DEXCSツールバー中、TreeFoamのサブセット機能は使えないものがある）
 
 ## DEXCS 以外のプラットフォームで動作させる為の要件
-FreeCADは最新のAppImage版（FreeCAD_0.19-24276-Linux-Conda_glibc2.12-x86_64.AppImage）に更新することを推奨する（それ以外での検証は未実施）。
+FreeCADは最新のAppImage版（FreeCAD-0.20.0-Linux-x86_64.AppImage）に更新することを推奨する（それ以外での検証は未実施）。
 
 DEXCS for OpenFOAM で構築したシステムでなくとも、
 OpenFOAM（含むcfMesh）とParaViewが動く環境であればDEXCSワークベンチは動作するはずである。

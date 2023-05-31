@@ -113,6 +113,8 @@ class _CfdMeshRefinement:
                           "Set cell size for selected object(s)")
         addObjectProperty(obj, "RefinementLevel", 1, "App::PropertyInteger", "",
                           "Set refinement level for for selected object(s)")
+        addObjectProperty(obj, "patchType", _CfdMesh.known_patchType, "App::PropertyEnumeration", "",
+                          "Set patch boundary type for for selected object(s)")
         addObjectProperty(obj, "KeepCell", False, "App::PropertyBool", "cfMeshOption",
                           "Keep cells in the mesh template which intersect selected objects")
         addObjectProperty(obj, "RemoveCell", False, "App::PropertyBool", "cfMeshOption",

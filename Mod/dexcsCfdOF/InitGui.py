@@ -32,7 +32,7 @@ class dexcsCfdOFWorkbench(Workbench):
         import dexcsCfdTools
         import FreeCAD
         #icon_path = os.path.join(dexcsCfdTools.get_module_path(), "Gui", "Resources", "icons", "cfd.svg")
-        icon_path = os.path.join(dexcsCfdTools.get_module_path(), "Gui", "Resources", "icons", "dexcs2021.svg")
+        icon_path = os.path.join(dexcsCfdTools.get_module_path(), "Gui", "Resources", "icons", "dexcs.svg")
         self.__class__.Icon = icon_path
         self.__class__.MenuText = "dexcsCfdOF"
         self.__class__.ToolTip = "dexcsCfdOF workbench"
