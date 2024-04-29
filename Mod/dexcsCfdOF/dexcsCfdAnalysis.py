@@ -119,6 +119,9 @@ class _CfdAnalysis:
  
                 if dialog == QtGui.QMessageBox.RestoreDefaults:
 
+                    model = FreeCAD.ActiveDocument.FileName
+                    prefs = dexcsCfdTools.getPreferencesLocation()
+                    FreeCAD.ParamGet(prefs).SetString("DefaultOutputPath", defaultModel_Dir)
                     outputPath = defaultModel_Dir
  
                 if dialog == QtGui.QMessageBox.Yes:

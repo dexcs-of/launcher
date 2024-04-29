@@ -32,7 +32,6 @@ from dexcsCfdMesh import _CfdMesh
 import time
 from datetime import timedelta
 import dexcsCfdTools
-from dexcsCfdTools import setQuantity, getQuantity
 import dexcsCfdMeshTools
 import dexcsCfMeshTools
 from dexcsCfdConsoleProcess import CfdConsoleProcess
@@ -44,7 +43,7 @@ if FreeCAD.GuiUp:
     from PySide import QtGui
     from PySide.QtCore import Qt
     from PySide.QtGui import QApplication
-
+from dexcsCfdTools import getQuantity, setQuantity, indexOrDefault, storeIfChanged
 import pythonVerCheck
 
 # import sys
@@ -76,7 +75,7 @@ class _TaskPanelCfdMesh:
         self.form.label_5.setText(_("Mesher"))
         self.form.label_6.setText(_("Mesh<"))
         self.form.pb_checkmesh.setText(_("CheckMesh"))
-        self.form.label.setText(_("Mesh Parameters"))
+        self.form.label.setText(_("cfMesh Parameters"))
         self.form.check_optimiseLayer.setText(_("optimiseLayer"))
         self.form.label_maxNumIterations.setText(_("maxNumIterations"))
         self.form.label_maxAllowedThickness.setText(_("maximum allowed thickness:"))
@@ -87,7 +86,8 @@ class _TaskPanelCfdMesh:
         self.form.l_max.setText(_("Base element size:"))
         self.form.l_workflowControls.setText(_("workflowControls(stopAfter):"))
         self.form.label_2.setText(_("Status"))
-
+        self.form.pb_searchPointInMesh.clicked.connect(self.searchPointInMesh)
+        
         self.console_message_cart = ''
         self.error_message = ''
         self.cart_mesh = dexcsCfdMeshTools.CfdMeshTools(self.mesh_obj)
@@ -104,7 +104,6 @@ class _TaskPanelCfdMesh:
         self.Timer.timeout.connect(self.update_timer_text)
 
         self.open_paraview = QtCore.QProcess()
-
         self.form.pb_write_mesh.clicked.connect(self.writeMesh)
         self.form.pb_edit_mesh.clicked.connect(self.editMesh)
         self.form.pb_run_mesh.clicked.connect(self.runMesh)
@@ -117,7 +116,7 @@ class _TaskPanelCfdMesh:
         self.form.pb_stop_mesh.setEnabled(False)
         self.form.pb_paraview.setEnabled(False)
         self.form.pb_checkmesh.setEnabled(False)
-        #self.form.snappySpecificProperties.setVisible(False)
+        self.form.snappySpecificProperties.setVisible(False)
         self.form.optimizer_frame.setVisible(False)
         self.form.check_reCalculateNormals.setChecked(True)
 
@@ -170,20 +169,24 @@ class _TaskPanelCfdMesh:
         self.form.if_relThicknessTol.setValue(self.mesh_obj.opt_relThicknessTol) 
         index_utility = self.form.cb_meshTool.findText(self.mesh_obj.MeshUtility)
         self.form.cb_meshTool.setCurrentIndex(index_utility)
-        ### addDexcs -->
-
-        #point_in_mesh = self.mesh_obj.PointInMesh.copy()
-        #setQuantity(self.form.if_pointInMeshX, point_in_mesh.get('x'))
-        #setQuantity(self.form.if_pointInMeshY, point_in_mesh.get('y'))
-        #setQuantity(self.form.if_pointInMeshZ, point_in_mesh.get('z'))
-        #self.form.if_cellsbetweenlevels.setValue(self.mesh_obj.CellsBetweenLevels)
-        #self.form.if_edgerefine.setValue(self.mesh_obj.EdgeRefinement)
+        self.form.if_cellsbetweenlevels.setValue(self.mesh_obj.CellsBetweenLevels)
+        # self.form.if_edgerefine.setValue(self.mesh_obj.EdgeRefinement)
 
         index_dimension = self.form.cb_dimension.findText(self.mesh_obj.ElementDimension)
         self.form.cb_dimension.setCurrentIndex(index_dimension)
         index_workflowControls = self.form.cb_workflowControls.findText(self.mesh_obj.workflowControls)
         self.form.cb_workflowControls.setCurrentIndex(index_workflowControls)
-
+        # For snappy hex mesh
+        setQuantity(self.form.if_max, self.mesh_obj.CharacteristicLengthMax)
+        ### addDexcs -->
+        point_in_mesh = self.mesh_obj.PointInMesh.copy()
+        setQuantity(self.form.if_pointInMeshX, point_in_mesh.get('x'))
+        setQuantity(self.form.if_pointInMeshY, point_in_mesh.get('y'))
+        setQuantity(self.form.if_pointInMeshZ, point_in_mesh.get('z'))
+        self.form.if_pointInMeshX.setText(self.mesh_obj.PointInMesh.get('x'))
+        self.form.if_pointInMeshY.setText(self.mesh_obj.PointInMesh.get('y'))
+        self.form.if_pointInMeshZ.setText(self.mesh_obj.PointInMesh.get('z'))
+        
     def updateUI(self):
         case_path = self.cart_mesh.meshCaseDir
         #print('case_path = ' + case_path)
@@ -192,11 +195,16 @@ class _TaskPanelCfdMesh:
         self.form.pb_paraview.setEnabled(os.path.exists(os.path.join(case_path, "pv.foam")))
         self.form.pb_checkmesh.setEnabled(os.path.exists(os.path.join(case_path, "pv.foam")))
         #self.form.pb_load_mesh.setEnabled(os.path.exists(os.path.join(case_path, "mesh_outside.stl")))
-        #utility = self.form.cb_utility.currentText()
-        #if utility == "snappyHexMesh":
-        #    self.form.snappySpecificProperties.setVisible(True)
-#        elif utility == "cfMesh":
-#            self.form.snappySpecificProperties.setVisible(False)
+        # utility = self.form.cb_utility.currentText()
+        utility = self.form.cb_meshTool.currentText()
+        if utility == "snappyHexMesh":
+            self.form.snappySpecificProperties.setVisible(True)
+            self.form.cfMeshSpecificProperties.setVisible(False)
+            self.form.label.setText("Snappy Hex Mesh Parameters")
+        elif utility == "cfMesh":
+            self.form.snappySpecificProperties.setVisible(False)
+            self.form.cfMeshSpecificProperties.setVisible(True)
+            self.form.label.setText("cfMesh Parameters")            
         if self.form.check_optimiseLayer.isChecked():
             self.form.optimizer_frame.setVisible(True)
         else:
@@ -209,7 +217,6 @@ class _TaskPanelCfdMesh:
                              "= '{}'".format(self.mesh_obj.Name, self.form.cb_meshTool.currentText()))
         FreeCADGui.doCommand("\nFreeCAD.ActiveDocument.{}.BaseCellSize "
                              "= '{}'".format(self.mesh_obj.Name, getQuantity(self.form.if_max)))
-
         ### <--addDexcs 
         FreeCADGui.doCommand("\nFreeCAD.ActiveDocument.{}.FeatureAngle "
                              "= {}".format(self.mesh_obj.Name, self.form.if_featureAngle.value()))
@@ -232,20 +239,35 @@ class _TaskPanelCfdMesh:
         FreeCADGui.doCommand("FreeCAD.ActiveDocument.{}.workflowControls "
                              "= '{}'".format(self.mesh_obj.Name, self.form.cb_workflowControls.currentText()))
         ### addDexcs -->
-
         FreeCADGui.doCommand("FreeCAD.ActiveDocument.{}.ElementDimension "
                              "= '{}'".format(self.mesh_obj.Name, self.form.cb_dimension.currentText()))
-        #FreeCADGui.doCommand("FreeCAD.ActiveDocument.{}.CellsBetweenLevels "
-        #                     "= {}".format(self.mesh_obj.Name, self.form.if_cellsbetweenlevels.value()))
-        #FreeCADGui.doCommand("FreeCAD.ActiveDocument.{}.EdgeRefinement "
-        #                     "= {}".format(self.mesh_obj.Name, self.form.if_edgerefine.value()))
-        #point_in_mesh = {'x': getQuantity(self.form.if_pointInMeshX),
-        #                 'y': getQuantity(self.form.if_pointInMeshY),
-        #                 'z': getQuantity(self.form.if_pointInMeshZ)}
-        #FreeCADGui.doCommand("FreeCAD.ActiveDocument.{}.PointInMesh "
-        #                     "= {}".format(self.mesh_obj.Name, point_in_mesh))
+        print("FreeCAD.ActiveDocument.{}.CellsBetweenLevels "
+                            "= {}".format(self.mesh_obj.Name, self.form.if_cellsbetweenlevels.value()))
+        FreeCADGui.doCommand("FreeCAD.ActiveDocument.{}.CellsBetweenLevels "
+                            "= {}".format(self.mesh_obj.Name, self.form.if_cellsbetweenlevels.value()))
+        FreeCADGui.doCommand("FreeCAD.ActiveDocument.{}.EdgeRefinement "
+                            "= {}".format(self.mesh_obj.Name, self.form.if_edgerefine.value()))
+        # mesher_idx = self.form.cb_utility.currentIndex()
+        mesher_idx = self.form.cb_meshTool.currentIndex()
+        print(getQuantity(self.form.if_max))
+        storeIfChanged(self.mesh_obj, 'CharacteristicLengthMax', getQuantity(self.form.if_max))
+        print(_CfdMesh.known_mesh_utility[mesher_idx])
+        storeIfChanged(self.mesh_obj, 'MeshUtility', _CfdMesh.known_mesh_utility[mesher_idx])
+        dim_idx = self.form.cb_dimension.currentIndex()
+        print(_CfdMesh.known_element_dimensions[dim_idx])
+        storeIfChanged(self.mesh_obj, 'ElementDimension', _CfdMesh.known_element_dimensions[dim_idx])
+        storeIfChanged(self.mesh_obj, 'CellsBetweenLevels', self.form.if_cellsbetweenlevels.value())
+        storeIfChanged(self.mesh_obj, 'EdgeRefinement', self.form.if_edgerefine.value())
+        if self.mesh_obj.MeshUtility == 'snappyHexMesh':
+            point_in_mesh = {'x': getQuantity(self.form.if_pointInMeshX),
+                             'y': getQuantity(self.form.if_pointInMeshY),
+                             'z': getQuantity(self.form.if_pointInMeshZ)}
+            storeIfChanged(self.mesh_obj, "PointInMesh", point_in_mesh)
+            FreeCADGui.doCommand("FreeCAD.ActiveDocument.{}.PointInMesh "
+                            "= {}".format(self.mesh_obj.Name, point_in_mesh))            
         self.cart_mesh = dexcsCfdMeshTools.CfdMeshTools(self.mesh_obj)
-
+        self.mesh_obj.Proxy.cart_mesh = dexcsCfdMeshTools.CfdMeshTools(self.mesh_obj)
+        
     def consoleMessage(self, message="", color="#000000", timed=True):
         if timed:
             self.console_message_cart = self.console_message_cart \
@@ -267,11 +289,15 @@ class _TaskPanelCfdMesh:
     def choose_utility(self, index):
         if index < 0:
             return
-        utility = self.form.cb_utility.currentText()
+        utility = self.form.cb_meshTool.currentText()
         if utility == "snappyHexMesh":
             self.form.snappySpecificProperties.setVisible(True)
-        else:
+            self.form.cfMeshSpecificProperties.setVisible(False)
+            self.form.label.setText("Snappy Hex Mesh Parameters")
+        elif utility == "cfMesh":
             self.form.snappySpecificProperties.setVisible(False)
+            self.form.cfMeshSpecificProperties.setVisible(True)
+            self.form.label.setText("cfMesh Parameters")            
 
     def writeMesh(self):
         import importlib
@@ -280,8 +306,7 @@ class _TaskPanelCfdMesh:
         self.Start = time.time()
         # Re-initialise dexcsCfdMeshTools with new parameters
         self.store()
-        FreeCADGui.addModule("dexcsCfdMeshTools")
-        FreeCADGui.addModule("dexcsCfMeshTools")
+        # FreeCADGui.addModule("dexcsCfdMeshTools")
         self.consoleMessage("Preparing meshing ...")
 
         #cart_mesh = self.cart_mesh
@@ -304,10 +329,18 @@ class _TaskPanelCfdMesh:
 
         template_case = dexcsCfdTools.getTemplateCase(self.analysis)
         try:
+            utility = self.form.cb_meshTool.currentText()            
             QApplication.setOverrideCursor(Qt.WaitCursor)
-            FreeCADGui.doCommand("dexcsCfMesh = dexcsCfMeshTools.MainControl()")
+            if (utility== 'cfMesh'):
+                FreeCADGui.addModule("dexcsCfMeshTools")                
+                FreeCADGui.doCommand("dexcsMesher = dexcsCfMeshTools.CfMeshTools()")
+            elif (utility=='snappyHexMesh'):
+                FreeCADGui.addModule("dexcsSHMeshTools")                
+                FreeCADGui.doCommand("dexcsMesher = dexcsSHMeshTools.SHMesTools()")
+            else:
+                raise Exception()
             #FreeCADGui.doCommand("dexcsCfMesh.perform("+ "'" + cart_mesh.meshCaseDir + "'" + ")")
-            FreeCADGui.doCommand("dexcsCfMesh.perform("+ "'" + output_path + "', '" + template_case + "'" + ")")       
+            FreeCADGui.doCommand("dexcsMesher.perform("+ "'" + output_path + "', '" + template_case + "'" + ")")       
             self.consoleMessage("Exporting the part surfaces ...")
         except Exception as ex:
             self.consoleMessage("Error " + type(ex).__name__ + ": " + str(ex), '#FF0000')
@@ -418,6 +451,7 @@ class _TaskPanelCfdMesh:
         pointCheck = self.cart_mesh.automaticInsidePointDetect()
         if pointCheck is not None:
             iMPx, iMPy, iMPz = pointCheck
+            print(pointCheck)
             setQuantity(self.form.if_pointInMeshX, str(iMPx) + "mm")
             setQuantity(self.form.if_pointInMeshY, str(iMPy) + "mm")
             setQuantity(self.form.if_pointInMeshZ, str(iMPz) + "mm")
@@ -448,3 +482,4 @@ class _TaskPanelCfdMesh:
             raise
         finally:
             QApplication.restoreOverrideCursor()
+            

@@ -24,353 +24,19 @@ from subprocess import Popen
 import pythonVerCheck
 import pyDexcsSwakSubset
 from dexcsCfdMesh import _CfdMesh
-
-class Test(QDialog):
-    def __init__(self,parent=None):
-        super(Test, self).__init__(parent)
-        self.ui = Ui_Dialog()
-        self.ui.setupUi(self)
-        
-        patchList = ['dexcs', 'inlet', 'outlet', 'wall']
-        for patchName in patchList:
-            print(patchName)
-            newitem = QTableWidgetItem(patchName)
-            self.ui._addrow(newitem)
-
-
-class Model:
-    """
-    現在読み込んでいるfreeCADファイルの情報を格納する為のクラス
-    """
-    PATCH_STR        = "patch"
-    LOCAL_STR        = "local"
-    EMPTY_STR        = ""
-    INF_STR          = "inf"
-
-    def __init__(self, caseFilePath):
-        """
-        @type caseFilePath: string 
-        @param caseFilePath:caseFilePath:freeCADの開いているfcstdファイルのpath
-        """
-        #print("Model")
-        self.caseFilePath = caseFilePath
-        
-    def open(self):
-        """
-        コンストラクタで与えられたcaseFilePathのファイルを開いて戻す。
-        @rtype: FreeCADで定義するdoc
-        @return: 読み込んだFreeCADファイルオブジェクト
-        """
-        try:
-            import sys
-            sys.path.append("/usr/lib/freecad/lib")
-            import FreeCAD
-            import Part
-        except ValueError:
-            message = _(u'FreeCAD library not found. Check the FREECADPATH variable.')        
-            answer = self.showMessageDialog(message)
-        #self.doc = FreeCAD.open(self.caseFilePath)
-        self.doc = App.ActiveDocument
-        assert(self.doc != None), "None self.doc"
-        return self.doc
+from dexcsMeshTools import MainControl, Model
                 
 
-class MainControl():
-    """
-    このアプリの全般的管理を行う為のクラス
-    """
-    F_1_2_STR         = "1.2"
-    MAX_CELL_SIZE_STR = "maxCellSize"
-    MIN_CELL_SIZE_STR = "minCellSize"
-    FEATURE_ANGLE_STR = "feature<BR>Angle"
-    UNTANGLE_LAYER = "untangle<BR>Layers"
-    FEATURE_ANGLE     = 30
-    configDict = pyDexcsSwakSubset.readConfigDexcs()
-    PATH_4_OPENFOAM = configDict["cfMesh"]
-    #PATH_4_OPENFOAM = "/opt/OpenFOAM/OpenFOAM-v1906"
-    BASHRC_PATH_4_OPENFOAM = PATH_4_OPENFOAM + "/etc/bashrc"
-    CFMESH_PATH_TEMPLATE = PATH_4_OPENFOAM + "/modules/cfmesh/tutorials/cartesianMesh/singleOrifice"
-    SOLVER_PATH_TEMPLATE = os.path.expanduser(configDict["dexcs"] + "/template/dexcs")
-    #SOLVER_PATH_TEMPLATE = "/opt/DEXCS/template/dexcs"
-    SLASH_STR             = "/"
-    DOT_STR               = "."
-    DOT_SLASH             = "./"
-    SURFACE_FEATURE_EDGES = "surfaceFeatureEdges -angle"
-    SURFACE_FEATURE_TRANS = "surfaceTransformPoints -scale"
-    CARTESIAN_MESH        = "cartesianMesh"
-    DOT_FMS_STR           = ".fms"
-    SPACE_STR             = " "
-    MV_STR                = "mv"
-    SED_STR               = "sed"
-    REGION_STR            = "region"
-    E_OPTION_STR          = "-e"
-    S_EMPTY_STR           = "s/empty/"
-    RM_F_STR              = "rm -f"
-    MESH_DICT_STR         = "system/meshDict"
-    OBJECT_STR            = "object"
-
+class CfMeshTools(MainControl):
     def __init__(self):
-        """
-        特に何もしない。
-        """
-        for obj in FreeCAD.ActiveDocument.Objects:
-            if hasattr(obj, "Proxy") and isinstance(obj.Proxy, _CfdMesh):
-               self.mesh_obj = obj
-
-        #print("DEXCS MainControl / " + self.mesh_obj.Label)
-
-    def checkMeshPerform(self, CaseFilePath):
-        """
-        checkMeshボタン押下後の処理を全て行う。
-        """
-        #print ("MainControl::checkMeshPerform")
-        os.chdir(CaseFilePath)
-        caseName = os.path.basename(CaseFilePath)
-        f=open(caseName+".OpenFOAM","w")
-        f.close()
-        #checkMeshの実行ファイル作成
-        title =  "#!/bin/bash\n"
-        configDict = pyDexcsSwakSubset.readConfigTreeFoam()
-        env = configDict["bashrcFOAM"]
-        configDict = pyDexcsSwakSubset.readConfigDexcs()
-        envTreeFoam = configDict["TreeFoam"]
-        env = env.replace('$TreeFoamUserPath',envTreeFoam)
-        envSet = "source " + env + '\n'
-        solverSet = "checkMesh " + "\n"
-        cont = title + envSet + solverSet 
-        f=open("./run","w")
-        f.write(cont)
-        f.close()
-        #実行権付与
-        os.system("chmod a+x run")
-        #実行
-        #comm = "xfce4-terminal --execute ./run &"
-        comm = "gnome-terminal --geometry=80x15 --zoom=0.9 -- bash --rcfile ./run"
-        #subprocess.call(comm .strip().split(" "))
-        os.system(comm)
-
-    def viewMeshPerform(self, CaseFilePath):
-        """
-        viewMeshボタン押下後の処理を全て行う。
-        """
-        #print ("MainControl::viewMeshPerform")
-        os.chdir(CaseFilePath)
-        caseName = os.path.basename(CaseFilePath)
-        f=open(caseName+".OpenFOAM","w")
-        f.close()
-        #paraviewの実行ファイル作成
-        envSet0 = ". " + os.path.expanduser("~") + "/.FreeCAD/runTreefoamSubset\n"
-        title =  "#!/bin/bash\n"
-        configDict = pyDexcsSwakSubset.readConfigTreeFoam()
-        paraFoamFix = configDict["paraFoam"]
-        envSet = envSet0 + "source " + paraFoamFix + "\n"
-        solverSet = "paraFoam " + "\n"
-        #cont = title + envSet + solverSet 
-        cont = title + envSet 
-        f=open("./run","w")
-        f.write(cont)
-        f.close()
-        #実行権付与
-        os.system("chmod a+x run")
-        #実行
-        comm = "xfce4-terminal --execute ./run &"
-        #comm = "gnome-terminal --geometry=80x15 --zoom=0.9 -- bash --rcfile ./run"
-        #subprocess.call(comm .strip().split(" "))
-        os.system(comm)
-
-    def editMeshDictPerform(self, CaseFilePath):
-        """
-        editMeshDictボタン押下後の処理を全て行う。
-        """
-        #print ("MainControl::editMeshDictPerform")
-        os.chdir(CaseFilePath)
-        #geditの実行ファイル作成
-        caseName = CaseFilePath
-        title =  "#!/bin/bash\n"
-        envSet = ""
-        solverSet = "gedit ./system/meshDict\n"
-        libPath = ""
-        sleep = ""
-        cont = title + envSet + libPath + solverSet + sleep
-        f=open("./run","w")
-        f.write(cont)
-        f.close()
-        #実行権付与
-        os.system("chmod a+x run")
-        #実行
-        comm = "xfce4-terminal --execute ./run &"
-        #cmd = "gnome-terminal --geometry=80x15 --zoom=0.9 -- bash --rcfile /home/et/Desktop/test/run &"
-        #subprocess.call(comm .strip().split(" "))
-        os.system(comm)
-
-    def makeCartesianMeshPerform(self, CaseFilePath):
-        """
-        makeCartesianMeshボタン押下後の処理を全て行う。
-        """
-        #print ("MainControl::makeCartesianMeshPerform")
-        os.chdir(CaseFilePath)
-        f=open("./cfmesh.log","w")
-        f.close()
-        #cfmeshの実行ファイル作成
-        caseName = CaseFilePath
-        title =  "#!/bin/bash\n"
-        envSet = ". " + MainControl.BASHRC_PATH_4_OPENFOAM + ";\n"
-        solverSet = "cartesianMesh | tee cfmesh.log\n"
-        sleep = "sleep 2\n"
-        cont = title + envSet + solverSet + sleep
-        f=open("./run","w")
-        f.write(cont)
-        f.close()
-        #実行権付与
-        os.system("chmod a+x run")
-        #実行
-        #comm = "xfce4-terminal --execute ./run"
-        comm = "gnome-terminal --geometry=80x15 --zoom=0.9 -- bash --rcfile ./run &"
-        process = (subprocess.Popen(comm, stdout=subprocess.PIPE, shell=True).communicate()[0]).decode('utf-8')
-        #print('コマンドは\n'+process+'です')
-        #os.system(comm)
-
-        #command = '. ' + MainControl.BASHRC_PATH_4_OPENFOAM + ';'
-        #command = command + 'cd ' + CaseFilePath + ';'
-        #command = command + MainControl.CARTESIAN_MESH
-
-        #print("command =" + command)
-        #os.system(command)
-        #path_to_output_file = CaseFilePath + '/log.cartesianMesh'
-        #myoutput = open(path_to_output_file,'w')
-        #try:
-        #    res = subprocess.call(command,stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
-            #output, errors = res.communicate()
-            #res = subprocess.call(command, shell=True)
-            #os.system(command)
-        #except:
-        #    print ("Error.")
-
-
-    def perform(self, CaseFilePath, TemplateCase):
-    #def perform(self, CaseFilePath, meshObj):
-        """
-        exportボタン押下後の処理を全て行う。
-        """
-        #print ("MainControl::perform")
-
-        ijk = 99
-        #print(_("hello %d") % ijk)
-        modelName = os.path.splitext(os.path.basename(FreeCAD.ActiveDocument.FileName))[0]
-        #print(CaseFilePath)
-        self.makeStlFile(CaseFilePath)
-        ### step2 ### convert stl to fms file ##############################
-        self.fmsFileName = CaseFilePath +  modelName + ".fms"
-        #print('outputFms=' + self.fmsFileName)
-        _ScaleToMeter = MainControl.SPACE_STR + str(self.mesh_obj.ScaleToMeter)
-        #print(_ScaleToMeter)
-        _featureAngle = MainControl.SPACE_STR + str(self.mesh_obj.FeatureAngle)
-        #print(_featureAngle)
-        command = '. ' + MainControl.BASHRC_PATH_4_OPENFOAM + ";" + MainControl.SURFACE_FEATURE_TRANS
-        command = command + MainControl.SPACE_STR + "'(" + _ScaleToMeter + _ScaleToMeter + _ScaleToMeter + ")'"
-        command = command + MainControl.SPACE_STR + self.stlFileName + MainControl.SPACE_STR + self.stlFileName + ";"
-        command = command + MainControl.SURFACE_FEATURE_EDGES
-        command = command + _featureAngle              
-        command = command + MainControl.SPACE_STR + self.stlFileName + MainControl.SPACE_STR
-        command = command + self.fmsFileName
-        #print("command =" + command)
-        os.system(command)
-
-
-        constantFolder = CaseFilePath + "constant" 
-
-        # OpenFOAMのケースフォルダでない場合の処理を追加（2019/8/2）
-        # if not os.path.isdir(constantFolder):
-        #     command = "mkdir " + constantFolder
-        #     os.system(command)
-
-        # systemFolder = CaseFilePath + "/system" 
-        # if not os.path.isdir(systemFolder):
-        #     command = "mkdir " + systemFolder
-        #     os.system(command)
-        #     command = "cp " + self.CFMESH_PATH_TEMPLATE + "/system/fv* " + systemFolder + "/"
-        #     os.system(command)
-        #     command = "cp " + self.CFMESH_PATH_TEMPLATE + "/system/controlDict "  + systemFolder + "/"
-        #     #print("command =" + command)
-        #     os.system(command)
-        # OpenFOAMのケースフォルダでない場合の処理を追加（2019/9/6）
-        if TemplateCase:
-            templateSolver =  TemplateCase
-        else:   
-            templateSolver = self.SOLVER_PATH_TEMPLATE
-        #print('templateSolver',templateSolver)
-        if not os.path.isdir(constantFolder):
-            command = "cp -r " + templateSolver + "/constant " + CaseFilePath + "/"
-            #print(command)
-            os.system(command)
-            command = "rm -rf " + constantFolder + "/polyMesh"
-            os.system(command)
-
-        systemFolder = CaseFilePath + "system" 
-        if not os.path.isdir(systemFolder):
-            command = "cp -r " + templateSolver + "/system " + CaseFilePath + "/"
-            os.system(command)
-
-        zeroFolder = CaseFilePath + "0" 
-        if not os.path.isdir(zeroFolder):
-            tempZero = templateSolver + "/0"
-            tempZeroOrig = templateSolver + "/0.orig"
-            if os.path.isdir(tempZero):
-                command = "cp -rf " + tempZero +  " " + CaseFilePath + "/"
-            elif os.path.isdir(tempZeroOrig):
-                command = "cp -rf " + tempZeroOrig +  " " + CaseFilePath + "/0"
-            else :
-                command = "mkdir 0"
-
-            os.system(command)
-
-        #copy All* script
-        command = "cp -f " + templateSolver + "/All* " + CaseFilePath + "/"
-        #print(command)
-        os.system(command)
-
-        if os.path.exists(CaseFilePath + "/Allrun"):
-            command = "mv " + CaseFilePath + "/Allrun " + CaseFilePath + "/Allrun.orig"
-            #print(command)
-            os.system(command)
-
-        #self.makeMeshDict(CaseFilePath, meshObj)
-        self.makeMeshDict(CaseFilePath)
-
-        os.chdir(CaseFilePath)
-        #cfmeshの実行ファイル作成
-        caseName = CaseFilePath
-        title =  "#!/bin/bash\n"
-        envSet = ". " + MainControl.BASHRC_PATH_4_OPENFOAM + ";\n"
-        if self.mesh_obj.ElementDimension == '2D':
-            solverSet = "cartesian2DMesh | tee cfmesh.log\n"
-        else:
-            solverSet = "cartesianMesh | tee cfmesh.log\n"
-        sleep = "sleep 2\n"
-        cont = title + envSet + solverSet + sleep
-        f=open("./Allmesh","w")
-        f.write(cont)
-        f.close()
-        #実行権付与
-        os.system("chmod a+x Allmesh")
-
-        solverSet = "checkMesh | tee checkMesh.log\n"
-        sleep = "sleep 2\n"
-        cont = title + envSet + solverSet + sleep
-        f=open("./Allcheck","w")
-        f.write(cont)
-        f.close()
-        #実行権付与
-        os.system("chmod a+x Allcheck")
-
-
+        super().__init__()
+        
     def makeMeshDict(self, CaseFilePath):
     #def makeMeshDict(self, CaseFilePath, meshObj):
         """
         objSettingのGUIパネルにて指定した各種パラメタを読み取って、OpenFOAMに必要なmeshDictを作成する
         """
         from dexcsCfdMeshRefinement import _CfdMeshRefinement
-
         dictName = CaseFilePath + MainControl.SLASH_STR + MainControl.MESH_DICT_STR
         meshDict = open(dictName , 'w')
         #dexcsCfdDict = True
@@ -387,7 +53,6 @@ class MainControl():
             dexcsCfdDict_opt_reCalculateNormalsCHKOption = "0"
         dexcsCfdDict_opt_relThicknessTol= str(self.mesh_obj.opt_relThicknessTol)
         dexcsCfdDict_keepCellsIntersectingBoundaryCHKOption = self.mesh_obj.keepCellsIntersectingBoundary
-
         if self.mesh_obj.workflowControls == 'none':
             stopAfterString = '\t//\tstopAfter\tedgeExtraction;\n'
         else:
@@ -557,7 +222,6 @@ class MainControl():
         else:
             removeCellsListString = removeCellsListString + "//\t" + "patchName" + "\n//\t{\n//\t\tkeepCells 1; //0 remove or 1 keep \n//\t}\n"
 
-
         # nLayers, thicknessRatio // BoundaryLayer チェックされたもの
         if __patch__ :
             patchNumber = 0
@@ -697,7 +361,7 @@ class MainControl():
                         RefStr = str(__reflevel__[patchNumber])
                         RefThickness = str(__refThickness__[patchNumber]).replace('m','')
                         #RefThickness = str(float(RefThickness)/1000)
-                        RefThickness = str(float(RefThickness)*self.mesh_obj.ScaleToMeter)
+                        RefThickness = str(float(RefThickness))
                         print('RefLevel '+RefStr)
 
                         strings5 = [
@@ -842,49 +506,49 @@ class MainControl():
                          if obj.isDerivedFrom("Part::Box"):
                             print(' Box')
                             print('RefLevel '+RefStr)
-                            centerX = ( obj.Placement.Base.x + obj.Length.Value * 0.5 ) * self.mesh_obj.ScaleToMeter
-                            centerY = ( obj.Placement.Base.y + obj.Width.Value * 0.5 ) * self.mesh_obj.ScaleToMeter
-                            centerZ = ( obj.Placement.Base.z + obj.Height.Value * 0.5 ) * self.mesh_obj.ScaleToMeter
+                            centerX = obj.Placement.Base.x + obj.Length.Value * 0.5
+                            centerY = obj.Placement.Base.y + obj.Width.Value * 0.5
+                            centerZ = obj.Placement.Base.z + obj.Height.Value * 0.5
                             strings7 = [
                             '\t' + objList + '\n',
                             '\t{\n',
                             '\t\ttype box;\n',
                             '\t\tadditionalRefinementLevels\t' + RefStr + ';\n',
                             '\t\tcentre (' + str(centerX) + MainControl.SPACE_STR + str(centerY) + MainControl.SPACE_STR + str(centerZ) + ');\n',
-                            '\t\tlengthX\t' + str(obj.Length.Value * self.mesh_obj.ScaleToMeter) + ';\n',
-                            '\t\tlengthY\t' + str(obj.Width.Value * self.mesh_obj.ScaleToMeter) + ';\n',
-                            '\t\tlengthZ\t' + str(obj.Height.Value * self.mesh_obj.ScaleToMeter) + ';\n',
+                            '\t\tlengthX\t' + str(obj.Length.Value) + ';\n',
+                            '\t\tlengthY\t' + str(obj.Width.Value) + ';\n',
+                            '\t\tlengthZ\t' + str(obj.Height.Value) + ';\n',
                             '\t}\n'
                                          ]
                          elif obj.isDerivedFrom("Part::Sphere"):
                             print(' Sphere')
                             print('RefLevel '+RefStr)
-                            centerX = obj.Placement.Base.x  * self.mesh_obj.ScaleToMeter
-                            centerY = obj.Placement.Base.y  * self.mesh_obj.ScaleToMeter
-                            centerZ = obj.Placement.Base.z  * self.mesh_obj.ScaleToMeter
+                            centerX = obj.Placement.Base.x 
+                            centerY = obj.Placement.Base.y 
+                            centerZ = obj.Placement.Base.z 
                             strings7 = [
                             '\t' + objList + '\n',
                             '\t{\n',
                             '\t\ttype sphere;\n',
                             '\t\tadditionalRefinementLevels\t' + RefStr + ';\n',
                             '\t\tcentre (' + str(centerX) + MainControl.SPACE_STR + str(centerY) + MainControl.SPACE_STR + str(centerZ) + ');\n',
-                            '\t\tradius\t' + str(obj.Radius.Value * self.mesh_obj.ScaleToMeter) + ';\n',
+                            '\t\tradius\t' + str(obj.Radius.Value) + ';\n',
                             '\t\trefinementThickness\t' + '0' + ';\n',
                             '\t}\n'
                                          ]
                          elif obj.isDerivedFrom("Part::Cone"):
                             print(' Cone')
                             print('RefLevel '+RefStr)
-                            center = FreeCAD.Vector(0, 0, - obj.Height.Value * self.mesh_obj.ScaleToMeter)
-                            pos = FreeCAD.Vector(obj.Placement.Base.x * self.mesh_obj.ScaleToMeter, obj.Placement.Base.y * self.mesh_obj.ScaleToMeter, obj.Placement.Base.z * self.mesh_obj.ScaleToMeter + obj.Height.Value * self.mesh_obj.ScaleToMeter)
+                            center = FreeCAD.Vector(0, 0, - obj.Height.Value)
+                            pos = FreeCAD.Vector(obj.Placement.Base.x, obj.Placement.Base.y, obj.Placement.Base.z + obj.Height.Value)
                             rot = FreeCAD.Rotation(obj.Placement.Rotation)
                             cylinderHead = FreeCAD.Placement(pos, rot, center)
-                            p0X = obj.Placement.Base.x  * self.mesh_obj.ScaleToMeter
-                            p0Y = obj.Placement.Base.y  * self.mesh_obj.ScaleToMeter
-                            p0Z = obj.Placement.Base.z  * self.mesh_obj.ScaleToMeter
-                            p1X = cylinderHead.Base.x 
-                            p1Y = cylinderHead.Base.y 
-                            p1Z = cylinderHead.Base.z 
+                            p0X = obj.Placement.Base.x
+                            p0Y = obj.Placement.Base.y
+                            p0Z = obj.Placement.Base.z
+                            p1X = cylinderHead.Base.x
+                            p1Y = cylinderHead.Base.y
+                            p1Z = cylinderHead.Base.z
                             strings7 = [
                             '\t' + objList + '\n',
                             '\t{\n',
@@ -892,23 +556,23 @@ class MainControl():
                             '\t\tadditionalRefinementLevels\t' + RefStr + ';\n',
                             '\t\tp0 (' + str(p0X) + MainControl.SPACE_STR + str(p0Y) + MainControl.SPACE_STR + str(p0Z) + ');\n',
                             '\t\tp1 (' + str(p1X) + MainControl.SPACE_STR + str(p1Y) + MainControl.SPACE_STR + str(p1Z) + ');\n',
-                            '\t\tradius0\t' + str(obj.Radius1.Value * self.mesh_obj.ScaleToMeter) + ';\n',
-                            '\t\tradius1\t' + str(obj.Radius2.Value * self.mesh_obj.ScaleToMeter) + ';\n',
+                            '\t\tradius0\t' + str(obj.Radius1.Value) + ';\n',
+                            '\t\tradius1\t' + str(obj.Radius2.Value) + ';\n',
                             '\t}\n'
                                          ]
                          elif obj.isDerivedFrom("Part::Cylinder"):
                             print(' Cylinder')
                             print('RefLevel '+RefStr)
-                            center = FreeCAD.Vector(0, 0, - obj.Height.Value * self.mesh_obj.ScaleToMeter)
-                            pos = FreeCAD.Vector(obj.Placement.Base.x * self.mesh_obj.ScaleToMeter, obj.Placement.Base.y * self.mesh_obj.ScaleToMeter, (obj.Placement.Base.z + obj.Height.Value) * self.mesh_obj.ScaleToMeter)
+                            center = FreeCAD.Vector(0, 0, - obj.Height.Value)
+                            pos = FreeCAD.Vector(obj.Placement.Base.x, obj.Placement.Base.y, obj.Placement.Base.z + obj.Height.Value)
                             rot = FreeCAD.Rotation(obj.Placement.Rotation)
                             cylinderHead = FreeCAD.Placement(pos, rot, center)
-                            p0X = obj.Placement.Base.x * self.mesh_obj.ScaleToMeter
-                            p0Y = obj.Placement.Base.y * self.mesh_obj.ScaleToMeter
-                            p0Z = obj.Placement.Base.z * self.mesh_obj.ScaleToMeter
-                            p1X = cylinderHead.Base.x 
-                            p1Y = cylinderHead.Base.y 
-                            p1Z = cylinderHead.Base.z 
+                            p0X = obj.Placement.Base.x
+                            p0Y = obj.Placement.Base.y
+                            p0Z = obj.Placement.Base.z
+                            p1X = cylinderHead.Base.x
+                            p1Y = cylinderHead.Base.y
+                            p1Z = cylinderHead.Base.z
                             strings7 = [
                             '\t' + objList + '\n',
                             '\t{\n',
@@ -916,17 +580,17 @@ class MainControl():
                             '\t\tadditionalRefinementLevels\t' + RefStr + ';\n',
                             '\t\tp0 (' + str(p0X) + MainControl.SPACE_STR + str(p0Y) + MainControl.SPACE_STR + str(p0Z) + ');\n',
                             '\t\tp1 (' + str(p1X) + MainControl.SPACE_STR + str(p1Y) + MainControl.SPACE_STR + str(p1Z) + ');\n',
-                            '\t\tradius0\t' + str(obj.Radius.Value * self.mesh_obj.ScaleToMeter) + ';\n',
-                            '\t\tradius1\t' + str(obj.Radius.Value * self.mesh_obj.ScaleToMeter) + ';\n',
+                            '\t\tradius0\t' + str(obj.Radius.Value) + ';\n',
+                            '\t\tradius1\t' + str(obj.Radius.Value) + ';\n',
                             '\t}\n'
                                          ]
                          else :
-                            xmax = obj.Shape.BoundBox.XMax * self.mesh_obj.ScaleToMeter
-                            xmin = obj.Shape.BoundBox.XMin * self.mesh_obj.ScaleToMeter
-                            ymax = obj.Shape.BoundBox.YMax * self.mesh_obj.ScaleToMeter
-                            ymin = obj.Shape.BoundBox.YMin * self.mesh_obj.ScaleToMeter
-                            zmax = obj.Shape.BoundBox.ZMax * self.mesh_obj.ScaleToMeter
-                            zmin = obj.Shape.BoundBox.ZMin * self.mesh_obj.ScaleToMeter
+                            xmax = obj.Shape.BoundBox.XMax
+                            xmin = obj.Shape.BoundBox.XMin
+                            ymax = obj.Shape.BoundBox.YMax
+                            ymin = obj.Shape.BoundBox.YMin
+                            zmax = obj.Shape.BoundBox.ZMax
+                            zmin = obj.Shape.BoundBox.ZMin
                             centerX = 0.5*(xmax+xmin)
                             centerY = 0.5*(ymax+ymin)
                             centerZ = 0.5*(zmax+zmin)
@@ -1191,224 +855,18 @@ class MainControl():
         #message = _(u'The configuration file system/meshDict for cfMesh has been created.')        
         #self.viewControl.showMessageDialog(message)
         
-    def modifyFms(self, outputFmsTemp):
-        """
-        コマンドsurfaceFeatureEdgesを使ってstl->fms変換した場合、
-        デフォルトのtype名はemptyになってしまうので、これを指定のtype名に変更する（sedを使用）
-        @type outputFmsTemp: string
-        @param outputFmsTemp: fmsの仮のファイル名
-        """
-        sedCmd = MainControl.SED_STR + MainControl.SPACE_STR
-        iRow = 0    # テーブルの行番号（オブジェクトの並び順）
-        jType = 0    # type=region以外(stl出力されるオブジェクト)の並び順
-        while (self.viewControl.get_gridTableValue(iRow,0)):
-            iRow = iRow + 1
-            if self.viewControl.get_gridTableValue(iRow-1,1) != MainControl.REGION_STR:
-                jType = jType + 1
-                sedCmd = sedCmd + MainControl.E_OPTION_STR + MainControl.SPACE_STR + "'"
-                sedCmd = sedCmd + str(2+3*jType)+","+str(3+3*jType)+ MainControl.S_EMPTY_STR
-                sedCmd = sedCmd + self.viewControl.get_gridTableValue(iRow-1,1)+MainControl.SLASH_STR + "'" + MainControl.SPACE_STR
 
-        sedCmd = sedCmd + outputFmsTemp + " > " + self.fmsFileName
-        os.system(sedCmd)
-        os.system(MainControl.RM_F_STR + MainControl.SPACE_STR + outputFmsTemp)
-        
-    def makeStlFile(self, CaseFilePath):
-        """
-        読み込んだCADファイルに格納されたデータのうち、Typeがregion以外のオブジェクトをstlファイルとして出力する。
-        """
-        from dexcsCfdMeshRefinement import _CfdMeshRefinement
-        print("makeStlFile")
-        ijk = 111
-        print('CaseFilePath = ' + CaseFilePath)
-        modelName = os.path.splitext(os.path.basename(FreeCAD.ActiveDocument.FileName))[0]
-        self.stlFileName = CaseFilePath + modelName + '.stl'
-        self.fileName = CaseFilePath 
-        print('stlFileName = ' + self.stlFileName)
-
-        outputStlFile = open(self.stlFileName, 'w')
-
-        # refinementRegion として指定（obj.Internal）されたパーツのLabelリストを作成
-        __region__=[]
-        doc = FreeCAD.activeDocument()
-        for obj in doc.Objects:
-            if obj.ViewObject.Visibility:
-                if hasattr(obj, "Proxy") and isinstance(obj.Proxy, _CfdMeshRefinement):
-                    if obj.Internal :                    
-                        for ref in(obj.ShapeRefs):
-                            __region__.append(ref[0].Label) 
-
-        for obj in doc.Objects:
-            if obj.ViewObject.Visibility:
-                __objs__=[]
-                try:
-                    if obj.Shape:
-                        # obj.Labelがregion指定パーツであるかどうか判定
-                        checkRegion = False
-                        for objRegion in __region__:
-                            if obj.Label == objRegion :
-                                print('pass ' + obj.Label)
-                                checkRegion=True
-                        # CfdSolver / Group Object / region指定Obj を除外
-                        if obj.isDerivedFrom("Part::FeaturePython") or obj.isDerivedFrom("App::DocumentObjectGroupPython") or checkRegion:
-                            pass
-                        else:
-                            print('append '+obj.Label)
-                                
-                            __objs__.append(obj)
-                            file=self.fileName+obj.Label+'.ast'
-                            Mesh.export(__objs__,file)
-                            importFile = open(file,'r')
-                            temp = importFile.readlines()
-                            for line in temp:
-                                if 'endsolid' in line:
-                                    outputStlFile.write('endsolid ' + obj.Label + '\n')
-                                elif 'solid' in line:
-                                    outputStlFile.write('solid ' + obj.Label + '\n')
-                                else:
-                                    outputStlFile.write(line)
-                            importFile.close
-                            os.remove(file)
-                except AttributeError:
-                    pass
-        outputStlFile.close
-            
-    def setupView_for_CUI(self):
-        """
-        実行時引数で与えられたfcstdファイルを読み込み、Viewの初期設定を行う
-        """
-        import sys
-        argvs = sys.argv  # コマンドライン引数を格納したリストの取得
-        argc = len(argvs)
-        if (argc != 2):   # 引数が足りない場合は、その旨を表示
-            print ('Usage: # python %s filename' % argvs[0])
-            self.caseFilePath="/home/et/Desktop/Qt4/Test/cfMesh/test/dexcs4Mesh.fcstd"
-            #quit()         # プログラムの終了
+    def writeRunMesherFile(self, CaseFilePath):
+        #cfmeshの実行ファイル作成
+        caseName = CaseFilePath
+        envSet = ". " + MainControl.BASHRC_PATH_4_OPENFOAM + ";\n"
+        if self.mesh_obj.ElementDimension == '2D':
+            solverSet = "cartesian2DMesh | tee cfmesh.log\n"
         else:
-            self.caseFilePath = argvs[1]
-        #print("import case file path = %s" % self.caseFilePath)
-        model = Model(self.caseFilePath)
-        self.doc = model.open()
-        self.fcListData = model.get_fcListData()
-        sumOf3Edges = model.get_sumOf3EdgesOfCadObjects()
-        cellMax = Decimal(sumOf3Edges/60)#適切に数値を丸める
-        #print ("cellMax = %6.2lf" % cellMax)
-        self.viewControl = ViewControl(self)
-        self.dirName = os.path.dirname(self.caseFilePath)
-        self.viewControl.setLayout(self.fcListData, self.dirName, cellMax)
-        #print ("dirName = ", self.dirName)
+            solverSet = "cartesianMesh | tee cfmesh.log\n"
+        sleep = "sleep 2\n"
+        cont = self.title + envSet + solverSet + sleep
+        f=open("./Allmesh","w")
+        f.write(cont)
+        f.close()
 
-    def setupView(self):
-        """
-        #実行時引数で与えられたfcstdファイルを読み込み、Viewの初期設定を行う
-        """
-        try:
-            import sys
-            sys.path.append("/usr/lib/freecad/lib")
-            import FreeCAD
-            import Part
-        except ValueError:
-            message = _('FreeCAD library not found. Check the FREECADPATH variable. ')        
-            wx.MessageBox(message,'Error')
-
-        self.caseFilePath = App.ActiveDocument.FileName        
-        model = Model(self.caseFilePath)
-        self.doc = model.open()
-        self.fcListData = model.get_fcListData()
-        sumOf3Edges = model.get_sumOf3EdgesOfCadObjects()
-        cellMax = Decimal(sumOf3Edges/60)#適切に数値を丸める
-        #print ("cellMax = %6.2lf" % cellMax)
-        self.viewControl = ViewControl(self)
-        self.dirName = os.path.dirname(self.caseFilePath)
-        #モデルファイルがケースファイルの置き場所にない場合（.CaseFileDict）
-        caseFileDict = self.dirName + "/.CaseFileDict"
-        if os.path.isfile(caseFileDict) == True:
-            f = open(caseFileDict)
-            tempDirName = f.read()
-            f.close()
-            if os.path.isdir(tempDirName) == True:
-                self.dirName = tempDirName
-            #print(self.dirName)
-        self.viewControl.setLayout(self.fcListData, self.dirName, cellMax)
-        #print ("dirName = ", self.dirName)
-    #---------------------------------------------------------------------------
-    #---------------------------------------------------------------------------
-    def searchVal(self,x,search_str):
-        for i in range(len(x)):
-            if search_str in x[i] and ( not x[i].strip().startswith("/")):
-                foundList=x[i].split()
-                return foundList[1].replace(";","")
-
-    #---------------------------------------------------------------------------
-    #---------------------------------------------------------------------------
-    def searchVal1(self,x,i_start,search_str):
-        i = i_start
-        while x[i]:
-            i +=1
-            if search_str in x[i] and ( not x[i].strip().startswith("/")):
-                foundList=x[i].split()
-                return foundList[1].replace(";","")
-
-    #---------------------------------------------------------------------------
-    #---------------------------------------------------------------------------
-    def searchLocationKakko(self,y,keyWord):
-        is1=0; is2=0
-        for i in range(len(y)):
-            if ( y[i].strip() == keyWord ) : #キーワードが見つかった
-                k_pop = 0                    #カッコの深さを示すカウンター
-                k_found =0                   # 最初の左カッコが見つかったどうかのフラグ    
-                while (k_found == 0 ): #最初の左カッコが見つかるまで行送りする
-                    i = i + 1
-                    if (y[i].strip() == "{") or (y[i].strip() == "(") : #最初の左カッコが見つかった
-                        is1 = i                 # 最初の左カッコが見つかった位置 
-                        k_pop = k_pop + 1; k_found =1
-                        while ( k_pop != 0 ):#カッコの深さが元に戻るまで行送りする
-                            i = i + 1
-                            #print i,k_found,k_pop
-                            if (y[i].strip() == "{") or (y[i].strip() == "(") :#左カッコが見つかった
-                                k_pop = k_pop + 1 #カッコの深さを＋１
-                            if (y[i].strip() == "}") or (y[i].strip() == ")") or (y[i].strip() == "};") or (y[i].strip() == ");") :#右カッコが見つかった
-                                k_pop = k_pop - 1 #カッコの深さをー１
-                            is2 = i         # 最後の右カッコが見つかった位置（になるはず）
-        return is1,is2
-    #---------------------------------------------------------------------------
-    #---------------------------------------------------------------------------
-    def searchLocationKakko1(self,y,iss1):
-        i = iss1
-        while y[i]:
-            k_pop = 0                    #カッコの深さを示すカウンター
-            k_found =0                   # 最初の左カッコが見つかったどうかのフラグ    
-            while (k_found == 0 ): #最初の左カッコが見つかるまで行送りする
-                i = i + 1
-                if (y[i].strip() == "{") or (y[i].strip() == "(") : #最初の左カッコが見つかった
-                    #print "##", i,k_pop, k_found
-                    is1 = i                 # 最初の左カッコが見つかった位置 
-                    k_pop = k_pop + 1; k_found =1
-                    while ( k_pop != 0 ):#カッコの深さが元に戻るまで行送りする
-                        i = i + 1
-                        #print "###", i,k_found,k_pop
-                        if (y[i].strip() == "{") or (y[i].strip() == "(") :#左カッコが見つかった
-                            k_pop = k_pop + 1 #カッコの深さを＋１
-                        if (y[i].strip() == "}") or (y[i].strip() == ")") or (y[i].strip() == "};") or (y[i].strip() == ");") :#右カッコが見つかった
-                            k_pop = k_pop - 1 #カッコの深さをー１
-                        if (k_pop == 0):
-                            is2 = i         # 最後の右カッコが見つかった位置（になるはず）
-                            return is1,is2
-#---------------------------------------------------------------------------
-#---------------------------------------------------------------------------
-
-def main():
-    """
-    mainメソッド
-    """
-    global refinementOption
-    refinementOption = 1
-
-    cfMeshSettingMainControl = MainControl()
-    cfMeshSettingMainControl.setupView()
-    
-if __name__ == '__main__':
-    """
-     このアプリの開始点
-    """
-    main()

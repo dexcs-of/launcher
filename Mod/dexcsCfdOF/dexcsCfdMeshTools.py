@@ -558,10 +558,19 @@ class CfdMeshTools:
         # Snappy requires that the chosen internal point must remain internal during the meshing process and therefore
         # the meshing algorithm might fail if the point accidentally falls in a sliver between the mesh and the geometry
         # As a safety measure, the check distance is chosen to be approximately the size of the background mesh.
-        shape = self.part_obj.Shape
-        step_size = self.clmax*2.5
 
-        bound_box = self.part_obj.Shape.BoundBox
+        for obj in self.mesh_obj.Document.Objects:
+            #bif type(obj) == Part:
+                shape = obj.Shape
+                pointCheck = self.isInside(shape)
+                if pointCheck is not None:
+                    return pointCheck
+        dexcsCfdTools.cfdError("Failed to find an internal point - please specify manually.")
+        return None
+    
+    def isInside(self, shape):
+        step_size = self.clmax*2.5
+        bound_box = shape.BoundBox
         error_safety_factor = 2.0
         if (step_size*error_safety_factor >= bound_box.XLength or
                         step_size*error_safety_factor >= bound_box.YLength or

@@ -322,6 +322,10 @@ def setQuantity(inputField, quantity):
     # A bit painful because the python locale settings seem to be based on language,
     # not input settings as the FreeCAD settings are. So can't use that; hence
     # this rather roundabout way involving the UserString of Quantity
+    if type(quantity) != 'Base.Quantity':
+        if type(quantity) == str:
+            inputField.setProperty("quantityString", quantity)
+        return
     q = Units.Quantity(quantity)
     # Avoid any truncation
     if isinstance(q.Format, tuple):  # Backward compat
