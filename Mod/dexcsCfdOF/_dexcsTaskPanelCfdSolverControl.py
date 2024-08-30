@@ -58,6 +58,7 @@ class _dexcsTaskPanelCfdSolverControl:
         self.form.pb_run_solver.setText(_("Run"))
         self.form.pb_write_inp.setText(_("Write"))
         self.form.pb_edit_inp.setText(_("Edit"))
+        self.form.pb_plot.setText(_("plotPost"))
         self.form.pb_reconstruct.setText(_("reconstructPar"))
         self.form.check_parallel.setText(_("parallel"))
 
@@ -71,8 +72,6 @@ class _dexcsTaskPanelCfdSolverControl:
         index_method = self.form.cb_method.findText(self.solver_object.ParallelMethod)
         self.form.cb_method.setCurrentIndex(index_method)
 
-        self.form.check_parallel.stateChanged.connect(self.updateUI)
-        self.form.check_parallel.setChecked(self.solver_object.ParallelCores > 1)
 
         # update UI
         self.console_message = ''
@@ -88,8 +87,14 @@ class _dexcsTaskPanelCfdSolverControl:
         self.form.terminateSolver.setEnabled(False)
 
         self.open_paraview = QtCore.QProcess()
+        self.open_plot = QtCore.QProcess()
 
         self.working_dir = dexcsCfdTools.getOutputPath(self.analysis_object)
+        #print('self.working_dir=', self.working_dir)
+
+        self.form.check_parallel.stateChanged.connect(self.updateUI)
+        self.form.check_parallel.setChecked(self.solver_object.ParallelCores > 1)
+
 
         self.updateUI()
 
@@ -99,6 +104,7 @@ class _dexcsTaskPanelCfdSolverControl:
         self.form.pb_edit_inp.clicked.connect(self.editSolverInputFile)
         self.form.pb_run_solver.clicked.connect(self.runSolverProcess)
         self.form.pb_paraview.clicked.connect(self.openParaview)
+        self.form.pb_plot.clicked.connect(self.openPlotTool)
         self.form.pb_reconstruct.clicked.connect(self.runReconstruct)
 
         self.Start = time.time()
@@ -111,6 +117,7 @@ class _dexcsTaskPanelCfdSolverControl:
         #print('solverDirectory=', solverDirectory)
         self.form.pb_edit_inp.setEnabled(os.path.exists(solverDirectory))
         self.form.pb_paraview.setEnabled(os.path.exists(os.path.join(solverDirectory, "pv.foam")))
+        self.form.pb_plot.setEnabled(os.path.exists(os.path.join(solverDirectory, "postProcessing")))
         self.form.pb_reconstruct.setEnabled(os.path.exists(os.path.join(solverDirectory, "Allreconst")))
         self.form.pb_run_solver.setEnabled(os.path.exists(os.path.join(solverDirectory, "Allrun")))
         self.form.parallel_frame.setVisible(self.form.check_parallel.isChecked())
@@ -147,6 +154,7 @@ class _dexcsTaskPanelCfdSolverControl:
         self.solver_run_process.terminate()
         self.solver_run_process.waitForFinished()
         self.open_paraview.terminate()
+        self.open_plot.terminate()
         FreeCADGui.ActiveDocument.resetEdit()
 
     def write_input_file_handler_dexcs(self):
@@ -161,6 +169,7 @@ class _dexcsTaskPanelCfdSolverControl:
         if self.check_prerequisites_helper():
             self.consoleMessage(_("Writing dexcs Allrun ..."))
             self.form.pb_paraview.setEnabled(False)
+            self.form.pb_plot.setEnabled(False)
             self.form.pb_reconstruct.setEnabled(False)
             self.form.pb_edit_inp.setEnabled(False)
             self.form.pb_run_solver.setEnabled(False)
@@ -214,6 +223,7 @@ class _dexcsTaskPanelCfdSolverControl:
             self.form.pb_run_solver.setEnabled(False)
             self.form.terminateSolver.setEnabled(True)
             self.form.pb_paraview.setEnabled(True)
+            self.form.pb_plot.setEnabled(True)
             self.form.pb_reconstruct.setEnabled(True)
             self.consoleMessage(_("Solver started"))
         else:
@@ -252,6 +262,14 @@ class _dexcsTaskPanelCfdSolverControl:
         finally:
             QApplication.restoreOverrideCursor()
 
+    def openPlotTool(self):
+            _macroPath = os.path.expanduser("~")+'/.local/share/FreeCAD/Mod/dexcsCfdOF/Macro'
+            _prefs = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Macro").GetString('MacroPath')
+            FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Macro").SetString('MacroPath',_macroPath)
+            FreeCADGui.runCommand('Std_Macro_5',0)
+            FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Macro").SetString('MacroPath',_prefs)
+
+
     def runReconstruct(self):
         self.Start = time.time()
 
@@ -269,6 +287,7 @@ class _dexcsTaskPanelCfdSolverControl:
             self.form.pb_run_solver.setEnabled(False)
             self.form.terminateSolver.setEnabled(True)
             self.form.pb_paraview.setEnabled(True)
+            self.form.pb_plot.setEnabled(True)
             self.form.pb_reconstruct.setEnabled(True)
             self.consoleMessage(_("reconstruction started"))
         else:
